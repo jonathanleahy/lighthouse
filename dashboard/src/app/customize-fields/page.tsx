@@ -6,7 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ChevronUp, ChevronDown, Edit, Filter, PlusCircle, Trash2, LayoutGrid, HelpCircle, Check } from 'lucide-react';
+import {
+    ArrowLeft,
+    ChevronUp,
+    ChevronDown,
+    Edit,
+    Filter,
+    PlusCircle,
+    Trash2,
+    LayoutGrid,
+    HelpCircle,
+    Check,
+    LayoutList
+} from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table as UITable, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -260,6 +272,46 @@ export default function CustomizeFieldsPage() {
                             )}
                         </div>
                         <div className="flex items-center space-x-2">
+                            {editingState.isEditMode ? (
+                                <Select
+                                    value={getActiveSet()?.displayMode}
+                                    onValueChange={(value: DisplayMode) => {
+                                        const activeSet = getActiveSet();
+                                        if (activeSet) {
+                                            dispatch({
+                                                type: 'UPDATE_CUSTOM_FIELD_SET',
+                                                payload: { ...activeSet, displayMode: value }
+                                            });
+                                        }
+                                    }}
+                                >
+                                    <SelectTrigger className="w-[180px]">
+                                        <SelectValue placeholder="Select display mode"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="row">
+                                            <span className="flex items-center">
+                                                <LayoutList className="h-4 w-4 mr-2"/>
+                                                Row View
+                                            </span>
+                                        </SelectItem>
+                                        <SelectItem value="card">
+                                            <span className="flex items-center">
+                                                <LayoutGrid className="h-4 w-4 mr-2"/>
+                                                Card View
+                                            </span>
+                                        </SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            ) : (
+                                <div className="flex items-center space-x-2">
+                                    {getActiveSet()?.displayMode === 'row' ? (
+                                        <LayoutList className="h-6 w-6"/>
+                                    ) : (
+                                        <LayoutGrid className="h-6 w-6"/>
+                                    )}
+                                </div>
+                            )}
                             {editingState.isEditMode ? (
                                 <>
                                     <Button variant="outline" onClick={handleCancel}>
