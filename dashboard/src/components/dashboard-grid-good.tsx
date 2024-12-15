@@ -92,23 +92,23 @@ const DEFAULT_VIEW_CONFIG: ViewConfig = {
 
 interface GridViewProps {
     data: CardData[];
+    sharedLabels: string[];
     onSelect: () => void;
     visibleFields: string[];
     viewMode: 'card' | 'table';
     showDescription?: boolean;
     showIcon?: boolean;
     activeSet?: CustomFieldSet;
-    sharedLabels?: string[]; // Make it optional
 }
 
 interface TableViewProps {
     data: CardData[];
     visibleFields: string[];
     onSelect: () => void;
+    sharedLabels: string[];
     compact?: boolean;
     showIcon?: boolean;
     activeSet?: CustomFieldSet;
-    sharedLabels?: string[]; // Make it optional
 }
 
 interface DashboardControlsProps {
@@ -124,12 +124,16 @@ interface DashboardControlsProps {
 
 interface Repository {
     repository_name: string;
-    [key: string]: string | number | boolean;
+    [key: string]: string | number | boolean;  // Allow for dynamic fields
 }
 
 interface FetchedData {
     repositories: Repository[];
 }
+
+// interface FetchedData {
+//     repositories: Repository[];
+// }
 
 const TextFilter: React.FC<TextFilterProps> = ({ onFilterChange, initialValue }) => {
     const [value, setValue] = useState(initialValue || '');
@@ -164,6 +168,31 @@ const TextFilter: React.FC<TextFilterProps> = ({ onFilterChange, initialValue })
         />
     );
 };
+
+const cardData: CardData[] = [
+    {
+        id: "project-alpha",
+        title: "Project Alpha",
+        description: "Ongoing development of new features",
+        items: [
+            { id: "tasks", label: "Tasks", value: "23", isHeader: true },
+            { id: "due", label: "Due", value: "5d", isHeader: true },
+            { id: "budget", label: "Budget", value: "$15k", isHeader: true },
+            { id: "team", label: "Team", value: "6", isHeader: true },
+            { id: "status", label: "Status", value: "On Track", isHeader: true },
+            { id: "priority", label: "Priority", value: "High", isHeader: true },
+            { id: "meeting", label: "Meeting", value: "Mon 10AM", isHeader: false },
+            { id: "milestone", label: "Milestone", value: "Feature X", isHeader: false },
+            { id: "blocker", label: "Blocker", value: "None", isHeader: false },
+            { id: "feedback", label: "Feedback", value: "Pending", isHeader: false },
+        ],
+        chipColor: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100",
+        chipText: "Active",
+        icon: Code,
+    }
+];
+
+const sharedLabels: string[] = ["Meeting", "Milestone", "Blocker", "Feedback"];
 
 const DashboardControls: React.FC<DashboardControlsProps> = ({
                                                                  customFieldSets,
@@ -211,13 +240,13 @@ const DashboardControls: React.FC<DashboardControlsProps> = ({
 
 const GridView: React.FC<GridViewProps> = ({
                                                data,
+                                               sharedLabels,
                                                onSelect,
                                                visibleFields,
                                                viewMode,
                                                showDescription = true,
                                                showIcon = true,
-                                               activeSet,
-                                               sharedLabels = [] // Provide default empty array
+                                               activeSet
                                            }) => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {data.map((item) => {
@@ -247,10 +276,10 @@ const TableView: React.FC<TableViewProps> = ({
                                                  data,
                                                  visibleFields,
                                                  onSelect,
+                                                 sharedLabels,
                                                  compact = false,
                                                  showIcon = true,
-                                                 activeSet,
-                                                 sharedLabels = [] // Provide default empty array
+                                                 activeSet
                                              }) => (
     <Table className={compact ? 'table-compact' : ''}>
         <TableHeader>
@@ -286,93 +315,92 @@ const TableView: React.FC<TableViewProps> = ({
     </Table>
 );
 
-const getFieldValue = (card: CardData, fieldName: string): string | number | null => {
-    const normalizedFieldName = fieldName.toLowerCase().replace(/_/g, '');
+const getFilteredAndSortedData = (
+    cardData: CardData[],
+    activeSet: CustomFieldSet | undefined,
+    textFilter: string
+): CardData[] => {
+    if (!activeSet || !cardData) return cardData;
 
-    // Check direct properties first
-    const directValue = card[fieldName] ??
-        card[fieldName.toLowerCase()] ??
-        card[normalizedFieldName] ??
-        card[fieldName.replace(/_/g, '')];
+    const hasActiveFilters = activeSet.fields.some(field => field.filterEnabled && field.filter);
+    const hasActiveSorts = activeSet.fields.some(field => field.sortOrder !== 'none');
+    const hasTextFilter = textFilter && textFilter.trim() !== '';
 
-    if (directValue !== undefined && directValue !== null) {
-        return directValue as string | number;
-    }
+    if (!hasActiveFilters && !hasActiveSorts && !hasTextFilter) return cardData;
 
-    // Special handling for repository name
-    if (normalizedFieldName === 'repositoryname') {
-        return card.repository_name || card.title || null;
-    }
+    return cardData
+        .filter(card => {
+            if (hasTextFilter) {
+                const searchTerm = textFilter.toLowerCase().replace(/%/g, '');
+                const matchesText =
+                    card.title?.toLowerCase().includes(searchTerm) ||
+                    card.description?.toLowerCase().includes(searchTerm) ||
+                    card.items?.some(item =>
+                        item.value?.toLowerCase().includes(searchTerm)
+                    );
 
-    // Check items array
-    const item = card.items?.find(item =>
-        item.label.toLowerCase().replace(/_/g, '') === normalizedFieldName
-    );
+                if (!matchesText) return false;
+            }
 
-    return item?.value || null;
+            if (!hasActiveFilters) return true;
+
+            return activeSet.fields.every(field => {
+                if (!field.filterEnabled || !field.filter) return true;
+
+                const normalizedFieldName = field.name.toLowerCase().replace(/_/g, '');
+                const directValues = [
+                    card[field.name],
+                    card[field.name.toLowerCase()],
+                    card[normalizedFieldName],
+                    card[field.name.replace(/_/g, '')],
+                    field.name.toLowerCase() === 'repository_name' ? card.repository_name : null,
+                    field.name.toLowerCase() === 'repository_name' ? card.title : null
+                ].filter(Boolean);
+
+                const sampleValue = directValues.find(v => v !== undefined && v !== null);
+                const fieldType = determineFieldType(sampleValue as string | number);
+                const conditions = parseFilterConditions(field.filter);
+
+                for (const value of directValues) {
+                    if (value && matchesConditions(String(value), conditions, fieldType)) {
+                        return true;
+                    }
+                }
+
+                const matchingItems = card.items?.filter(item => {
+                    const itemLabelNormalized = item.label.toLowerCase().replace(/_/g, '');
+                    return itemLabelNormalized === normalizedFieldName;
+                });
+
+                return matchingItems?.some(item => {
+                    const itemType = determineFieldType(item.value);
+                    return matchesConditions(String(item.value), conditions, itemType);
+                }) || false;
+            });
+        })
+        .sort((a, b) => {
+            if (!hasActiveSorts) return 0;
+
+            for (const field of activeSet.fields) {
+                if (field.sortOrder !== 'none') {
+                    const aValue = getSortValue(a, field.name);
+                    const bValue = getSortValue(b, field.name);
+
+                    if (aValue !== bValue) {
+                        return field.sortOrder === 'asc'
+                            ? compareValues(aValue, bValue)
+                            : compareValues(bValue, aValue);
+                    }
+                }
+            }
+            return 0;
+        });
 };
 
 const parseFilterConditions = (filter: string): string[][] => {
-    return filter.split('||')
-        .map(orCondition =>
-            orCondition.trim()
-                .split('&&')
-                .map(condition => condition.trim())
-                .filter(condition => condition !== '')
-        )
-        .filter(conditions => conditions.length > 0);
-};
-
-const matchesSingleCondition = (
-    value: string,
-    condition: string,
-    fieldType: 'number' | 'text'
-): boolean => {
-    const normalizedValue = value.toLowerCase();
-    const normalizedCondition = condition.toLowerCase();
-
-    if (fieldType === 'number') {
-        const numValue = parseFloat(value);
-        const operator = condition.match(/^[<>]=?|=/)?.[0] || '=';
-        const targetNumber = parseFloat(condition.replace(operator, ''));
-
-        if (!isNaN(numValue) && !isNaN(targetNumber)) {
-            switch (operator) {
-                case '>': return numValue > targetNumber;
-                case '<': return numValue < targetNumber;
-                case '>=': return numValue >= targetNumber;
-                case '<=': return numValue <= targetNumber;
-                default: return numValue === targetNumber;
-            }
-        }
-    }
-
-    // Handle wildcards
-    if (normalizedCondition.includes('%')) {
-        const pattern = normalizedCondition.replace(/%/g, '');
-        const isStartWildcard = condition.startsWith('%');
-        const isEndWildcard = condition.endsWith('%');
-
-        if (isStartWildcard && isEndWildcard) {
-            return normalizedValue.includes(pattern);
-        } else if (isStartWildcard) {
-            return normalizedValue.endsWith(pattern);
-        } else if (isEndWildcard) {
-            return normalizedValue.startsWith(pattern);
-        }
-    }
-
-    // Exact match
-    return normalizedValue === normalizedCondition;
-};
-
-const matchesConditions = (
-    value: string | number,
-    conditions: string[][],
-    fieldType: 'number' | 'text'
-): boolean => {
-    return conditions.some(andConditions =>
-        andConditions.every(condition => matchesSingleCondition(String(value), condition, fieldType))
+    if (!filter) return [];
+    return filter.split('||').map(orCondition =>
+        orCondition.trim().split('&&').map(condition => condition.trim())
     );
 };
 
@@ -382,68 +410,72 @@ const determineFieldType = (value: string | number): 'number' | 'text' => {
     return !isNaN(parseFloat(value)) && isFinite(Number(value)) ? 'number' : 'text';
 };
 
-const getFilteredAndSortedData = (
-    cardData: CardData[],
-    activeSet: CustomFieldSet | undefined,
-    textFilter: string
-): CardData[] => {
-    if (!activeSet || !cardData) return cardData;
+const matchesConditions = (value: string, conditions: string[][], fieldType: 'number' | 'text'): boolean => {
+    return conditions.some(andConditions =>
+        andConditions.every(condition => matchesSingleCondition(value, condition, fieldType))
+    );
+};
 
-    // First apply text filter if it exists
-    let filteredData = cardData;
-    const searchTerm = textFilter.toLowerCase().trim();
+const matchesSingleCondition = (value: string, condition: string, fieldType: 'number' | 'text'): boolean => {
+    if (fieldType === 'number') {
+        const operator = condition.match(/^[<>]=?|=/)?.[0];
+        const number = parseFloat(condition.replace(operator || '', ''));
 
-    if (searchTerm !== '') {
-        filteredData = filteredData.filter(card => {
-            const searchableValues = [
-                card.title,
-                card.description,
-                ...(card.items?.map(item => item.value) || []),
-                // Include any direct property values
-                ...Object.values(card).filter(value =>
-                    typeof value === 'string' || typeof value === 'number'
-                ).map(value => String(value))
-            ].filter(Boolean); // Remove null/undefined values
-
-            return searchableValues.some(value =>
-                String(value).toLowerCase().includes(searchTerm)
-            );
-        });
-    }
-
-    // Then apply field-specific filters
-    const activeFilters = activeSet.fields.filter(field => field.filterEnabled && field.filter);
-    if (activeFilters.length > 0) {
-        filteredData = filteredData.filter(card => {
-            return activeFilters.every(field => {
-                const conditions = parseFilterConditions(field.filter);
-                const fieldValue = getFieldValue(card, field.name);
-
-                if (!fieldValue) return false;
-                return matchesConditions(fieldValue, conditions, determineFieldType(fieldValue));
-            });
-        });
-    }
-
-    // Finally, apply sorting
-    const activeSorts = activeSet.fields.filter(field => field.sortOrder !== 'none');
-    if (activeSorts.length > 0) {
-        filteredData.sort((a, b) => {
-            for (const field of activeSorts) {
-                const aValue = getFieldValue(a, field.name);
-                const bValue = getFieldValue(b, field.name);
-
-                if (aValue !== bValue) {
-                    return field.sortOrder === 'asc' ?
-                        (aValue === null ? -1 : bValue === null ? 1 : String(aValue).localeCompare(String(bValue))) :
-                        (bValue === null ? -1 : aValue === null ? 1 : String(bValue).localeCompare(String(aValue)));
-                }
+        if (!isNaN(number)) {
+            const numValue = parseFloat(value);
+            switch (operator) {
+                case '>': return numValue > number;
+                case '<': return numValue < number;
+                case '>=': return numValue >= number;
+                case '<=': return numValue <= number;
+                case '=': return numValue === number;
+                default: return numValue === number;
             }
-            return 0;
-        });
+        }
     }
 
-    return filteredData;
+    if (condition.includes('%')) {
+        const isStartWildcard = condition.startsWith('%');
+        const isEndWildcard = condition.endsWith('%');
+        const cleanPattern = condition.replace(/%/g, '').toLowerCase();
+        const stringValue = String(value).toLowerCase();
+
+        if (isStartWildcard && isEndWildcard) {
+            return stringValue.includes(cleanPattern);
+        } else if (isStartWildcard) {
+            return stringValue.endsWith(cleanPattern);
+        } else if (isEndWildcard) {
+            return stringValue.startsWith(cleanPattern);
+        }
+    }
+
+    return String(value).toLowerCase() === condition.toLowerCase();
+};
+
+const getSortValue = (card: CardData, fieldName: string): string | number => {
+    const normalizedFieldName = fieldName.toLowerCase().replace(/_/g, '');
+
+    const directValue = card[fieldName] ||
+        card[fieldName.toLowerCase()] ||
+        card[normalizedFieldName] ||
+        card[fieldName.replace(/_/g, '')];
+
+    if (directValue !== undefined && directValue !== null) {
+        return directValue as string | number;
+    }
+
+    const item = card.items?.find(item =>
+        item.label.toLowerCase().replace(/_/g, '') === normalizedFieldName
+    );
+
+    return item?.value || '';
+};
+
+const compareValues = (a: string | number, b: string | number): number => {
+    if (typeof a === 'number' && typeof b === 'number') {
+        return a - b;
+    }
+    return String(a).localeCompare(String(b));
 };
 
 const getVisibleFields = (set: CustomFieldSet | undefined, currentViewMode: 'card' | 'table'): string[] => {
@@ -513,7 +545,7 @@ export default function DashboardGrid() {
     );
 
     const processedCardData = useMemo(() => {
-        if (!fetchedData?.repositories || !Array.isArray(fetchedData.repositories)) return [];
+        if (!fetchedData?.repositories || !Array.isArray(fetchedData.repositories)) return cardData;
 
         return fetchedData.repositories.map((repo: Repository) => {
             const items = Object.entries(repo)
@@ -575,7 +607,7 @@ export default function DashboardGrid() {
                     displayMode: 'row'
                 })),
                 displayMode: 'card',
-                viewConfig: DEFAULT_VIEW_CONFIG
+                viewConfig: DEFAULT_VIEW_CONFIG  // Include viewConfig in the default set
             };
             dispatch({ type: 'SET_CUSTOM_FIELD_SETS', payload: [defaultSet] });
             dispatch({ type: 'SET_ACTIVE_SET_ID', payload: defaultSet.id });
@@ -583,6 +615,7 @@ export default function DashboardGrid() {
     }, [fetchedData, state.customFieldSets.length, dispatch]);
 
     const handleCardSelect = useCallback(() => {
+        // Functionality to be implemented if needed
         console.log('Card selection functionality to be implemented');
     }, []);
 
@@ -627,6 +660,7 @@ export default function DashboardGrid() {
             {viewMode === 'card' ? (
                 <GridView
                     data={filteredAndSortedCardData}
+                    sharedLabels={sharedLabels}
                     onSelect={handleCardSelect}
                     visibleFields={visibleFields}
                     viewMode={viewMode}
@@ -639,6 +673,7 @@ export default function DashboardGrid() {
                     data={filteredAndSortedCardData}
                     visibleFields={visibleFields}
                     onSelect={handleCardSelect}
+                    sharedLabels={sharedLabels}
                     compact={activeViewConfig.tableConfig.compact}
                     showIcon={activeViewConfig.tableConfig.showIcon}
                     activeSet={activeSet}
