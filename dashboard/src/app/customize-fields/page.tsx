@@ -6,12 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ChevronUp, ChevronDown, Edit, Filter, PlusCircle, Trash2, LayoutGrid, LayoutList, HelpCircle, Check } from 'lucide-react';
+import { ArrowLeft, ChevronUp, ChevronDown, Edit, Filter, PlusCircle, Trash2, LayoutGrid, HelpCircle, Check } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table as UITable, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useCustomFields } from '@/lib/customFieldsContext';
-import { ScrollArea } from "@/components/ui/scroll-area";
 import DashboardGuide from "@/components/DashboardGuide";
 
 type SortOrder = 'asc' | 'desc' | 'none';
@@ -324,7 +323,7 @@ export default function CustomizeFieldsPage() {
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
-                                                onClick={() => toggleFieldVisibility(field.id, 'table')}
+                                                onClick={() => toggleFieldVisibility(field.id, 'row')}
                                                 className="transition-all duration-200"
                                                 title={field.isVisibleInCard ? 'Hide in table view' : 'Show in table view'}
                                             >
