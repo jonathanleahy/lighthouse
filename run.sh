@@ -18,4 +18,4 @@ done
 #codesign --sign "Jonathan Leahy" --force ./public/argocd
 
 ttab "cd server/src; go build -o ../server; cd ../; ./server --webserver"
-ttab "cd dashboard/; nvm use 20.11.1; npm run dev;"
+ttab "cd dashboard/; nvm use 20.11.1; npm install; npm run dev;"
