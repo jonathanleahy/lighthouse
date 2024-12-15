@@ -119,7 +119,7 @@ export default function MicroserviceDetail({ params }: { params: Promise<{ id: s
     if (!data) return null;
 
     return {
-      repoName: data.repoDesc || '',
+      repoName: selectedOption || '',
       repoBitUrl: data.repoBitUrl || '',
       apps: data.apps || []
     };

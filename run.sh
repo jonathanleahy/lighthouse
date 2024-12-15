@@ -3,6 +3,20 @@
 #set -e  # Exit immediately if a command exits with a non-zero status
 #set -x  # Print commands and their arguments as they are executed
 
+build=false
+
+while getopts "b" opt; do
+  case $opt in
+    b)
+      build=true
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
 ports=(3000 8083)
 for port in "${ports[@]}"; do
   echo "Checking port $port"
@@ -17,5 +31,10 @@ done
 
 #codesign --sign "Jonathan Leahy" --force ./public/argocd
 
-ttab "cd server/src; go build -o ../server; cd ../; ./server --webserver"
-ttab "cd dashboard/; nvm use 20.11.1; npm install; npm run dev;"
+if $build; then
+  ttab "cd server/src; go build -o ../server; cd ../; ./server --webserver"
+  ttab "cd dashboard/; nvm use 20.11.1; npm install; npm run build; npm start;"
+else
+  ttab "cd server/src; go build -o ../server; cd ../; ./server --webserver"
+  ttab "cd dashboard/; nvm use 20.11.1; npm install; npm run dev;"
+fi
