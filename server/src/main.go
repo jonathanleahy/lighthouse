@@ -42,6 +42,17 @@ type RegionDetails struct {
 	Namespace      string `json:"namespace"`
 }
 
+type ReposListCache struct {
+	Data      []byte
+	Timestamp time.Time
+}
+
+var (
+	reposListCache ReposListCache
+	reposListMux   sync.RWMutex
+	cacheDuration  = 5 * time.Minute
+)
+
 func handleTerraformConfigs(w http.ResponseWriter, r *http.Request) {
 	setCORSHeaders(w, r)
 
@@ -517,16 +528,128 @@ func listReposFromFileHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check for force refresh parameter
+	forceRefresh := r.URL.Query().Get("force") == "true"
+
+	// Check cache if not forcing refresh
+	if !forceRefresh {
+		reposListMux.RLock()
+		if !reposListCache.Timestamp.IsZero() && time.Since(reposListCache.Timestamp) < cacheDuration {
+			reposListMux.RUnlock()
+			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("X-Cache", "HIT")
+			w.Write(reposListCache.Data)
+			return
+		}
+		reposListMux.RUnlock()
+	}
+
+	fmt.Println("Full refresh")
 	// Read the content of pismo.json
 	jsonData, err := ioutil.ReadFile("projects/projects/pismo.json")
 	if err != nil {
+		log.Printf("Error reading file: %v", err)
 		http.Error(w, "Error reading pismo.json", http.StatusInternalServerError)
 		return
 	}
 
-	// Set the content type and write the response
+	// Parse the JSON into a map
+	var data map[string]interface{}
+	if err := json.Unmarshal(jsonData, &data); err != nil {
+		log.Printf("JSON Unmarshal error: %v", err)
+		http.Error(w, "Error parsing pismo.json", http.StatusInternalServerError)
+		return
+	}
+
+	// Check if repositories exists and is an array
+	reposInterface, ok := data["repositories"]
+	if !ok {
+		log.Printf("No 'repositories' key found in JSON")
+		http.Error(w, "Invalid JSON structure", http.StatusInternalServerError)
+		return
+	}
+
+	repos, ok := reposInterface.([]interface{})
+	if !ok {
+		log.Printf("'repositories' is not an array")
+		http.Error(w, "Invalid JSON structure", http.StatusInternalServerError)
+		return
+	}
+
+	// Convert repositories to the desired format
+	result := make([]map[string]interface{}, len(repos))
+
+	for i, repoInterface := range repos {
+		repo, ok := repoInterface.(map[string]interface{})
+		if !ok {
+			log.Printf("Repository at index %d is not an object", i)
+			continue
+		}
+
+		processed := ""
+		on_env := ""
+
+		repoName, ok := repo["repository_name"].(string)
+		if !ok {
+			log.Printf("Repository at index %d has no valid repository_name", i)
+			continue
+		}
+
+		deploymentPath := filepath.Join("projects/projects-summary", repoName+".json")
+		if fileInfo, err := os.Stat(deploymentPath); err == nil && fileInfo.Size() > 0 {
+			processed = "true"
+			deploymentData, err := ioutil.ReadFile(deploymentPath)
+			if err == nil && len(deploymentData) > 0 {
+				var deploymentInfo map[string]interface{}
+				if err := json.Unmarshal(deploymentData, &deploymentInfo); err == nil {
+					if apps, ok := deploymentInfo["apps"].([]interface{}); ok && len(apps) > 0 {
+						on_env = "true"
+					}
+				}
+			}
+		}
+
+		newEntry := map[string]interface{}{
+			"repository_name": repoName,
+			"team":            repo["team"],
+			"description":     repo["description"],
+		}
+
+		if on_env == "true" {
+			newEntry["deployed"] = on_env
+		}
+
+		if processed == "true" {
+			newEntry["processed"] = processed
+		}
+
+		result[i] = newEntry
+	}
+
+	response := map[string]interface{}{
+		"repositories": result,
+	}
+
+	// Convert to JSON
+	updatedJSON, err := json.Marshal(response)
+	if err != nil {
+		log.Printf("Error marshaling response: %v", err)
+		http.Error(w, "Error creating JSON response", http.StatusInternalServerError)
+		return
+	}
+
+	// Update cache
+	reposListMux.Lock()
+	reposListCache = ReposListCache{
+		Data:      updatedJSON,
+		Timestamp: time.Now(),
+	}
+	reposListMux.Unlock()
+
+	// Set response headers
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(jsonData)
+	w.Header().Set("X-Cache", "MISS")
+	w.Write(updatedJSON)
 }
 
 func main() {

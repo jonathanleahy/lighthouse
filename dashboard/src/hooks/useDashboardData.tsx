@@ -1,47 +1,50 @@
-"use client";
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface DashboardData {
-    repoDesc?: string;
-    repoSquad?: string;
-    repoBitUrl?: string;
-    repoCodefresh?: string;
-    argocd?: { url?: string };
+    repositories: Array<{
+        id: string;
+        name: string;
+        [key: string]: string | number | boolean | null;
+    }>;
 }
 
 interface DashboardDataResult {
     data: DashboardData | null;
     loading: boolean;
     error: Error | null;
+    refetch: (force?: boolean) => void;
 }
 
-export const useDashboardData = (url: string | null, fetchData: boolean): DashboardDataResult => {
+export function useDashboardData(url: string | null, initialFetch: boolean): DashboardDataResult {
     const [data, setData] = useState<DashboardData | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(initialFetch);
     const [error, setError] = useState<Error | null>(null);
 
-    useEffect(() => {
+    const fetchData = useCallback(async (force = false) => {
         if (!url) return;
-
-        const fetchDashboardData = async () => {
-            setLoading(true);
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`);
-                }
-                const result: DashboardData = await response.json();
-                setData(result);
-            } catch (err) {
-                setError(err as Error);
-            } finally {
-                setLoading(false);
+        setLoading(true);
+        setError(null);
+        try {
+            const fetchUrl = force ? `${url}&force` : url;
+            const response = await fetch(fetchUrl);
+            const result = await response.json();
+            setData(result);
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err);
+            } else {
+                setError(new Error('An unknown error occurred'));
             }
-        };
+        } finally {
+            setLoading(false);
+        }
+    }, [url]);
 
-        fetchDashboardData();
-    }, [url, fetchData]);
+    useEffect(() => {
+        if (initialFetch) {
+            fetchData();
+        }
+    }, [fetchData, initialFetch]);
 
-    return { data, loading, error };
-};
+    return { data, loading, error, refetch: fetchData };
+}

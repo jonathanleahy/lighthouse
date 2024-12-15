@@ -1,28 +1,31 @@
 "use client"
 
 import Link from 'next/link'
-import { ArrowLeft, BarChart, Users, AlertCircle } from 'lucide-react'
+import { ArrowLeft, BarChart, AlertCircle, RefreshCw } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Deployments } from '@/components/deployments'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { useDashboardData } from "@/hooks/useDashboardData";
 import React, { use } from "react";
 import { useState, useEffect } from 'react';
 import { Globe, RotateCw, Search } from 'lucide-react';
 
-function ServiceOverview({ service }: { service: { id: string, name: string, description: string, squad: string } }) {
+function ServiceOverview({ service, refreshData }: { service: { id: string, name: string, description: string, squad: string }, refreshData: () => void }) {
   return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">{service.name}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground mb-4">{service.description}</p>
-          <div className="grid grid-cols-2 gap-4">
+      <Card className="relative">
+        <CardContent className="pt-6">
+          <div className="absolute top-2 right-2">
+            <Button variant="ghost" size="icon" onClick={refreshData} aria-label="Refresh service status">
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold">{service.name}</h2>
+            <p className="text-sm text-muted-foreground">{service.description}</p>
             <div className="flex items-center space-x-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <span className="font-medium">Squad: {service.squad}</span>
+              <span className="font-semibold">Squad:</span>
+              <span>{service.squad}</span>
             </div>
           </div>
         </CardContent>
@@ -91,10 +94,14 @@ export default function MicroserviceDetail({ params }: { params: Promise<{ id: s
   const resolvedParams = use(params);
   const selectedOption = resolvedParams.id;
 
-  const { data: mockData, loading, error } = useDashboardData(
+  const { data: mockData, loading, error, refetch } = useDashboardData(
       selectedOption ? `http://localhost:8083/?repo=${selectedOption}` : null,
       true
   );
+
+  const refreshData = (force = false) => {
+    refetch(force);
+  };
 
   const LoadingIcons = ({ className }: { className?: string }) => {
     const [iconIndex, setIconIndex] = useState(0);
@@ -125,19 +132,21 @@ export default function MicroserviceDetail({ params }: { params: Promise<{ id: s
     };
   };
 
-  const transformedData = transformToDeploymentData(mockData);
+  const transformedData = transformToDeploymentData(mockData as DashboardData);
+
+  const dashboardData = mockData as DashboardData;
 
   const service = {
     id: 12,
     name: selectedOption,
-    description: (mockData as DashboardData)?.repoDesc || '',
+    description: dashboardData?.repoDesc || '',
     status: 'Warning',
     version: 'v1.9.2',
     requests: '500K',
     uptime: '99.5%',
     errors: 45,
     infos: 89,
-    squad: (mockData as DashboardData)?.repoSquad || '',
+    squad: dashboardData?.repoSquad || '',
     lastMainUpdate: '2023-11-18',
     lastBranchUpdate: '2023-11-21',
     lastDeploy: '2023-11-22'
@@ -185,29 +194,26 @@ export default function MicroserviceDetail({ params }: { params: Promise<{ id: s
             <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="grid gap-6 md:grid-cols-3 mb-8">
                 <div className="md:col-span-2">
-                  <ServiceOverview key={service.id} service={{...service, id: service.id.toString()}}/>
+                  <ServiceOverview key={service.id} service={{...service, id: service.id.toString()}} refreshData={refreshData} />
                 </div>
                 <Card key="quick-links">
-                  <CardHeader>
-                    <CardTitle className="font-semibold">Quick Links</CardTitle>
-                  </CardHeader>
-                  <CardContent className="grid grid-cols-2 gap-4">
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link href={(mockData as DashboardData)?.repoBitUrl || "#"} target="_blank" rel="noopener noreferrer">
-                        {(mockData as DashboardData)?.repoBitUrl ? "View Github" : "No Github URL"}
+                  <CardContent className="grid grid-cols-2 gap-4 p-4">
+                    <Button variant="outline" className="w-full m-1" asChild>
+                      <Link href={dashboardData?.repoBitUrl || "#"} target="_blank" rel="noopener noreferrer">
+                        {dashboardData?.repoBitUrl ? "View Github" : "No Github URL"}
                       </Link>
                     </Button>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link href={(mockData as DashboardData)?.repoCodefresh || "#"} target="_blank" rel="noopener noreferrer">
-                        {(mockData as DashboardData)?.repoCodefresh ? "View Codefresh" : "No Codefresh URL"}
+                    <Button variant="outline" className="w-full m-1" asChild>
+                      <Link href={dashboardData?.repoCodefresh || "#"} target="_blank" rel="noopener noreferrer">
+                        {dashboardData?.repoCodefresh ? "View Codefresh" : "No Codefresh URL"}
                       </Link>
                     </Button>
-                    <Button variant="outline" className="w-full" asChild>
-                      <Link href={(mockData as DashboardData)?.argocd?.url || "#"} target="_blank" rel="noopener noreferrer">
-                        {(mockData as DashboardData)?.argocd?.url ? "View ArgoCD" : "No ArgoCD URL"}
+                    <Button variant="outline" className="w-full m-1" asChild>
+                      <Link href={dashboardData?.argocd?.url || "#"} target="_blank" rel="noopener noreferrer">
+                        {dashboardData?.argocd?.url ? "View ArgoCD" : "No ArgoCD URL"}
                       </Link>
                     </Button>
-                    <Button variant="outline" className="w-full" asChild>
+                    <Button variant="outline" className="w-full m-1" asChild>
                       <a href="#" target="_blank" rel="noopener noreferrer">
                         <BarChart className="mr-2 h-4 w-4" />
                         Grafana :-(

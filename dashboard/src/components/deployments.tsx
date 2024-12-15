@@ -253,14 +253,11 @@ export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData })
           <h2 className="text-lg font-semibold">Deployments</h2>
           <div className="flex items-center gap-2">
             <Input
-                placeholder="Search apps..."
+                placeholder="Filter deployments..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-64"
             />
-            <Button variant="outline" size="sm">
-              <RotateCw className="h-4 w-4" />
-            </Button>
           </div>
         </div>
 

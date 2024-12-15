@@ -1,18 +1,18 @@
 "use client"
 
-import { useState, useCallback, useMemo, useEffect } from "react"
-import { Card } from "@/components/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Code, LayoutGrid, LayoutList, Edit } from 'lucide-react'
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ThemeSwitcher } from "@/components/theme-switcher"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useRouter } from 'next/navigation'
-import { useCustomFields } from '@/lib/customFieldsContext'
-import { useFetchData } from "@/hooks/useFetchHook"
-import { debounce } from "lodash"
-import { LucideIcon } from 'lucide-react'
+import { useState, useCallback, useMemo, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+import { debounce } from "lodash";
+import {LucideIcon, RefreshCw} from 'lucide-react';
+import { useCustomFields } from '@/lib/customFieldsContext';
+import { useFetchData } from "@/hooks/useFetchHook";
+import { Card } from "@/components/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Code, LayoutGrid, LayoutList, Edit } from 'lucide-react';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface TextFilterProps {
     onFilterChange: (value: string) => void;
@@ -120,6 +120,7 @@ interface DashboardControlsProps {
     onViewModeToggle: () => void;
     onTextFilterChange: (value: string) => void;
     initialTextFilter?: string;
+    onRefresh: () => void;
 }
 
 interface Repository {
@@ -173,7 +174,8 @@ const DashboardControls: React.FC<DashboardControlsProps> = ({
                                                                  viewMode,
                                                                  onViewModeToggle,
                                                                  onTextFilterChange,
-                                                                 initialTextFilter
+                                                                 initialTextFilter,
+                                                                 onRefresh
                                                              }) => (
     <div className="mb-4 flex justify-between items-center">
         <div className="flex items-center space-x-2">
@@ -203,6 +205,10 @@ const DashboardControls: React.FC<DashboardControlsProps> = ({
             <Button variant="outline" size="sm" onClick={onViewModeToggle}>
                 {viewMode === 'card' ? <LayoutList className="mr-2 h-4 w-4" /> : <LayoutGrid className="mr-2 h-4 w-4" />}
                 {viewMode === 'card' ? 'Table View' : 'Card View'}
+            </Button>
+            <Button variant="outline" size="sm" onClick={onRefresh}>
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Refresh
             </Button>
             <ThemeSwitcher />
         </div>
@@ -440,6 +446,7 @@ const getFilteredAndSortedData = (
                 }
             }
             return 0;
+
         });
     }
 
@@ -467,20 +474,20 @@ const getVisibleFields = (set: CustomFieldSet | undefined, currentViewMode: 'car
 };
 
 export default function DashboardGrid() {
-    const { data: fetchedData, loading, error } = useFetchData<FetchedData>("http://localhost:8083/list-repos");
-    const { state, dispatch } = useCustomFields()
+    const { data: fetchedData, loading, error, refetch } = useFetchData<FetchedData>("http://localhost:8083/list-repos");
+    const { state, dispatch } = useCustomFields();
     const [textFilter, setTextFilter] = useState(() => {
         if (typeof window !== 'undefined') {
             return localStorage.getItem('dashboardTextFilter') || '';
         }
         return '';
     });
-    const router = useRouter()
-
+    const router = useRouter();
     const [viewMode, setViewMode] = useState<'card' | 'table'>(() => {
         const activeSet = state.customFieldSets.find(set => set.id === state.activeSetId);
         return activeSet?.displayMode === 'row' ? 'table' : 'card';
     });
+    const [forceRefresh, setForceRefresh] = useState(false);
 
     useEffect(() => {
         const savedCustomFieldSets = localStorage.getItem('customFieldSets');
@@ -546,70 +553,41 @@ export default function DashboardGrid() {
         [activeSet, viewMode]
     );
 
-    const filteredAndSortedCardData = useMemo(() =>
-            getFilteredAndSortedData(processedCardData, activeSet, textFilter),
-        [processedCardData, activeSet, textFilter]
-    );
+    const filteredAndSortedCardData = useMemo(() => {
+        return getFilteredAndSortedData(processedCardData, activeSet, textFilter);
+    }, [processedCardData, activeSet, textFilter]);
 
-    useEffect(() => {
-        if (state.customFieldSets.length === 0 && fetchedData?.repositories) {
-            const allFields = [...new Set(
-                fetchedData.repositories.flatMap(repo =>
-                    Object.keys(repo)
-                )
-            )]
-                .map(key => key.charAt(0).toUpperCase() + key.slice(1));
-
-            const defaultSet: CustomFieldSet = {
-                id: '1',
-                name: 'Default Fields',
-                fields: allFields.map((field, index) => ({
-                    id: `${index + 1}`,
-                    name: field,
-                    type: 'text',
-                    isVisibleInCard: true,
-                    isVisibleInRow: true,
-                    sortOrder: 'none',
-                    filter: '',
-                    filterEnabled: false,
-                    displayMode: 'row'
-                })),
-                displayMode: 'card',
-                viewConfig: DEFAULT_VIEW_CONFIG
-            };
-            dispatch({ type: 'SET_CUSTOM_FIELD_SETS', payload: [defaultSet] });
-            dispatch({ type: 'SET_ACTIVE_SET_ID', payload: defaultSet.id });
-        }
-    }, [fetchedData, state.customFieldSets.length, dispatch]);
-
-    const handleCardSelect = useCallback(() => {
-        console.log('Card selection functionality to be implemented');
-    }, []);
-
-    const handleSetChange = useCallback((setId: string) => {
-        dispatch({ type: 'SET_ACTIVE_SET_ID', payload: setId });
-        localStorage.setItem('activeSetId', setId);
+    const handleSetChange = useCallback((id: string) => {
+        dispatch({ type: 'SET_ACTIVE_SET_ID', payload: id });
+        localStorage.setItem('activeSetId', id);
     }, [dispatch]);
 
-    const toggleViewMode = useCallback(() => {
-        const newMode = viewMode === 'card' ? 'table' : 'card';
-        setViewMode(newMode);
+    const handleViewModeToggle = useCallback(() => {
+        setViewMode(prevMode => prevMode === 'card' ? 'table' : 'card');
+    }, []);
 
-        const updatedSets = state.customFieldSets.map(set => ({
-            ...set,
-            displayMode: newMode === 'table' ? ('row' as DisplayMode) : ('card' as DisplayMode),
-            viewConfig: {
-                ...DEFAULT_VIEW_CONFIG,
-                ...(set.viewConfig || {})
-            }
-        }));
+    const handleTextFilterChange = useCallback((value: string) => {
+        setTextFilter(value);
+    }, []);
 
-        dispatch({ type: 'SET_CUSTOM_FIELD_SETS', payload: updatedSets });
-        localStorage.setItem('customFieldSets', JSON.stringify(updatedSets));
-    }, [viewMode, state.customFieldSets, dispatch]);
+    const handleRefresh = useCallback(() => {
+        setForceRefresh(true);
+        refetch();
+    }, [refetch]);
 
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+    useEffect(() => {
+        if (forceRefresh) {
+            setForceRefresh(false);
+        }
+    }, [forceRefresh]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
 
     return (
         <div>
@@ -619,15 +597,15 @@ export default function DashboardGrid() {
                 onSetChange={handleSetChange}
                 onEditFields={() => router.push('/customize-fields')}
                 viewMode={viewMode}
-                onViewModeToggle={toggleViewMode}
-                onTextFilterChange={setTextFilter}
+                onViewModeToggle={handleViewModeToggle}
+                onTextFilterChange={handleTextFilterChange}
                 initialTextFilter={textFilter}
+                onRefresh={handleRefresh}
             />
-
             {viewMode === 'card' ? (
                 <GridView
                     data={filteredAndSortedCardData}
-                    onSelect={handleCardSelect}
+                    onSelect={() => {}}
                     visibleFields={visibleFields}
                     viewMode={viewMode}
                     showDescription={activeViewConfig.cardConfig.showDescription}
@@ -638,7 +616,7 @@ export default function DashboardGrid() {
                 <TableView
                     data={filteredAndSortedCardData}
                     visibleFields={visibleFields}
-                    onSelect={handleCardSelect}
+                    onSelect={() => {}}
                     compact={activeViewConfig.tableConfig.compact}
                     showIcon={activeViewConfig.tableConfig.showIcon}
                     activeSet={activeSet}

@@ -1,134 +1,35 @@
-import { useState, useEffect } from 'react';
+// hooks/useFetchHook.ts
+import { useState, useEffect, useCallback } from 'react';
 
 interface FetchState<T> {
     data: T | null;
     loading: boolean;
     error: Error | null;
+    refetch: () => void;
 }
 
-export function useFetchData<T>(url: string) {
-    const [state, setState] = useState<FetchState<T>>({
-        data: null,
-        loading: true,
-        error: null,
-    });
+export function useFetchData<T>(url: string): FetchState<T> {
+    const [data, setData] = useState<T | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Error | null>(null);
 
-    useEffect(() => {
-        const abortController = new AbortController();
-        const signal = abortController.signal;
-
-        const fetchData = async () => {
-            try {
-                setState(prev => ({ ...prev, loading: true }));
-
-                const response = await fetch(url, {
-                    signal,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (!signal.aborted) {
-                    setState({
-                        data,
-                        loading: false,
-                        error: null,
-                    });
-                }
-            } catch (error) {
-                if (!signal.aborted) {
-                    setState({
-                        data: null,
-                        loading: false,
-                        error: error instanceof Error ? error : new Error('An unknown error occurred'),
-                    });
-                }
-            }
-        };
-
-        fetchData();
-
-        return () => {
-            abortController.abort();
-        };
+    const fetchData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const response = await fetch(url);
+            const result = await response.json();
+            setData(result);
+        } catch (err) {
+            setError(err as Error);
+        } finally {
+            setLoading(false);
+        }
     }, [url]);
 
-    return {
-        data: state.data,
-        loading: state.loading,
-        error: state.error,
-    };
-}
-
-// Optional: Add a version that automatically retries failed requests
-export function useFetchDataWithRetry<T>(url: string, retryCount = 3, retryDelay = 1000) {
-    const [state, setState] = useState<FetchState<T>>({
-        data: null,
-        loading: true,
-        error: null,
-    });
-
     useEffect(() => {
-        const abortController = new AbortController();
-        const signal = abortController.signal;
+        fetchData();
+    }, [fetchData]);
 
-        const fetchWithRetry = async (retriesLeft: number): Promise<void> => {
-            try {
-                setState(prev => ({ ...prev, loading: true }));
-
-                const response = await fetch(url, {
-                    signal,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                if (!signal.aborted) {
-                    setState({
-                        data,
-                        loading: false,
-                        error: null,
-                    });
-                }
-            } catch (error) {
-                if (signal.aborted) return;
-
-                if (retriesLeft > 0 && error instanceof Error && !error.message.includes('aborted')) {
-                    // Wait for retryDelay milliseconds before retrying
-                    await new Promise(resolve => setTimeout(resolve, retryDelay));
-                    return fetchWithRetry(retriesLeft - 1);
-                }
-
-                setState({
-                    data: null,
-                    loading: false,
-                    error: error instanceof Error ? error : new Error('An unknown error occurred'),
-                });
-            }
-        };
-
-        fetchWithRetry(retryCount);
-
-        return () => {
-            abortController.abort();
-        };
-    }, [url, retryCount, retryDelay]);
-
-    return {
-        data: state.data,
-        loading: state.loading,
-        error: state.error,
-    };
+    return { data, loading, error, refetch: fetchData };
 }

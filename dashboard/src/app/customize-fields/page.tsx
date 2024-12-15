@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, ChevronUp, ChevronDown, Edit, Save, Filter, PlusCircle, Trash2, LayoutGrid, LayoutList, HelpCircle } from 'lucide-react';
+import { ArrowLeft, ChevronUp, ChevronDown, Edit, Filter, PlusCircle, Trash2, LayoutGrid, LayoutList, HelpCircle, Check } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
 import { Table as UITable, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -25,107 +25,19 @@ interface CustomField {
     filterEnabled?: boolean;
     filter?: string;
     sortOrder?: SortOrder;
+    type?: string; // Add missing properties
+    displayMode?: DisplayMode;
 }
 
-interface CustomFieldSet {
-    id: string;
-    name: string;
-    fields: CustomField[];
-    displayMode: DisplayMode;
-}
+import { CustomFieldSet as ImportedCustomFieldSet } from '@/lib/customFieldsContext';
+import IconWithSlash from "@/components/IconWithSlash";
+
+type CustomFieldSet = ImportedCustomFieldSet
 
 interface EditingState {
     isEditMode: boolean;
     editingName: string;
 }
-
-interface VisibilityToggleProps {
-    isVisibleInCard: boolean;
-    isVisibleInRow: boolean;
-    isEditMode: boolean;
-    onToggleCardVisibility: () => void;
-    onToggleRowVisibility: () => void;
-}
-
-interface FieldSetGroup {
-    name: string;
-    sets: CustomFieldSet[];
-}
-
-
-const VisibilityToggle: React.FC<VisibilityToggleProps> = ({
-                                                               isVisibleInCard,
-                                                               isVisibleInRow,
-                                                               isEditMode,
-                                                               onToggleCardVisibility,
-                                                               onToggleRowVisibility
-                                                           }) => {
-    if (isEditMode) {
-        return (
-            <div className="flex items-center gap-2">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onToggleCardVisibility}
-                    className="transition-all duration-200 relative group"
-                    title={isVisibleInCard ? 'Hide in card view' : 'Show in card view'}
-                >
-                    <LayoutGrid
-                        className={`h-4 w-4 ${isVisibleInCard ? 'text-foreground' : 'text-muted-foreground'}`}
-                    />
-                    {!isVisibleInCard && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center" />
-                        </div>
-                    )}
-                </Button>
-
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={onToggleRowVisibility}
-                    className="transition-all duration-200 relative group"
-                    title={isVisibleInRow ? 'Hide in table view' : 'Show in table view'}
-                >
-                    <LayoutList
-                        className={`h-4 w-4 ${isVisibleInRow ? 'text-foreground' : 'text-muted-foreground'}`}
-                    />
-                    {!isVisibleInRow && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center" />
-                        </div>
-                    )}
-                </Button>
-            </div>
-        );
-    }
-
-    return (
-        <div className="flex items-center gap-2">
-            <div className="p-2 relative">
-                <LayoutGrid
-                    className={`h-4 w-4 ${isVisibleInCard ? 'text-foreground' : 'text-muted-foreground'}`}
-                />
-                {!isVisibleInCard && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center" />
-                    </div>
-                )}
-            </div>
-
-            <div className="p-2 relative">
-                <LayoutList
-                    className={`h-4 w-4 ${isVisibleInRow ? 'text-foreground' : 'text-muted-foreground'}`}
-                />
-                {!isVisibleInRow && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center" />
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
 
 export default function CustomizeFieldsPage() {
     const router = useRouter();
@@ -241,6 +153,17 @@ export default function CustomizeFieldsPage() {
                 name: newSetName.trim(),
                 fields: getActiveSet()?.fields.map(field => ({ ...field, id: `${Date.now()}-${field.id}` })) || [],
                 displayMode: 'row',
+                viewConfig: {
+                    defaultView: 'table',
+                    cardConfig: {
+                        showDescription: true,
+                        showIcon: true
+                    },
+                    tableConfig: {
+                        compact: false,
+                        showIcon: true
+                    }
+                }
             };
             dispatch({ type: 'ADD_CUSTOM_FIELD_SET', payload: newSet });
             dispatch({ type: 'SET_ACTIVE_SET_ID', payload: newSet.id });
@@ -273,13 +196,19 @@ export default function CustomizeFieldsPage() {
                 </Button>
             </div>
 
-            <div className={`flex justify-between items-center mb-4 px-4 ${editingState.isEditMode ? 'opacity-50' : ''}`}>
-                <ScrollArea className="w-[calc(100%-120px)]">
-                    <div className="flex space-x-2">
+            <div
+                className={`flex justify-between items-center mb-4 px-4 ${editingState.isEditMode ? 'opacity-50' : ''}`}>
+                <div className="w-full overflow-x-auto">
+                    <div className="inline-flex rounded-lg bg-muted p-1 text-muted-foreground">
                         {state.customFieldSets.map(set => (
                             <Button
                                 key={set.id}
-                                variant={state.activeSetId === set.id ? "default" : "outline"}
+                                variant="ghost"
+                                className={`rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                                    state.activeSetId === set.id
+                                        ? "bg-background text-foreground shadow-sm"
+                                        : "hover:bg-background/50 hover:text-foreground"
+                                }`}
                                 onClick={() => dispatch({type: 'SET_ACTIVE_SET_ID', payload: set.id})}
                                 disabled={editingState.isEditMode}
                             >
@@ -287,7 +216,7 @@ export default function CustomizeFieldsPage() {
                             </Button>
                         ))}
                     </div>
-                </ScrollArea>
+                </div>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button variant="outline" disabled={editingState.isEditMode}>
@@ -333,53 +262,27 @@ export default function CustomizeFieldsPage() {
                         </div>
                         <div className="flex items-center space-x-2">
                             {editingState.isEditMode ? (
-                                <Select
-                                    value={getActiveSet()?.displayMode}
-                                    onValueChange={(value: DisplayMode) => {
-                                        const activeSet = getActiveSet();
-                                        if (activeSet) {
-                                            dispatch({
-                                                type: 'UPDATE_CUSTOM_FIELD_SET',
-                                                payload: { ...activeSet, displayMode: value }
-                                            });
-                                        }
-                                    }}
-                                >
-                                    <SelectTrigger className="w-[180px]">
-                                        <SelectValue placeholder="Select display mode"/>
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="row">
-                                            <span className="flex items-center">
-                                                <LayoutList className="h-4 w-4 mr-2"/>
-                                                Row View
-                                            </span>
-                                        </SelectItem>
-                                        <SelectItem value="card">
-                                            <span className="flex items-center">
-                                                <LayoutGrid className="h-4 w-4 mr-2"/>
-                                                Card View
-                                            </span>
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <>
+                                    <Button variant="outline" onClick={handleCancel}>
+                                        <ArrowLeft className="h-4 w-4 mr-2"/>
+                                        Cancel
+                                    </Button>
+                                    <Button onClick={handleSave}>
+                                        <Check className="h-4 w-4 mr-2"/>
+                                        Save
+                                    </Button>
+                                </>
                             ) : (
-                                <div className="flex items-center space-x-2">
-                                    {getActiveSet()?.displayMode === 'row' ? (
-                                        <LayoutList className="h-6 w-6"/>
-                                    ) : (
-                                        <LayoutGrid className="h-6 w-6"/>
-                                    )}
-                                </div>
+                                <Button variant="outline" onClick={() => setEditingState({ isEditMode: true, editingName: getActiveSet()?.name || '' })}>
+                                    <Edit className="h-4 w-4 mr-2"/>
+                                    Edit
+                                </Button>
                             )}
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <UITable>
-
-
-
                         <TableHeader>
                             <TableRow>
                                 {editingState.isEditMode && <TableHead className="w-[80px]">Order</TableHead>}
@@ -387,188 +290,129 @@ export default function CustomizeFieldsPage() {
                                 <TableHead className="w-[100px]">Card View</TableHead>
                                 <TableHead className="w-[100px]">Table View</TableHead>
                                 <TableHead className="w-[400px]">Custom Filter</TableHead>
-                        <TableHead className="w-[180px]">Sort</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {getActiveSet()?.fields.map((field, index) => (
-                        <TableRow key={field.id}>
-                            {editingState.isEditMode && (
-                                <TableCell className="w-[80px]">
-                                    <div className="flex items-center gap-2">
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => moveField(index, 'up')}
-                                            disabled={index === 0}
-                                        >
-                                            <ChevronUp className="h-4 w-4"/>
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => moveField(index, 'down')}
-                                            disabled={index === getActiveSet()?.fields.length - 1}
-                                        >
-                                            <ChevronDown className="h-4 w-4"/>
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            )}
-                            <TableCell className="w-[300px]">{field.name}</TableCell>
-                            <TableCell className="w-[100px]">
-                                {editingState.isEditMode ? (
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() => toggleFieldVisibility(field.id, 'card')}
-                                        className="transition-all duration-200 relative"
-                                        title={field.isVisibleInCard ? 'Hide in card view' : 'Show in card view'}
-                                    >
-                                        <LayoutGrid
-                                            className={`h-4 w-4 ${field.isVisibleInCard ? 'text-foreground' : 'text-muted-foreground'}`}
-                                        />
-                                        {!field.isVisibleInCard && (
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center"/>
+                                <TableHead className="w-[180px]">Sort</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {getActiveSet()?.fields.map((field, index) => (
+                                <TableRow key={field.id}>
+                                    {editingState.isEditMode && (
+                                        <TableCell className="w-[80px]">
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => moveField(index, 'up')}
+                                                    disabled={index === 0}
+                                                >
+                                                    <ChevronUp className="h-4 w-4"/>
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => moveField(index, 'down')}
+                                                    disabled={index === getActiveSet()?.fields.length - 1}
+                                                >
+                                                    <ChevronDown className="h-4 w-4"/>
+                                                </Button>
                                             </div>
+                                        </TableCell>
+                                    )}
+                                    <TableCell className="w-[300px]">{field.name}</TableCell>
+                                    <TableCell className="w-[100px]">
+                                        {editingState.isEditMode ? (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => toggleFieldVisibility(field.id, 'table')}
+                                                className="transition-all duration-200"
+                                                title={field.isVisibleInCard ? 'Hide in table view' : 'Show in table view'}
+                                            >
+                                                <IconWithSlash Icon={LayoutGrid} disabled={!field.isVisibleInRow} />
+                                            </Button>
+                                        ) : (
+                                            <IconWithSlash Icon={LayoutGrid} disabled={!field.isVisibleInRow} />
                                         )}
-                                    </Button>
-                                ) : (
-                                    <div className="p-2 relative">
-                                        <LayoutGrid
-                                            className={`h-4 w-4 ${field.isVisibleInCard ? 'text-foreground' : 'text-muted-foreground'}`}
-                                        />
-                                        {!field.isVisibleInCard && (
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center"/>
+                                    </TableCell>
+                                    <TableCell className="w-[100px]">
+                                        {editingState.isEditMode ? (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                onClick={() => toggleFieldVisibility(field.id, 'card')}
+                                                className="transition-all duration-200"
+                                                title={field.isVisibleInCard ? 'Hide in card view' : 'Show in card view'}
+                                            >
+                                                <IconWithSlash Icon={LayoutGrid} disabled={!field.isVisibleInCard} />
+                                            </Button>
+                                        ) : (
+                                            <IconWithSlash Icon={LayoutGrid} disabled={!field.isVisibleInCard} />
+                                        )}
+                                    </TableCell>
+                                    <TableCell className="w-[400px]">
+                                        {editingState.isEditMode ? (
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={() => handleFilterToggle(field.id)}
+                                                    className="transition-all duration-200 relative"
+                                                    title={field.filterEnabled ? 'Disable filter' : 'Enable filter'}
+                                                >
+                                                    <Filter
+                                                        className={`h-4 w-4 ${field.filterEnabled ? 'text-foreground' : 'text-muted-foreground'}`}
+                                                    />
+                                                    {!field.filterEnabled && (
+                                                        <div className="absolute inset-0 flex items-center justify-center">
+                                                            <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center"/>
+                                                        </div>
+                                                    )}
+                                                </Button>
+                                                <Input
+                                                    value={field.filter || ''}
+                                                    onChange={(e) => handleFilterChange(field.id, e.target.value)}
+                                                    placeholder="Enter filter value"
+                                                    disabled={!field.filterEnabled}
+                                                />
                                             </div>
+                                        ) : (
+                                            field.filterEnabled ? field.filter : 'N/A'
                                         )}
-                                    </div>
-                                )}
-                            </TableCell>
-                            <TableCell className="w-[100px]">
-                                {editingState.isEditMode ? (
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={() => toggleFieldVisibility(field.id, 'row')}
-                                        className="transition-all duration-200 relative"
-                                        title={field.isVisibleInRow ? 'Hide in table view' : 'Show in table view'}
-                                    >
-                                        <LayoutList
-                                            className={`h-4 w-4 ${field.isVisibleInRow ? 'text-foreground' : 'text-muted-foreground'}`}
-                                        />
-                                        {!field.isVisibleInRow && (
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center"/>
-                                            </div>
+                                    </TableCell>
+                                    <TableCell className="w-[180px]">
+                                        {editingState.isEditMode ? (
+                                            <Select
+                                                value={field.sortOrder || 'none'}
+                                                onValueChange={(value: SortOrder) => handleSortChange(field.id, value)}
+                                            >
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Select sort order"/>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="none">None</SelectItem>
+                                                    <SelectItem value="asc">Ascending</SelectItem>
+                                                    <SelectItem value="desc">Descending</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        ) : (
+                                            field.sortOrder || 'N/A'
                                         )}
-                                    </Button>
-                                ) : (
-                                    <div className="p-2 relative">
-                                        <LayoutList
-                                            className={`h-4 w-4 ${field.isVisibleInRow ? 'text-foreground' : 'text-muted-foreground'}`}
-                                        />
-                                        {!field.isVisibleInRow && (
-                                            <div className="absolute inset-0 flex items-center justify-center">
-                                                <div className="w-5 h-px bg-muted-foreground rotate-45 transform origin-center"/>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
-                            </TableCell>
-                            <TableCell className="w-[400px]">
-                                {editingState.isEditMode ? (
-                                    <div className="flex items-center gap-2">
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            onClick={() => handleFilterToggle(field.id)}
-                                        >
-                                            <Filter
-                                                className={`h-4 w-4 ${field.filterEnabled ? 'text-foreground' : 'text-muted-foreground'}`}/>
-                                        </Button>
-                                        <Input
-                                            value={field.filter || ''}
-                                            onChange={(e) => handleFilterChange(field.id, e.target.value)}
-                                            placeholder="Enter filter"
-                                            disabled={!field.filterEnabled}
-                                            className="w-full"
-                                        />
-                                    </div>
-                                ) : (
-                                    field.filterEnabled ? field.filter : 'N/A'
-                                )}
-                            </TableCell>
-                            <TableCell className="w-[180px]">
-                                {editingState.isEditMode ? (
-                                    <Select
-                                        value={field.sortOrder || 'none'}
-                                        onValueChange={(value: SortOrder) => handleSortChange(field.id, value)}
-                                    >
-                                        <SelectTrigger className="w-[170px]">
-                                            <SelectValue placeholder="Select sort order"/>
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="none">None</SelectItem>
-                                            <SelectItem value="asc">Ascending</SelectItem>
-                                            <SelectItem value="desc">Descending</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                ) : (
-                                    field.sortOrder
-                                )}
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </UITable>
-        </CardContent>
-    <CardFooter className="flex justify-between mt-4">
-        {editingState.isEditMode ? (
-            <>
-                {state.customFieldSets.length > 1 && (
-                    <Button
-                        variant="destructive"
-                        onClick={() => deleteCustomFieldSet(getActiveSet()?.id || '')}
-                        disabled={state.activeSetId === '1'}
-                    >
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </UITable>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                    <Button variant="destructive" onClick={() => deleteCustomFieldSet(getActiveSet()?.id || '')}>
                         <Trash2 className="h-4 w-4 mr-2"/>
-                        Delete Set
+                        Delete
                     </Button>
-                )}
-                <div className="space-x-2 ml-auto">
-                    <Button onClick={handleCancel} variant="outline">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSave}>
-                        <Save className="h-4 w-4 mr-2"/>
-                        Save Changes
-                    </Button>
-                </div>
-            </>
-        ) : (
-            <div className="w-full flex justify-end">
-                <Button
-                    onClick={() => {
-                        const activeSet = getActiveSet();
-                        setEditingState({
-                            isEditMode: true,
-                            editingName: activeSet?.name || ''
-                        });
-                    }}
-                    variant="outline"
-                >
-                    <Edit className="h-4 w-4 mr-2"/>
-                    Edit Fields
-                </Button>
-            </div>
-        )}
-    </CardFooter>
-</Card>
-    <DashboardGuide open={showGuide} onOpenChange={setShowGuide} />
-</div>
-);
+                </CardFooter>
+            </Card>
+
+            {showGuide && <DashboardGuide open={showGuide} onOpenChange={setShowGuide} />}
+        </div>
+    );
 }
 
