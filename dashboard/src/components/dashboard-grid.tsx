@@ -500,6 +500,37 @@ export default function DashboardGrid() {
         }
     }, [dispatch]);
 
+    // Added effect to create default custom fields when none exist
+    useEffect(() => {
+        if (state.customFieldSets.length === 0 && fetchedData?.repositories) {
+            const allFields = [...new Set(
+                fetchedData.repositories.flatMap(repo =>
+                    Object.keys(repo)
+                )
+            )]
+                .map(key => key.charAt(0).toUpperCase() + key.slice(1));
+            const defaultSet: CustomFieldSet = {
+                id: '1',
+                name: 'Default Fields',
+                fields: allFields.map((field, index) => ({
+                    id: `${index + 1}`,
+                    name: field,
+                    type: 'text',
+                    isVisibleInCard: true,
+                    isVisibleInRow: true,
+                    sortOrder: 'none',
+                    filter: '',
+                    filterEnabled: false,
+                    displayMode: 'row'
+                })),
+                displayMode: 'card',
+                viewConfig: DEFAULT_VIEW_CONFIG
+            };
+            dispatch({ type: 'SET_CUSTOM_FIELD_SETS', payload: [defaultSet] });
+            dispatch({ type: 'SET_ACTIVE_SET_ID', payload: defaultSet.id });
+        }
+    }, [fetchedData, state.customFieldSets.length, dispatch]);
+
     useEffect(() => {
         const activeSet = state.customFieldSets.find(set => set.id === state.activeSetId);
         if (activeSet?.displayMode) {
