@@ -1,0 +1,153 @@
+version: '1.0'
+
+stages:
+  - clone
+  - test
+  - build
+  - metadata
+  - update helm
+
+services:
+  name: integration_services
+  composition:
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - 6379
+  jaeger:
+    image: 'jaegertracing/all-in-one:1.9.0'
+    ports:
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 9411:9411
+      - 16686:16686
+      - 14268:14268
+  localstack:
+    image: localstack/localstack-full
+    ports:
+      - 4566
+      - 4571
+      - 8080
+    environment:
+      - >-
+        SERVICES=s3,sns,sqs,apigateway,lambda,dynamodb,dynamodbstreams,cloudformation
+
+steps:
+  clone_parallel:
+    type: parallel
+    stage: clone
+    steps:
+      clone:
+        title: Cloning repository
+        type: git-clone
+        repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+        revision: '${{CF_BRANCH}}'
+        git: github
+        stage: "clone"
+
+  test_parallel:
+    type: parallel
+    stage: "test"
+    steps:
+      go_test:
+        title: "Test"
+        image: 'golang:latest'
+        type: freestyle
+        stage: test
+        working_directory: '${{clone}}'
+        commands:
+          - go test -cover -p=1 -coverprofile=./cov.out ./...
+      go_Integration_test:
+        title: "Test Integração"
+        image: 'golang:latest'
+        type: freestyle
+        stage: "test"
+        working_directory: '${{clone}}'
+        commands:
+          - go test ./... -tags=integration
+        services:
+        - integration_services
+
+  build:
+    title: Building Docker image
+    type: build
+    image_name: pismopocs/${{CF_REPO_NAME}}
+    working_directory: '${{clone}}'
+    tags:
+      - "PR-latest"
+      - "PR-${{CF_PULL_REQUEST_NUMBER}}"
+    dockerfile: scripts/docker/api/Dockerfile
+    stage: build
+    registry: pismopocs
+    when:
+      steps:
+        - name: test_parallel
+          'on':
+            - success
+
+  enrich_parallel:
+    type: parallel
+    stage: build
+    steps:
+      enrich_image_pr:
+        title: Add PR info
+        type: image-enricher
+        stage: "metadata"
+        arguments:
+          IMAGE: pismopocs/${{CF_REPO_NAME}}:PR-${{CF_PULL_REQUEST_NUMBER}}
+          BRANCH: '${{CF_BRANCH}}'
+          REPO: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+          GIT_PROVIDER_NAME: github
+      enrich_image_latest:
+        title: Add PR info
+        type: image-enricher
+        stage: "metadata"
+        arguments:
+          IMAGE: pismopocs/${{CF_REPO_NAME}}:latest
+          BRANCH: '${{CF_BRANCH}}'
+          REPO: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+          GIT_PROVIDER_NAME: github
+
+
+  update_helm_tag_parallel:
+    type: parallel
+    stage: "update helm"
+    steps:
+      update_helm_tag_sa_east_1:
+        title: "Update helm tag on file: /scripts/helm/sandbox/sa-east-1/values.yaml"
+        image: "mikefarah/yq:3"
+        working_directory: ${{clone}}/scripts/helm/sandbox/sa-east-1/
+        stage: "update helm"
+        commands:
+          - "ls -la"
+          - "yq w -i values.yaml 'rollout-template.image.tag' PR-${{CF_PULL_REQUEST_NUMBER}}"
+          - "yq w -i values.yaml 'rollout-template.image.revision' ${{CF_REVISION}}"
+          - "cat values.yaml"
+      update_helm_tag_us_east_1:
+        title: "Update helm tag on file: /scripts/helm/sandbox/us-east-1/values.yaml"
+        image: "mikefarah/yq:3"
+        working_directory: ${{clone}}/scripts/helm/sandbox/us-east-1/
+        stage: "update helm"
+        commands:
+          - "yq w -i values.yaml 'rollout-template.image.tag' PR-${{CF_PULL_REQUEST_NUMBER}}"
+          - "yq w -i values.yaml 'rollout-template.image.revision' ${{CF_REVISION}}"
+          - "cat values.yaml"
+
+  commit_and_push:
+    title: Commit manifest
+    type: git-commit
+    stage: "update helm"
+    working_directory: '${{clone}}'
+    arguments:
+      repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+      git: github
+      commit_message: "change image: docker.io/pismopocs/${{CF_REPO_NAME}}:PR-${{CF_PULL_REQUEST_NUMBER}}"
+      git_user_name: codefresh
+      git_user_email: codefresh@pismo.io
+      allow_empty: true
+      add:
+      - ./scripts/helm/sandbox/sa-east-1/values.yaml
+      - ./scripts/helm/sandbox/us-east-1/values.yaml
+

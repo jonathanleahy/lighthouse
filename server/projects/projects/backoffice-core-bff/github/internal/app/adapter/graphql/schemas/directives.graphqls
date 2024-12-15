@@ -1,0 +1,1 @@
+directive @hasAnyRole(roles: [String!]!) on FIELD_DEFINITION

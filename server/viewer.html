@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Core Interactive Graph Visualization</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+        #file-input-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        #file-input {
+            display: none;
+        }
+        #file-input-label {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #file-input-label:hover {
+            background-color: #45a049;
+        }
+        #developer-section {
+            margin-top: auto;
+            padding-top: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+        #developer-label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+            color: #666;
+        }
+        #app-select {
+            padding: 5px;
+            font-size: 12px;
+            max-width: 200px;
+        }
+        #graph {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .node {
+            cursor: pointer;
+        }
+        .node circle {
+            stroke: #fff;
+            stroke-width: 2px;
+        }
+        .node text {
+            font: 12px sans-serif;
+            pointer-events: none;
+        }
+        .link {
+            fill: none;
+            stroke: #ccc;
+            stroke-width: 2px;
+        }
+        #info-panel {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        #info-panel pre {
+            margin: 0;
+            overflow-x: auto;
+        }
+        .node.selected circle {
+            stroke: #000;
+            stroke-width: 3px;
+        }
+        .status-ok {
+            color: #4CAF50;
+        }
+        .status-warning {
+            color: #FFA500;
+        }
+        .status-error {
+            color: #FF0000;
+        }
+        #repo-link-container {
+            text-align: right;
+            display: none; /* Hide by default */
+        }
+        #repo-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 20px 0px 0px 0px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #repo-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 id="visualization-title">Interactive Graph Visualization</h1>
+    <div id="file-input-container">
+        <label for="file-input" id="file-input-label">Choose File</label>
+        <input type="file" id="file-input" accept=".json">
+    </div>
+    <div id="graph"></div>
+    <div id="repo-link-container">
+        <a id="repo-link" href="#" target="_blank">Repository Link</a>
+    </div>
+    <div id="info-panel"></div>
+    <div id="developer-section">
+        <label id="developer-label" for="app-select">Debug/Developer Details:</label>
+        <select id="app-select">
+            <option value="">Select a JSON file</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    let data = {};
+    let currentGraph = null;
+
+    function simplifyAppName(appName, baseRepoName) {
+        return appName.replace(baseRepoName, '').replace(/^-/, '');
+    }
+
+    function updateTitle(repoName) {
+        document.getElementById('visualization-title').textContent = `${repoName} Visualization`;
+        document.title = `${repoName} Visualization`;
+    }
+
+    function getNodeColor(d) {
+        if (d.group === 0) {
+            return d.error ? "#FF0000" : (d.warning ? "#FFA500" : "#4CAF50");
+        }
+        return d.error ? "#FF0000" : (d.warning ? "#FFA500" : "#4CAF50");
+    }
+
+    function getNodeStatus(d) {
+        return d.error ? "error" : (d.warning ? "warning" : "ok");
+    }
+
+    function createInteractiveGraph(appData) {
+        updateTitle(appData.repoName);
+
+        const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+        const width = 960 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+
+        d3.select("#graph").selectAll("*").remove();
+
+        const svg = d3.select("#graph")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${width / 2 + margin.left},${height / 2 + margin.top})`);
+
+        const hasWarning = appData.apps.some(app => app.warning);
+        const hasError = appData.apps.some(app => app.error);
+
+        const nodes = [
+            { id: appData.repoName, group: 0, warning: hasWarning, error: hasError },
+            ...appData.apps.map((app, index) => {
+                const simplifiedName = simplifyAppName(app.appName, appData.repoName);
+                console.log(`createInteractiveGraph: appName=${app.appName}, simplifiedName=${simplifiedName}`);
+                return {
+                    id: simplifiedName,
+                    fullName: app.appName,
+                    group: 1,
+                    ...app
+                };
+            })
+        ];
+
+        const links = appData.apps.map(app => {
+            const simplifiedName = simplifyAppName(app.appName, appData.repoName);
+            console.log(`createInteractiveGraph: link source=${appData.repoName}, target=${simplifiedName}`);
+            return {
+                source: appData.repoName,
+                target: simplifiedName
+            };
+        });
+
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-500))
+            .force("center", d3.forceCenter(0, 0))
+            .force("collide", d3.forceCollide().radius(60))
+            .force("radial", d3.forceRadial(d => d.group === 0 ? 0 : (d.type === "failover" ? Math.min(width, height) / 6 : Math.min(width, height) / 3)).strength(0.8));
+
+        const link = svg.append("g")
+            .selectAll("line")
+            .data(links)
+            .join("line")
+            .attr("class", "link");
+
+        const node = svg.append("g")
+            .selectAll(".node")
+            .data(nodes)
+            .join("g")
+            .attr("class", "node")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        node.append("circle")
+            .attr("r", d => d.group === 0 ? 20 : (d.type === "failover" ? 10 : 15))
+            .attr("fill", getNodeColor);
+
+        const labels = node.append("text")
+            .attr("dy", ".35em")
+            .text(d => d.id + (d.type === "failover" ? " (failover)" : ""));
+
+        node.on("click", clicked);
+
+        function ticked() {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node.attr("transform", d => `translate(${d.x},${d.y})`);
+
+            labels
+                .attr("text-anchor", "middle")
+                .attr("x", d => d.group === 0 ? 0 : (d.x > 0 ? 25 : -25))
+                .attr("y", d => d.group === 0 ? 30 : (d.y > 0 ? 25 : -25));
+        }
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        function clicked(event, d) {
+            node.classed("selected", false);
+            d3.select(this).classed("selected", true);
+            updateInfoPanel(d);
+        }
+
+        // Function to filter images by environment
+        function filterImagesByEnvironment(images, environment) {
+            return images.filter(image => image.includes(environment));
+        }
+
+        // Function to count the number of different image types
+        function countImageTypes(images) {
+            const imageCount = {};
+            images.forEach(image => {
+                if (!imageCount[image]) {
+                    imageCount[image] = 0;
+                }
+                imageCount[image]++;
+            });
+            return imageCount;
+        }
+
+        function updateInfoPanel(d) {
+            const statusClass = `status-${getNodeStatus(d)}`;
+            let content = `<h2 class="${statusClass}">${d.fullName || d.id}</h2>`;
+            if (d.group === 1) {
+                const imagesCount = d.images ? d.images.length : 0;
+                content += `<p>${imagesCount === 1 ? 'Image:' : 'Images:'} ${imagesCount}</p>`;
+                if (d.images) {
+                    content += '<ul>' + d.images.map(img => `<li>${img}</li>`).join('') + '</ul>';
+
+                    // Filter images for core environment
+                    const coreImages = filterImagesByEnvironment(d.images, 'core');
+
+                    // Count image types for core environment
+                    const coreImageCount = countImageTypes(coreImages);
+
+                    // Add warning if core image count is greater than or equal to 3
+                    if (Object.keys(coreImageCount).length >= 3) {
+                        content += `<p class="status-warning"><strong>Warning:</strong> Core environment has 3 or more image types.</p>`;
+                    }
+
+                    content += '<h3>Core Environment Image Types Count:</h3>';
+                    content += '<ul>';
+                    for (const [image, count] of Object.entries(coreImageCount)) {
+                        content += `<li>${image}: ${count}</li>`;
+                    }
+                    content += '</ul>';
+                }
+                if (d.error) {
+                    content += `<p><strong>Error:</strong> ${d.error}</p>`;
+                }
+                if (d.warning) {
+                    content += `<p><strong>Warning:</strong> ${d.warning}</p>`;
+                }
+            } else {
+                content += `<p>Repository Name: ${appData.repoName}</p>`;
+                content += `<p>Total Apps: ${appData.apps.length}</p>`;
+                content += `<h3>Full JSON Details:</h3>`;
+                content += `<pre>${JSON.stringify(appData, null, 2)}</pre>`;
+
+                // display the number of different image types
+                const imageCount = countImageTypes(appData.apps.map(app => app.images).flat().filter(image => image !== undefined));
+                content += `<h3>Image Types:</h3>`;
+                content += '<ul>';
+                for (const [image, count] of Object.entries(imageCount)) {
+                    content += `<li>${image}: ${count}</li>`;
+                }
+                content += '</ul>';
+
+            }
+            document.getElementById('info-panel').innerHTML = content;
+        }
+
+        simulation.on("tick", ticked);
+
+        // Select the central node by default
+        const centralNode = node.filter(d => d.group === 0);
+        centralNode.dispatch("click");
+
+        currentGraph = { node, updateInfoPanel };
+    }
+
+    function updateGraph() {
+        const selectedApp = document.getElementById('app-select').value;
+        if (selectedApp && data[selectedApp]) {
+            createInteractiveGraph(data[selectedApp]);
+            document.getElementById('repo-link').href = data[selectedApp].repoBitUrl;
+        }
+    }
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            readFile(file);
+        }
+    }
+
+    function readFile(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const json = JSON.parse(e.target.result);
+                const fileName = file.name.replace('.json', '');
+
+                if (json.apps && json.repoName) {
+                    data[fileName] = json;
+                } else {
+                    const firstProp = Object.keys(json)[0];
+                    if (json[firstProp].apps && json[firstProp].repoName) {
+                        data[fileName] = json[firstProp];
+                    } else {
+                        throw new Error("Invalid JSON structure");
+                    }
+                }
+
+                updateAppSelect(fileName);
+                createInteractiveGraph(data[fileName]);
+                document.getElementById('repo-link').href = data[fileName].repoBitUrl;
+                document.getElementById('repo-link-container').style.display = 'block'; // Show the div
+            } catch (error) {
+                console.error('Error parsing JSON file:', error);
+                alert(`Error parsing ${file.name}: ${error.message}`);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    function updateAppSelect(fileName) {
+        const select = document.getElementById('app-select');
+        let option = select.querySelector(`option[value="${fileName}"]`);
+
+        if (!option) {
+            option = document.createElement('option');
+            select.appendChild(option);
+        }
+
+        option.value = fileName;
+        option.textContent = fileName;
+        select.value = fileName;
+    }
+
+    document.getElementById('file-input').addEventListener('change', handleFileSelect);
+    document.getElementById('app-select').addEventListener('change', updateGraph);
+
+    // Allow reloading the same file
+    document.getElementById('file-input').addEventListener('click', function(event) {
+        event.target.value = '';
+    });
+</script>
+</body>
+</html>

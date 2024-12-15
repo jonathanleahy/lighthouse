@@ -1,0 +1,141 @@
+definitions:
+  entity.Audit:
+    properties:
+      http:
+        $ref: '#/definitions/entity.HTTP'
+      id:
+        type: integer
+      localization:
+        $ref: '#/definitions/entity.Localization'
+      operation:
+        $ref: '#/definitions/entity.Operation'
+      user:
+        $ref: '#/definitions/entity.User'
+      user_agent:
+        $ref: '#/definitions/entity.UserAgent'
+    type: object
+  entity.HTTP:
+    properties:
+      code:
+        type: integer
+      request:
+        type: string
+      response:
+        type: string
+    type: object
+  entity.Localization:
+    properties:
+      latitude:
+        type: number
+      longitude:
+        type: number
+    type: object
+  entity.Operation:
+    properties:
+      action:
+        type: string
+      cid:
+        type: string
+      date:
+        type: string
+      domain:
+        type: string
+      domain_id:
+        type: string
+      origin:
+        type: string
+      tenant:
+        type: string
+    type: object
+  entity.SearchAudit:
+    properties:
+      audits:
+        items:
+          $ref: '#/definitions/entity.Audit'
+        type: array
+      current_page:
+        type: integer
+      pages:
+        type: integer
+      per_page:
+        type: integer
+      total_items:
+        type: integer
+    type: object
+  entity.User:
+    properties:
+      email:
+        type: string
+      roles:
+        items:
+          type: string
+        type: array
+    type: object
+  entity.UserAgent:
+    properties:
+      device:
+        type: string
+      device_ip:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /query:
+    post:
+      description: Return graphql data
+      parameters:
+      - description: Roles
+        in: header
+        name: '"x-roles"'
+        required: true
+        type: string
+      - description: Tenant
+        in: header
+        name: '"x-tenant"'
+        required: true
+        type: string
+      - description: query
+        in: body
+        name: query
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Return graphql data
+      tags:
+      - graphql
+  /v1/audit:
+    get:
+      description: Return audit by parameters
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.SearchAudit'
+      summary: Return audit by parameters
+      tags:
+      - audit
+  /v1/audit/{id}:
+    get:
+      description: Return detailed audit by ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.Audit'
+      summary: Return audit by ID
+      tags:
+      - audit
+swagger: "2.0"
+

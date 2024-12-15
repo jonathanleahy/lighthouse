@@ -1,0 +1,19 @@
+input RoleInput {
+    id: Int,
+    name: String!
+}
+
+input FeatureInput {
+    name: String!,
+    parentFeatureID: Int
+}
+
+input ActionInput {
+    action: PermissionAction!
+}
+
+input EndpointInput {
+    service_name: String!,
+    method: String!,
+    path: String!
+}

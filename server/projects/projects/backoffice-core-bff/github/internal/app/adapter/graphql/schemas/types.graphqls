@@ -1,0 +1,41 @@
+type Health {
+    message: String!
+}
+
+type DisputeEvent {
+    id: Int!
+    ord_id: Int!
+    account_id: Int!
+    authorization_id: Int!
+    comment: String!
+    dispute_reason: Int!
+    modality: Int!
+    dispute_status: Int!
+    dispute_status_group: String!
+    created_at: String!
+    updated_at: String
+    created_at_utc: String
+    updated_at_utc: String
+    timeline: String
+    protocol: String
+    metadata: String
+    disputed_amount: Float!
+    is_network: Boolean!
+    is_dispute_migrated: Boolean!
+    reversal_id: Int
+    network_return_reason_code: String
+    network_brand_type: String!
+    transaction_date: String!
+}
+
+type DisputeStatus {
+    source: String!
+    target: String!
+    event: String!
+}
+
+type FraudReport {
+    fraud_report_id: Int!
+    dispute_id: Int!
+    dispute_installment_id: Int!
+}

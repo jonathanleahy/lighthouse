@@ -1,0 +1,110 @@
+enum Order {
+    asc
+    desc
+}
+
+enum AuditAction {
+    create
+    read
+    update
+    delete
+    list
+}
+
+type Audit {
+    id: Int!
+    operation: Operation
+    user: User
+    user_agent: UserAgent
+    localization: Localization
+    http: Http
+}
+
+type Operation {
+    tenant: String!
+    action: String!
+    domain: String!
+    domain_id: String!
+    origin: String
+    cid: String!
+    date: String!
+}
+
+type User {
+    email: String!
+    roles: [String!]!
+}
+
+type UserAgent {
+    device: String
+    device_ip: String
+}
+
+type Localization {
+    latitude: Float
+    longitude: Float
+}
+
+type Http {
+    code: Int!
+    request: String!
+    response: String!
+}
+
+type SearchAudit {
+    current_page: Int!
+    pages:       Int!
+    per_page:     Int!
+    total_items:  Int!
+    audits: [Audit!]
+}
+
+type ListRoles {
+    data: JSON
+}
+scalar JSON
+
+type ListUserRoles {
+    roles: [String!]
+}
+
+type Feature {
+    id: Int!
+    name: String
+    parentFeatureID: Int
+}
+
+type Endpoint {
+    id: Int!
+    service_name: String
+    path: String
+    method: String
+}
+
+type SearchFeature {
+    current_page: Int!
+    pages:       Int!
+    per_page:     Int!
+    total_items:  Int!
+    features: [Feature!]
+}
+
+type SearchEndpoint {
+    current_page: Int!
+    pages:       Int!
+    per_page:     Int!
+    total_items:  Int!
+    endpoints: [Endpoint!]
+}
+
+type Role {
+    id: Int!
+    name: String!
+}
+
+enum PermissionAction {
+    read
+    write
+}
+
+

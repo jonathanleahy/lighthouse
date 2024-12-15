@@ -1,0 +1,1362 @@
+[
+  {
+    "file_path": "projects/console-audit-bff/github/.checkmarx/application.yml",
+    "lines": 69
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.checkmarx/sca_application.yml",
+    "lines": 84
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/config",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/description",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/applypatch-msg.sample",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/commit-msg.sample",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/fsmonitor-watchman.sample",
+    "lines": 174
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/post-update.sample",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/pre-applypatch.sample",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/pre-commit.sample",
+    "lines": 49
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/pre-merge-commit.sample",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/pre-push.sample",
+    "lines": 53
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/pre-rebase.sample",
+    "lines": 169
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/pre-receive.sample",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/prepare-commit-msg.sample",
+    "lines": 42
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/push-to-checkout.sample",
+    "lines": 78
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/sendemail-validate.sample",
+    "lines": 77
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/hooks/update.sample",
+    "lines": 128
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/index",
+    "lines": 164
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/info/exclude",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/logs/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/logs/refs/heads/main",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/logs/refs/remotes/origin/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/objects/pack/pack-fd9640b9139b61e92b168204bdff3caed14188a8.idx",
+    "lines": 267
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/objects/pack/pack-fd9640b9139b61e92b168204bdff3caed14188a8.pack",
+    "lines": 3751
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/objects/pack/pack-fd9640b9139b61e92b168204bdff3caed14188a8.rev",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/packed-refs",
+    "lines": 52
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/refs/heads/main",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.git/refs/remotes/origin/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.github/CODEOWNERS",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.github/PULL_REQUEST_TEMPLATE.md",
+    "lines": 26
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/.gitignore",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/Makefile",
+    "lines": 98
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/README.md",
+    "lines": 148
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/clismo.yaml",
+    "lines": 32
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/cmd/api/main.go",
+    "lines": 33
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/cortex.yaml",
+    "lines": 52
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/cx.config",
+    "lines": 17
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docker-compose.yml",
+    "lines": 50
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/images/console-audit-detail-example.png",
+    "lines": 588
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/images/console-audit-list-example.png",
+    "lines": 698
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/openapi/docs.go",
+    "lines": 245
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/openapi/swagger.json",
+    "lines": 217
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/openapi/swagger.yaml",
+    "lines": 140
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/query/query.findAuditByID.MD",
+    "lines": 192
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/query/query.findAuditByID.png",
+    "lines": 186
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/query/query.findAuditByID.puml",
+    "lines": 31
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/query/query.searchAudit.MD",
+    "lines": 204
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/query/query.searchAudit.png",
+    "lines": 108
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/docs/query/query.searchAudit.puml",
+    "lines": 27
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/go.mod",
+    "lines": 91
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/go.sum",
+    "lines": 364
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/gqlgen.yml",
+    "lines": 56
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/entity/models_gen.go",
+    "lines": 254
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/generated/generated.go",
+    "lines": 10030
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/resolvers/resolver.go",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/resolvers/schema.resolvers.go",
+    "lines": 443
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/resolvers/schema.resolvers_test.go",
+    "lines": 1345
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/schemas/inputs.graphqls",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/schemas/schema.graphqls",
+    "lines": 27
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/schemas/types.graphqls",
+    "lines": 109
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/graphql/tools/tools.go",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/handler/handler.go",
+    "lines": 22
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/handler/handler_test.go",
+    "lines": 63
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/presenter/audit.go",
+    "lines": 69
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/presenter/error.go",
+    "lines": 17
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/presenter/net.go",
+    "lines": 5
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/presenter/role.go",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/router.go",
+    "lines": 266
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/adapter/web/router_test.go",
+    "lines": 223
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/app.go",
+    "lines": 45
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/app_test.go",
+    "lines": 59
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/audit.go",
+    "lines": 452
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/audit_test.go",
+    "lines": 1137
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/manager.go",
+    "lines": 18
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/manager_test.go",
+    "lines": 20
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/mock/audit.go",
+    "lines": 354
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/mock/net.go",
+    "lines": 51
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/net.go",
+    "lines": 25
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/internal/app/domain/service/net_test.go",
+    "lines": 59
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/kubernetes/sa-east-1/ext/console-audit-bff-config.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/kubernetes/sa-east-1/itau/console-audit-bff-config.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/kubernetes/sa-east-1/itau/console-audit-bff-custom-config.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/kubernetes/sa-east-1/prod/console-audit-bff-config.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/kubernetes/sa-east-1/prod/console-audit-bff-custom-config.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/cd-production.yaml",
+    "lines": 123
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/cd.yaml",
+    "lines": 132
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/ci-release.yaml",
+    "lines": 231
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/ci.yaml",
+    "lines": 153
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/flyway/migrate.yaml",
+    "lines": 60
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/flyway/repair.yaml",
+    "lines": 60
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/help.yaml",
+    "lines": 58
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/release.yaml",
+    "lines": 160
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/codefresh/terraform/terraform.yaml",
+    "lines": 0
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/docker/api/Dockerfile",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/aus-prod/ap-southeast-2/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/aus-prod/ap-southeast-2/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/aus-prod/ap-southeast-2/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/aus-prod/ap-southeast-2/templates/secrets/app-secrets.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/aus-prod/ap-southeast-2/values.yaml",
+    "lines": 50
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-1/templates/configmap.yaml",
+    "lines": 12
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-1/templates/secrets/app-secrets.yaml",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-1/values.yaml",
+    "lines": 85
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-2/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-2/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-2/templates/configmap.yaml",
+    "lines": 12
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-2/templates/secrets/app-secrets.yaml",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/citi-stag/us-east-2/values.yaml",
+    "lines": 85
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/dev-ext/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/dev-ext/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/dev-ext/sa-east-1/templates/configmap.yaml",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/dev-ext/sa-east-1/templates/secrets/app-secrets.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/dev-ext/sa-east-1/values.yaml",
+    "lines": 89
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/getnet-prod/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/getnet-prod/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/getnet-prod/sa-east-1/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/getnet-prod/sa-east-1/templates/secrets/app-secrets.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/getnet-prod/sa-east-1/values.yaml",
+    "lines": 51
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-1/templates/configmap.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-1/templates/secrets/app-secrets.yaml",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-1/values.yaml",
+    "lines": 85
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-2/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-2/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-2/templates/configmap.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-2/templates/secrets/app-secrets.yaml",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/ind-prod/ap-south-2/values.yaml",
+    "lines": 85
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/sa-east-1/templates/configmap.yaml",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/sa-east-1/templates/secrets/app-secrets.yaml",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/sa-east-1/values.yaml",
+    "lines": 83
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/us-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/us-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/us-east-1/templates/configmap.yaml",
+    "lines": 12
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/us-east-1/templates/secrets/app-secrets.yaml",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/integration/us-east-1/values.yaml",
+    "lines": 83
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/irl-prod/eu-west-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/irl-prod/eu-west-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/irl-prod/eu-west-1/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/irl-prod/eu-west-1/templates/secrets/app-secrets.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/irl-prod/eu-west-1/values.yaml",
+    "lines": 50
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/itau/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/itau/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/itau/sa-east-1/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/itau/sa-east-1/templates/secrets/app-secrets.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/itau/sa-east-1/values.yaml",
+    "lines": 50
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/prod/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/prod/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/prod/sa-east-1/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/prod/sa-east-1/templates/secrets/app-secrets.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/prod/sa-east-1/values.yaml",
+    "lines": 50
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/usa-prod/us-east-2/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/usa-prod/us-east-2/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/usa-prod/us-east-2/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/usa-prod/us-east-2/templates/secrets/app-secrets.yaml",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/helm/usa-prod/us-east-2/values.yaml",
+    "lines": 50
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/opentelemetry/collector-config.yaml",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/prometheus/prometheus.yaml",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/prometheus/prometheus.yml",
+    "lines": 22
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/shell/start.sh",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/stresstest/Makefile",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/stresstest/get-health.js",
+    "lines": 12
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/_state.tf",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/_variables.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/modules.tf",
+    "lines": 5
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1/versions.tf",
+    "lines": 25
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/modules.tf",
+    "lines": 5
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2/versions.tf",
+    "lines": 25
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/_state.tf",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/us-east-1/_state.tf",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/us-east-1/_variables.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/us-east-1/ecr.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/us-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/dev-ext/us-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/_state.tf",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/_variables.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/integration/us-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/_state.tf",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/_variables.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/_state.tf",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/_state.tf",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/_variables.tf",
+    "lines": 16
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/global.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/locals.tf",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/providers.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/secrets.tf",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/scripts/terraform/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/sonar-project.properties",
+    "lines": 64
+  },
+  {
+    "file_path": "projects/console-audit-bff/github/values.yaml",
+    "lines": 66
+  }
+]

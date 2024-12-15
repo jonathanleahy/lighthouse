@@ -1,0 +1,89 @@
+aws:
+  accountId: "270036487593"
+  region: "sa-east-1"
+  regionShortName: "sae1"
+
+# rollout template configs
+rollout-Canary:
+  squad: psm-console
+  fullnameOverride: "console-audit-bff"
+  domain: pismolabs.io
+  environment: dev-ext
+  ports:
+    http: 8080
+  metrics:
+    enabled: true
+    path: /metrics
+  health:
+    enabled: true
+    path: /health
+  replicas: 3
+  revisionHistoryLimit: 10
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
+    metrics:
+      - type: Resource
+        resource:
+          name: memory
+          target:
+            type: Utilization
+            averageUtilization: 80
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
+  image:
+    registry: 270036487593.dkr.ecr.us-east-1.amazonaws.com
+    repository: console-audit-bff
+    imagePullPolicy: Always
+  resources:
+    limits:
+      cpu: "100m"
+      memory: "200Mi"
+    requests:
+      cpu: "1m"
+      memory: "16Mi"
+  strategy:
+    canary:
+      analysis: {}
+      # templates:
+      #  - success-rate
+      #  - error-rate
+      #  - custom-success-rate
+      steps:
+        - setWeight: 0
+        - pause: { }
+        - setWeight: 10
+        - pause: { duration: "5m" }
+        - setWeight: 20
+        - pause: { duration: "5m" }
+        - setWeight: 30
+        - pause: { duration: "5m" }
+        - setWeight: 60
+        - pause: { duration: "5m" }
+        - setWeight: 90
+        - pause: { duration: "5m" }
+  envFrom:
+    - configMapRef:
+        name: console-audit-bff-config
+    - configMapRef:
+        name: commons-config
+    - secretRef:
+        name: console-audit-bff-secrets
+  serviceAccount:
+    create: true
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::270036487593:role/console-audit-bff-role-sae1
+  pod:
+    annotations: {}
+  virtualService:
+    extraGateways:
+      - ext/istio-gateway-internal
+    extraHosts:
+      #DEPRECATED: Remove console-audit-bff-ext.pismolabs.io after Wednesday 27th of November 2024
+      - console-audit-bff-ext.pismolabs.io
+      - console-audit-bff-ext.internal.pismolabs.io

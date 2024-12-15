@@ -1,0 +1,9 @@
+type Query {
+    health: Health!
+    getDisputeStatus(disputeId: Int!, disputeInstallmentId:Int): [DisputeStatus]! @hasAnyRole(roles: ["controlc-backoffice-operator", "controlc-backoffice-viewer"])
+}
+
+type Mutation {
+    createFraudReport(disputeId: Int!, input: FraudReportInput!): FraudReport! @hasAnyRole(roles: ["controlc-backoffice-operator"])
+    updateDisputeStatusEvent(disputeId: Int!, input: DisputeEventInput!): DisputeEvent! @hasAnyRole(roles: ["controlc-backoffice-operator"])
+}

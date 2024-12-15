@@ -1,0 +1,217 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/query": {
+            "post": {
+                "description": "Return graphql data",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "graphql"
+                ],
+                "summary": "Return graphql data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Roles",
+                        "name": "\"x-roles\"",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Tenant",
+                        "name": "\"x-tenant\"",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "query",
+                        "name": "query",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/v1/audit": {
+            "get": {
+                "description": "Return audit by parameters",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "audit"
+                ],
+                "summary": "Return audit by parameters",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.SearchAudit"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/audit/{id}": {
+            "get": {
+                "description": "Return detailed audit by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "audit"
+                ],
+                "summary": "Return audit by ID",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.Audit"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.Audit": {
+            "type": "object",
+            "properties": {
+                "http": {
+                    "$ref": "#/definitions/entity.HTTP"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "localization": {
+                    "$ref": "#/definitions/entity.Localization"
+                },
+                "operation": {
+                    "$ref": "#/definitions/entity.Operation"
+                },
+                "user": {
+                    "$ref": "#/definitions/entity.User"
+                },
+                "user_agent": {
+                    "$ref": "#/definitions/entity.UserAgent"
+                }
+            }
+        },
+        "entity.HTTP": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "request": {
+                    "type": "string"
+                },
+                "response": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.Localization": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "number"
+                },
+                "longitude": {
+                    "type": "number"
+                }
+            }
+        },
+        "entity.Operation": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "cid": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string"
+                },
+                "domain": {
+                    "type": "string"
+                },
+                "domain_id": {
+                    "type": "string"
+                },
+                "origin": {
+                    "type": "string"
+                },
+                "tenant": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.SearchAudit": {
+            "type": "object",
+            "properties": {
+                "audits": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entity.Audit"
+                    }
+                },
+                "current_page": {
+                    "type": "integer"
+                },
+                "pages": {
+                    "type": "integer"
+                },
+                "per_page": {
+                    "type": "integer"
+                },
+                "total_items": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entity.User": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "entity.UserAgent": {
+            "type": "object",
+            "properties": {
+                "device": {
+                    "type": "string"
+                },
+                "device_ip": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

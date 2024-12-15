@@ -1,0 +1,61 @@
+version: '1.0'
+
+mode: parallel
+
+steps:
+
+  clone_parallel:
+    type: parallel
+    steps:
+
+      clone:
+        title: Cloning repository
+        type: git-clone
+        repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+        revision: '${{CF_BRANCH}}'
+        git: github
+
+  flyway_sandbox_repair_approval:
+    title: "repair"
+    type: pending-approval
+    fail_fast: false
+    timeout:
+      duration: 1
+      finalState: terminated
+    when:
+      steps:
+        all:
+          - name: clone
+            on:
+              - success
+
+  flyway_sandbox_repair:
+    title: "repair"
+    type: freestyle
+    image: "flyway/flyway:latest"
+    working_directory: "${{clone}}/scripts/flyway/sandbox"
+    environment:
+      - FLYWAY_LOCATIONS=filesystem:.
+      - FLYWAY_PLACEHOLDER_REPLACEMENT=true
+      - FLYWAY_MIXED=true
+      - FLYWAY_OUT_OF_ORDER=true
+      - FLYWAY_IGNORE_MISSING_MIGRATIONS=true
+      - FLYWAY_URL=jdbc:postgresql://cockroachdb.cockroachdb.svc.cluster.local:26257/postgres?sslmode=disable&ssl=false
+      - FLYWAY_USER=root
+      - FLYWAY_PASSWORD=root
+      - FLYWAY_DEFAULT_SCHEMA=postgres
+      - FLYWAY_SCHEMAS=postgres
+      - FLYWAY_CONNECT_RETRIES=3
+      - FLYWAY_DRIVER=org.postgresql.Driver
+    commands:
+      - /flyway/flyway info
+      - /flyway/flyway repair
+      - /flyway/flyway info
+    volumes:
+      - .:/flyway/sql
+    when:
+      steps:
+        - name: flyway_sandbox_repair_approval
+          on:
+            - approved
+

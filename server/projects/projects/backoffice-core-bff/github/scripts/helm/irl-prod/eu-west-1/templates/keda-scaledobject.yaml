@@ -1,0 +1,29 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: "backoffice-core-bff-scaled-object"
+  namespace: "psm-crm"
+spec:
+  scaleTargetRef:
+    apiVersion: argoproj.io/v1alpha1
+    kind: Rollout
+    name: backoffice-core-bff
+  minReplicaCount: 3
+  maxReplicaCount: 5
+  cooldownPeriod: 60
+  advanced:
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleUp:
+          stabilizationWindowSeconds: 0
+        scaleDown:
+          stabilizationWindowSeconds: 300
+  triggers:
+    - type: cpu
+      metadata:
+        type: Utilization
+        value: "90"
+    - type: memory
+      metadata:
+        type: Utilization
+        value: "80"

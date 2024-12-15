@@ -1,0 +1,160 @@
+version: '1.0'
+
+stages:
+  - setup
+  - ci
+  - clone
+  - merge
+  - release
+  - deploy
+
+mode: parallel
+
+hooks:
+ on_elected:
+   exec:
+    image: chatwork/jq
+    commands:
+      - export PISMO_PR_RELEASE=$(echo $CF_PULL_REQUEST_COMMENT | sed -e "s/\/release//" | jq -r '.release')
+      - export PISMO_PR_TITLE=$(echo $CF_PULL_REQUEST_COMMENT | sed -e "s/\/release//" | jq -r '.title')
+      - export PISMO_PR_DESCRIPTION=$(echo $CF_PULL_REQUEST_COMMENT | sed -e "s/\/release//" | jq -r '.description')
+      - cf_export PISMO_PR_RELEASE PISMO_PR_TITLE PISMO_PR_DESCRIPTION
+
+steps:
+
+  check_parameters:
+    title: "Check Parameters"
+    stage: "setup"
+    image: chatwork/jq
+    commands:
+      - export PISMO_PR_RELEASE=$(echo $CF_PULL_REQUEST_COMMENT | sed -e "s/\/release//" | jq -r '.release')
+      - export PISMO_PR_TITLE=$(echo $CF_PULL_REQUEST_COMMENT | sed -e "s/\/release//" | jq -r '.title')
+      - export PISMO_PR_DESCRIPTION=$(echo $CF_PULL_REQUEST_COMMENT | sed -e "s/\/release//" | jq -r '.description')
+      - cf_export PISMO_PR_RELEASE PISMO_PR_TITLE PISMO_PR_DESCRIPTION
+
+  ci-release-runnner:
+    title: "run ci"
+    stage: "ci"
+    type: codefresh-run
+    arguments:
+      PIPELINE_ID: ${{CF_REPO_NAME}}/${{CF_REPO_NAME}}-ci-release
+      TRIGGER_ID: git
+      BRANCH: '${{CF_BRANCH}}'
+      SHA: '${{CF_REVISION}}'
+      VARIABLE:
+        - PISMO_PR_RELEASE=${{PISMO_PR_RELEASE}}
+        - PISMO_PR_TITLE=${{PISMO_PR_TITLE}}
+        - PISMO_PR_DESCRIPTION=${{PISMO_PR_DESCRIPTION}}
+        - CF_REPO_NAME=${{CF_REPO_NAME}}
+    when:
+        steps:
+          all:
+            - name: check_parameters
+              on:
+                - success
+
+  clone_parallel:
+    type: parallel
+    stage: "clone"
+    steps:
+      clone:
+        title: "Cloning repository"
+        type: git-clone
+        repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+        revision: '${{CF_BRANCH}}'
+        git: github
+        stage: setup
+      export_access_token:
+        title: "Export git access token"
+        image: codefresh/cli
+        stage: setup
+        environment:
+          - GIT_INTEGRATION_NAME=github
+          - GIT_USER_NAME=codefresh
+        commands:
+          - export GIT_ACCESS_TOKEN=$(codefresh get context $GIT_INTEGRATION_NAME --decrypt -o yaml | yq -r -c .spec.data.auth.password)
+          - echo GIT_ACCESS_TOKEN=$GIT_ACCESS_TOKEN >> /meta/env_vars_to_export
+          - export GIT_ACCESS_TOKEN_USER=$(codefresh get context $GIT_INTEGRATION_NAME --decrypt -o yaml | yq -r -c .spec.data.auth.username)
+          # If the git integration does not include the auth username, then default to the git_user_name argument
+          - if [ "$GIT_ACCESS_TOKEN_USER" = "null" ]; then export GIT_ACCESS_TOKEN_USER=$GIT_USER_NAME; fi
+          - echo GIT_ACCESS_TOKEN_USER=$GIT_ACCESS_TOKEN_USER >> /meta/env_vars_to_export
+    when:
+      steps:
+        all:
+          - name: ci-release-runnner
+            on:
+              - success
+
+  #github_release:
+  #  type: freestyle
+  #  title: An example showing how to override the commands to be executed
+  #  arguments:
+  #    image: codefresh/github-release
+  #    commands:
+  #      - github-release --help
+  #      - >-
+  #        github-release list --owner ${{CF_REPO_OWNER}} --repo ${{CF_REPO_NAME}}
+
+  merge:
+    type: freestyle
+    title: "merge on main"
+    working_directory: "${{clone}}"
+    stage: "merge"
+    image: alpine/git
+    commands:
+      - export GIT_FQDN=$(git remote get-url --push origin | awk -F[/:] '{print $4}')
+      - git config --global user.name codefresh
+      - git config --global user.email codefresh@pismo.io
+      - git status
+      - git checkout main
+      - git merge --no-ff ${{CF_BRANCH}} -m "merge release $PISMO_PR_RELEASE on main"
+      - git push "https://$GIT_ACCESS_TOKEN_USER:$GIT_ACCESS_TOKEN@$GIT_FQDN/${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}.git"
+    when:
+      steps:
+        all:
+          - name: clone_parallel
+            on:
+              - success
+
+  github_release:
+    type: github-release
+    title: "generate release"
+    stage: "release"
+    working_directory: "${{clone}}"
+    description: |-
+      generate release
+    arguments:
+      git_context_name: github
+      release_name: release-${{PISMO_PR_RELEASE}}-${{PISMO_PR_TITLE}}
+      release_tag: ${{PISMO_PR_RELEASE}}
+      release_description: ${{PISMO_PR_DESCRIPTION}}
+      draft: false
+      prerelease: false
+    when:
+      steps:
+        all:
+          - name: merge
+            on:
+              - success
+
+  cd-release-runnner:
+    title: "Deploy ${{PISMO_PR_RELEASE}} on production"
+    type: codefresh-run
+    stage: "deploy"
+    arguments:
+      PIPELINE_ID: ${{CF_REPO_NAME}}/${{CF_REPO_NAME}}-deploy-release
+      #TRIGGER_ID: git
+      BRANCH: '${{CF_BRANCH}}'
+      SHA: '${{CF_REVISION}}'
+      VARIABLE:
+        - PISMO_PR_RELEASE=${{PISMO_PR_RELEASE}}
+        - PISMO_PR_TITLE=${{PISMO_PR_TITLE}}
+        - PISMO_PR_DESCRIPTION=${{PISMO_PR_DESCRIPTION}}
+        - CF_REPO_OWNER=${{CF_REPO_OWNER}}
+        - CF_REPO_NAME=${{CF_REPO_NAME}}
+    when:
+        steps:
+          all:
+            - name: github_release
+              on:
+                - success

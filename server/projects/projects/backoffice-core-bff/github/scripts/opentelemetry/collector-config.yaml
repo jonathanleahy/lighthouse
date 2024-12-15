@@ -1,0 +1,35 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
+
+exporters:
+    logging:
+    zipkin:
+      endpoint: "http://backoffice-core-bff-zipkin-all-in-one:9411/api/v2/spans"
+    prometheus:
+      endpoint: "0.0.0.0:9464"
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers:
+#        - logging
+        - otlp
+      exporters:
+        - logging
+        - zipkin
+      processors:
+        - batch
+    metrics:
+      receivers:
+        - otlp
+      exporters:
+        - logging
+        - prometheus
+      processors:
+        - batch

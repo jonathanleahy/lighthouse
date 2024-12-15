@@ -1,0 +1,46 @@
+aws:
+  accountId: "459584242408"
+  region: "us-east-1"
+  regionShortName: "use1"
+
+# rollout template configs
+rollout-Canary:
+  squad: psm-crm
+  fullnameOverride: "backoffice-core-bff"
+  domain: pismolabs.io
+  environment: integration
+  ports:
+    http: 8080
+  metrics:
+    enabled: true
+    path: /metrics
+  health:
+    enabled: true
+    path: /health
+  replicas: 3
+  revisionHistoryLimit: 10
+  image:
+    registry: 270036487593.dkr.ecr.us-east-1.amazonaws.com
+    repository: backoffice-core-bff
+    imagePullPolicy: Always
+  resources:
+    limits:
+      cpu: "200m"
+      memory: "128Mi"
+    requests:
+      cpu: "200m"
+      memory: "32Mi"
+  strategy:
+    canary:
+      analysis: {}
+  envFrom:
+    - configMapRef:
+        name: commons-configs
+    - configMapRef:
+        name: backoffice-core-bff-config
+  serviceAccount:
+    create: true
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::270036487593:role/migrate-integration
+  pod:
+    annotations: {}

@@ -1,0 +1,28 @@
+type Query {
+    find_audit_by_id(id: Int!): Audit
+    search_audit(page: Int, per_page: Int, order: Order, begin_date: String, end_date: String, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): SearchAudit!
+    list_roles: [Role]!
+    list_user_roles(user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): ListUserRoles!
+    search_roles(email: String, feature: String): ListRoles!
+    search_feature(page: Int, per_page: Int, order: Order, id: String, name: String, parentFeatureID: String, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): SearchFeature!
+    find_feature_by_id(id: Int!): Feature
+    search_endpoint(page: Int, per_page: Int, order: Order, id: String, service_name: String, method: String, path: String, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): SearchEndpoint!
+    find_endpoint_by_id(id: Int!): Endpoint
+}
+
+type Mutation {
+    create_role(role: RoleInput!): String!
+    create_feature(feature: FeatureInput!, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): String!
+    update_feature(feature: FeatureInput!, id: Int!, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): String!
+    delete_feature(id: Int!, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): String!
+    create_endpoint(endpoint: EndpointInput!, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): String!
+    update_endpoint(endpoint: EndpointInput!, id: Int!, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): String!
+    delete_endpoint(id: Int!, user: String, actions: [AuditAction!], domains: [String!], domain_id: String, cid: String): String!
+    update_role(role: RoleInput!): String!
+    delete_role(id: Int!): String!
+    attach_role_to_user(id: Int!,  email: String!): String!
+    detach_role_to_user(id: Int!,  email: String!): String!
+    attach_role_to_feature(id: Int!, feature_id: Int!, permission: ActionInput!): String!
+    detach_role_to_feature(id: Int!, feature_id: Int!, permission: ActionInput!): String!
+}
+

@@ -1,0 +1,133 @@
+## UTEIS
+# declare -x CF_PULL_REQUEST_ACTION="commentAdded"
+# declare -x CF_PULL_REQUEST_COMMENT="/sandbox"
+
+# https://codefresh.io/docs/docs/ci-cd-guides/working-with-docker-registries/
+# https://github.com/codefresh-contrib/cfstep-image-promotion
+# https://codefresh.io/continuous-deployment/creating-temporary-preview-environments-based-pull-requests-argo-cd-codefresh/
+# https://github.com/scottrigby/codefresh-pr/blob/master/codefresh.yaml
+
+version: '1.0'
+
+stages:
+  - clone
+  - sandbox
+
+mode: parallel
+
+steps:
+  clone_parallel:
+    type: parallel
+    stage: clone
+    steps:
+      clone:
+        title: cloning gitops repo
+        type: git-clone
+        stage: "clone"
+        repo: '${{CF_REPO_OWNER}}/cicd'
+        revision: 'main'
+        git: github
+
+  update_cicd_branch_parallel:
+    type: parallel
+    stage: sandbox
+    when:
+      steps:
+        all:
+          - name: clone
+            on:
+              - success
+    steps:
+      update_cicd_branch_sa_east_1:
+        title: "Update CICD branch on sa-east-1"
+        image: "mikefarah/yq:3"
+        working_directory: "${{clone}}"
+        #working_directory: ./scripts/helm/sandbox/sa-east-1/
+        stage: "sandbox"
+        commands:
+          - ls -la
+          - "yq w -i ./argo/enviroments/sandbox/${{CF_REPO_NAME}}/sa-east-1/argo-application.yaml 'spec.source.targetRevision' ${{CF_BRANCH}}"
+          - cat ./argo/enviroments/sandbox/${{CF_REPO_NAME}}/sa-east-1/argo-application.yaml
+      update_cicd_branch_us_east_1:
+        title: "Update CICD branch on us-east-1"
+        image: "mikefarah/yq:3"
+        working_directory: "${{clone}}"
+        #working_directory: ./scripts/helm/sandbox/us-east-1/
+        stage: "sandbox"
+        commands:
+          - "ls -la"
+          - "yq w -i ./argo/enviroments/sandbox/${{CF_REPO_NAME}}/us-east-1/argo-application.yaml 'spec.source.targetRevision' ${{CF_BRANCH}}"
+          - "cat ./argo/enviroments/sandbox/${{CF_REPO_NAME}}/us-east-1/argo-application.yaml"
+
+  commit_and_push_cicd:
+    title: Commit manifest
+    type: git-commit
+    stage: "sandbox"
+    #working_directory: "${{clone}}"
+    arguments:
+      repo: '${{CF_REPO_OWNER}}/cicd'
+      git: github
+      commit_message: "change branch: on cicd"
+      git_user_name: codefresh
+      git_user_email: codefresh@pismo.io
+      allow_empty: true
+      working_directory: "/codefresh/volume/cicd"
+    when:
+      steps:
+        all:
+          - name: update_cicd_branch_parallel
+            on:
+              - success
+
+  sync_and_wait_cicd:
+    title: Sync ArgoCD cicd and wait
+    type: argocd-sync
+    stage: sandbox
+    arguments:
+      context: argocd
+      app_name: cicd
+      wait_healthy: true
+    when:
+      steps:
+        all:
+          - name: commit_and_push_cicd
+            on:
+              - success
+
+  sync_and_wait_sa_east_1:
+    title: "Sync ArgoCD ${{CF_REPO_NAME}}-sandbox-sa-east-1 and wait"
+    type: argocd-sync
+    stage: sandbox
+    #working_directory: "/codefresh/volume/sync_and_wait_sa_east_1"
+    arguments:
+      context: argocd
+      app_name: ${{CF_REPO_NAME}}-sandbox-sa-east-1
+      wait_healthy: true
+      #wait_for_suspend: false
+      #prune: true
+    when:
+      steps:
+        all:
+          - name: sync_and_wait_cicd
+            on:
+              - success
+
+  sync_and_wait_us_east_1:
+    title: "Sync ArgoCD ${{CF_REPO_NAME}}-sandbox-us-east-1 and wait"
+    type: argocd-sync
+    stage: sandbox
+    #working_directory: "/codefresh/volume/sync_and_wait_us_east_1"
+    arguments:
+      context: argocd
+      app_name: ${{CF_REPO_NAME}}-sandbox-us-east-1
+      wait_healthy: true
+      #wait_for_suspend: false
+      #prune: true
+    when:
+      steps:
+        all:
+          - name: sync_and_wait_sa_east_1
+            on:
+              - success
+
+

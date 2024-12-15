@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: 'console-audit-bff-config'
+  namespace: 'psm-console'
+data:
+  ENVIRONMENT: 'prod'
+  CORS_ALLOWED_METHODS: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS"

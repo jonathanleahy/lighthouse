@@ -1,0 +1,33 @@
+version:
+  cli: "1"
+  templates: "1.0.7"
+  tf_module: "1.0.0"
+app_name: console-audit-bff
+squad_name: psm-console
+environments:
+  - name:  prod
+    regions:
+      - name: sa-east-1
+        vars:
+          KEY: value-env
+  - name:  itau
+    regions:
+      - name: sa-east-1
+        vars:
+          KEY: value-env
+infra:
+  ecr_repository: console-audit-bff
+  service_port: 8080
+  service_type: API
+  helm:
+    rollout_type: CANARY
+    replicas:
+      dev-ext: 0
+      prod: 3
+      itau: 3
+    configmaps:
+      - template: scripts/custom/helm/configmap.yaml
+    secrets:
+      - path: /v1/${local.name}/${local.region}/app-secrets
+        template: scripts/custom/helm/app-secrets.yaml
+

@@ -1,0 +1,14 @@
+apiVersion: kubernetes-client.io/v1
+kind: ExternalSecret
+metadata:
+  name: backoffice-core-bff-custom-secrets
+spec:
+  backendType: secretsManager
+  region: sa-east-1
+  data:
+    - key: /v1/backoffice-core-bff/global/app-secrets
+      name: AWS_ACCESS_KEY_ID
+      property: key_id
+    - key: /v1/backoffice-core-bff/global/app-secrets
+      name: AWS_SECRET_ACCESS_KEY
+      property: secret

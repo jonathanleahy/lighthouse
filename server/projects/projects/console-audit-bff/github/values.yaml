@@ -1,0 +1,66 @@
+deployment:
+  role: console-audit-bff-role
+  replicas:
+    prod: 3
+    itau: 3
+  image:
+    healthCheck:
+      enabled: true
+    ports:
+      http: 8080
+    dockerRegistry: 270036487593.dkr.ecr.us-east-1.amazonaws.com
+    pullPolicy: Always
+  envFrom:
+    secretRef:
+      - custom
+
+squad: psm-console
+
+hpa:
+  prod:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
+    metrics:
+      - type: Resource
+        resource:
+          name: memory
+          target:
+            type: Utilization
+            averageUtilization: 80
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
+  itau:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
+    metrics:
+      - type: Resource
+        resource:
+          name: memory
+          target:
+            type: Utilization
+            averageUtilization: 80
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
+
+resources:
+  limits:
+    cpu: "100m"
+    memory: "64Mi"
+  requests:
+    cpu: "1m"
+    memory: "16Mi"
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+team: psm-console

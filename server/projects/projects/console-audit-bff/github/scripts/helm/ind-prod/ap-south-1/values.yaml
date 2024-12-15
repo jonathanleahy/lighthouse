@@ -1,0 +1,85 @@
+aws:
+  accountId: "056132470094"
+  region: "ap-south-1"
+  regionShortName: "aps1"
+
+# rollout template configs
+rollout-Canary:
+  squad: psm-console
+  fullnameOverride: "console-audit-bff"
+  domain: ind.pismo.io
+  virtualService:
+    extraGateways:
+      - "prod/istio-gateway-private"
+  environment: ind-prod
+  ports:
+    http: 8080
+  metrics:
+    enabled: true
+    path: /metrics
+  health:
+    enabled: true
+    path: /health
+  replicas: 3
+  revisionHistoryLimit: 10
+  hpa:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
+    metrics:
+      - type: Resource
+        resource:
+          name: memory
+          target:
+            type: Utilization
+            averageUtilization: 80
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
+  image:
+    registry: 270036487593.dkr.ecr.us-east-1.amazonaws.com
+    repository: console-audit-bff
+    imagePullPolicy: Always
+  resources:
+    limits:
+      cpu: "100m"
+      memory: "200Mi"
+    requests:
+      cpu: "1m"
+      memory: "16Mi"
+  strategy:
+    canary:
+      analysis: {}
+      # templates:
+      #  - success-rate
+      #  - error-rate
+      #  - custom-success-rate
+      steps:
+        - setWeight: 0
+        - pause: { }
+        - setWeight: 10
+        - pause: { duration: "24h" }
+        - setWeight: 20
+        - pause: { duration: "15m" }
+        - setWeight: 30
+        - pause: { duration: "15m" }
+        - setWeight: 60
+        - pause: { duration: "15m" }
+        - setWeight: 90
+        - pause: { duration: "15m" }
+  envFrom:
+    - configMapRef:
+        name: console-audit-bff-config
+    - configMapRef:
+        name: commons-configs
+    - secretRef:
+        name: console-audit-bff-secrets
+  serviceAccount:
+    create: true
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::056132470094:role/console-audit-bff-role-aps1
+  pod:
+    annotations: {}

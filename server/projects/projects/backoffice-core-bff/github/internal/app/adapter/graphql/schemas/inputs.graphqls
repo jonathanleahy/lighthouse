@@ -1,0 +1,24 @@
+input FraudReportInput {
+    acct_status: String!
+    chgbk_indicator: String!
+    cvc_invalid_indicator: String!
+    device_type: String!
+    fraud_type: String!
+    report_date: String!
+    sub_type: String!
+}
+
+input DisputeEventInput {
+    event: String!
+    reason: String!
+    dispute_installment_id: String
+    memo: String
+    merchant_name: String
+    updated_chargeback_reason_code: String
+    change_reason_code_reason: String
+    pre_arb_is_partial: Boolean
+    pre_arb_currency_code: String
+    justify_not_accepted_fully: String
+    pre_arb_amount: Int
+    is_dispute_migrated: Boolean
+}

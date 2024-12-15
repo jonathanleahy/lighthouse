@@ -1,0 +1,31 @@
+@startuml
+header <img src="http://assets.pismolabs.io/img-pismo-logo.png">
+footer <U+00A9> Pismo Soluções Tecnológicas\nAll rights reserved - [[https://pismo.io pismo.io]]
+title <size:20>POST /query</size>
+
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+autonumber
+
+actor Client
+
+box "Async" #f6f6f6
+  participant "Console Audit BFF"
+  participant "Console Audit API"
+end box
+
+Client -> "Console Audit BFF": POST /query
+
+alt Find ID Operation
+    "Console Audit BFF" -> "Console Audit API": GET https://console-audit-api/v1/audit/{id}
+    alt Audit Not Found
+        "Console Audit BFF" <-  "Console Audit API": 404 - Audit not found
+        Client <- "Console Audit BFF": 200 - Not Found
+    end
+    alt Audit Found
+        "Console Audit BFF" <- "Console Audit API": 200 - Audit Found
+        "Console Audit BFF" -> "Console Audit BFF": Format Result
+        Client <- "Console Audit BFF": 200 - OK
+    end
+end
+@enduml

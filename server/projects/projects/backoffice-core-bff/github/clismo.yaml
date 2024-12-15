@@ -1,0 +1,40 @@
+version:
+  cli: "1"
+  templates: 1.0.19
+  tf_module: 1.0.0
+app_name: backoffice-core-bff
+squad_name: psm-crm
+environments:
+  - name: integration
+    regions:
+      - name: sa-east-1
+      - name: us-east-1
+  - name: prod
+    regions:
+      - name: sa-east-1
+  - name: itau
+    regions:
+      - name: sa-east-1
+  - name: ind-prod
+    regions:
+      - name: ap-south-1
+      - name: ap-south-2
+infra:
+  ecr_repository: backoffice-core-bff
+  service_port: "8080"
+  service_type: API
+  helm:
+    rollout_type: CANARY
+    replicas:
+      integration: 5
+      itau: 5
+      prod: 5
+      ind-prod: 5
+    configmaps:
+      - template: scripts/custom/helm/configmap.yaml
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 1m
+      memory: 16Mi

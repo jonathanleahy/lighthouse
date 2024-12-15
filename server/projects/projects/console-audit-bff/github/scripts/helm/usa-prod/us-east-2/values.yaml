@@ -1,0 +1,50 @@
+# rollout template configs
+rollout-Canary:
+  squad: psm-console
+  fullnameOverride: "console-audit-bff"
+  domain: usa.pismo.io
+  environment: usa-prod
+  revisionHistoryLimit: 10
+  ports:
+    http: 8080
+  metrics:
+    enabled: true
+    path: /metrics
+  health:
+    enabled: true
+    path: /health
+  replicas: 3
+  hpa:
+    enabled: true
+    maxReplicas: 5
+    minReplicas: 3
+  image:
+    registry: 270036487593.dkr.ecr.us-east-1.amazonaws.com
+    repository: console-audit-bff
+    imagePullPolicy: Always
+  resources:
+    limits:
+      cpu: 100m
+      memory: 64Mi
+    requests:
+      cpu: 1m
+      memory: 16Mi
+  strategy:
+    canary:
+      analysis: {}
+  envFrom:
+    - configMapRef:
+        name: commons-config
+    - configMapRef:
+        name: console-audit-bff-config
+    - secretRef:
+        name: console-audit-bff-app-secrets
+  serviceAccount:
+    create: true
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::008594187592:role/console-audit-bff-role-sae1
+  pod:
+    annotations: {}
+  virtualService:
+    extraGateways:
+      - usa-prod/istio-gateway-internal

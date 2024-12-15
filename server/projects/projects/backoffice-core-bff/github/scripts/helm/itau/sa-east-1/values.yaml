@@ -1,0 +1,41 @@
+# rollout template configs
+rollout-Canary:
+  squad: psm-crm
+  fullnameOverride: "backoffice-core-bff"
+  domain: pismolabs.io
+  environment: itau
+  revisionHistoryLimit: 10
+  ports:
+    http: 8080
+  metrics:
+    enabled: true
+    path: /metrics
+  health:
+    enabled: true
+    path: /health
+  replicas: 3
+  image:
+    registry: 270036487593.dkr.ecr.us-east-1.amazonaws.com
+    repository: backoffice-core-bff
+    imagePullPolicy: Always
+  resources:
+    limits:
+      cpu: "200m"
+      memory: "128Mi"
+    requests:
+      cpu: "200m"
+      memory: "32Mi"
+  strategy:
+    canary:
+      analysis: {}
+  envFrom:
+    - configMapRef:
+        name: commons-config
+    - configMapRef:
+        name: backoffice-core-bff-config
+  serviceAccount:
+    create: true
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::408082092235:role/backoffice-core-bff-role-sae1
+  pod:
+    annotations: {}

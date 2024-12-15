@@ -1,0 +1,58 @@
+version: '1.0'
+
+stages:
+  - help
+
+mode: parallel
+
+steps:
+    add_commenton_current_pr_from_trigger:
+      title: "help"
+      type: kostis-codefresh/github-pr-comment
+      fail_fast: false
+      arguments:
+        PR_COMMENT_TEXT: >-
+          list of commands
+            - sandbox
+              - ci ( dispatch build )
+              - cd ( dispatch update )
+              - flyway { "environment": "environment", "command": "command" }
+                - environments
+                  - sandbox
+                - commands
+                  - migrate
+                  - repair
+                  - rebase
+              - terraform { "environment": "environment", "command": "command" }
+                - environments
+                  - sandbox
+                - commands
+                  - apply
+                  - state &extraparams
+                  - import &extraparams
+            - production
+              - release  { "release": "x.x.x", "title": "title", "description": "desk", "ticket": "JIRA-TICKET" }
+                - dispatch:
+                  - ci
+                  - sonar
+                  - generate release
+                  - deploy on production/itau
+              - flyway { environment: "environment", command: "command" }
+                - environments
+                  - itau
+                  - production
+                - commands
+                  - migrate
+                  - repair
+                  - rebase
+              - terraform { "environment": "environment", "command": "command" }
+                - environments
+                  - itau
+                  - production
+                - commands
+                  - apply
+                  - state &extraparams
+                  - import &extraparams
+            - general
+              - help ( this beautiful command )
+        GIT_PROVIDER_NAME: github

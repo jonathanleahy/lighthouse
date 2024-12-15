@@ -1,0 +1,4 @@
+dependencies:
+  - name: rollout-Canary
+    version: 0.0.1-SNAPSHOT
+    repository: https://helm.pismo.services

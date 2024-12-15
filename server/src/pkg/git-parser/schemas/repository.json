@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "git": {
+      "type": "object",
+      "properties": {
+        "lastCommit": {
+          "type": "object",
+          "properties": {
+            "hash": {"type": "string"},
+            "author": {"type": "string"},
+            "date": {"type": "string"},
+            "message": {"type": "string"}
+          }
+        },
+        "branch": {"type": "string"},
+        "tags": {"type": "array", "items": {"type": "string"}},
+        "remoteUrl": {"type": "string"}
+      }
+    },
+    "build": {
+      "type": "object",
+      "properties": {
+        "docker": {
+          "type": "object",
+          "properties": {
+            "present": {"type": "boolean"},
+            "baseImage": {"type": "string"},
+            "ports": {"type": "array", "items": {"type": "integer"}},
+            "commands": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "makefile": {
+          "type": "object",
+          "properties": {
+            "present": {"type": "boolean"},
+            "targets": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,50 @@
+version: "3"
+services:
+  # Opentelemetry Collector
+  collector:
+    container_name: console-audit-collector
+    image: otel/opentelemetry-collector:latest
+    command: [ "--config=/conf/collector-config.yaml" ]
+    volumes:
+      - ./scripts/opentelemetry/collector-config.yaml:/conf/collector-config.yaml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "9464:9464"
+      - "55680:55680"
+      - "55681:55681"
+    depends_on:
+      - zipkin-all-in-one
+
+  # Zipkin
+  zipkin-all-in-one:
+    container_name: console-audit-bff-zipkin-all-in-one
+    image: openzipkin/zipkin:latest
+    ports:
+      - "9411:9411"
+
+  # Prometheus
+  prometheus:
+    container_name: console-audit-bff-prometheus
+    image: prom/prometheus:latest
+    volumes:
+      - ./scripts/prometheus/prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  localstack:
+    image: localstack/localstack:0.14.0
+    ports:
+      - '4510-4599:4510-4599'
+    environment:
+      - DEBUG=1
+      - SERVICES=sqs,sns
+      - DEFAULT_REGION=sa-east-1
+      - FORCE_NONINTERACTIVE=1
+      - DATA_DIR=/var/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_ACCESS_KEY_ID=pismo
+      - AWS_SECRET_ACCESS_KEY=pismo
+    volumes:
+      - ${TEMPDIR:-/tmp/localstack}:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock

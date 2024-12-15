@@ -1,0 +1,86 @@
+[
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/aus-prod/ap-southeast-2",
+    "region_default": "ap-southeast-2",
+    "account_default": "aus-prod",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-1",
+    "region_default": "us-east-1",
+    "account_default": "integration",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/citi-stag-usa/us-east-2",
+    "region_default": "us-east-2",
+    "account_default": "citi-stag-usa",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/dev-ext/sa-east-1",
+    "region_default": "sa-east-1",
+    "account_default": "dev-ext",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/dev-ext/us-east-1",
+    "region_default": "us-east-1",
+    "account_default": "dev-ext",
+    "namespace": ""
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/getnet-prod/sa-east-1",
+    "region_default": "sa-east-1",
+    "account_default": "getnet-prod",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-1",
+    "region_default": "ap-south-1",
+    "account_default": "ind-prod",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/ind-prod/ap-south-2",
+    "region_default": "ap-south-2",
+    "account_default": "ind-prod",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/integration/sa-east-1",
+    "region_default": "sa-east-1",
+    "account_default": "integration",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/integration/us-east-1",
+    "region_default": "us-east-1",
+    "account_default": "integration",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/irl-prod/eu-west-1",
+    "region_default": "eu-west-1",
+    "account_default": "irl-prod",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/itau/sa-east-1",
+    "region_default": "sa-east-1",
+    "account_default": "itau-prod",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/prod/sa-east-1",
+    "region_default": "sa-east-1",
+    "account_default": "production",
+    "namespace": "psm-console"
+  },
+  {
+    "path": "projects/projects/console-audit-bff/github/scripts/terraform/usa-prod/us-east-2",
+    "region_default": "us-east-2",
+    "account_default": "usa-prod",
+    "namespace": "psm-console"
+  }
+]

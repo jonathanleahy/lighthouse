@@ -1,0 +1,1298 @@
+[
+  {
+    "file_path": "projects/backoffice-core-bff/github/.checkmarx/application.yml",
+    "lines": 69
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.checkmarx/sca_application.yml",
+    "lines": 84
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/config",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/description",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/applypatch-msg.sample",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/commit-msg.sample",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/fsmonitor-watchman.sample",
+    "lines": 174
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/post-update.sample",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/pre-applypatch.sample",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/pre-commit.sample",
+    "lines": 49
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/pre-merge-commit.sample",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/pre-push.sample",
+    "lines": 53
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/pre-rebase.sample",
+    "lines": 169
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/pre-receive.sample",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/prepare-commit-msg.sample",
+    "lines": 42
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/push-to-checkout.sample",
+    "lines": 78
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/sendemail-validate.sample",
+    "lines": 77
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/hooks/update.sample",
+    "lines": 128
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/index",
+    "lines": 131
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/info/exclude",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/logs/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/logs/refs/heads/main",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/logs/refs/remotes/origin/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/objects/pack/pack-53cab7ebe6c0c04b5f8f79f7cabda97e899115ba.idx",
+    "lines": 96
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/objects/pack/pack-53cab7ebe6c0c04b5f8f79f7cabda97e899115ba.pack",
+    "lines": 880
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/objects/pack/pack-53cab7ebe6c0c04b5f8f79f7cabda97e899115ba.rev",
+    "lines": 5
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/packed-refs",
+    "lines": 20
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/refs/heads/main",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.git/refs/remotes/origin/HEAD",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.github/CODEOWNERS",
+    "lines": 5
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.github/PULL_REQUEST_TEMPLATE.md",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/.gitignore",
+    "lines": 5
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/Makefile",
+    "lines": 68
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/README.md",
+    "lines": 73
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/clismo.yaml",
+    "lines": 40
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/cmd/api/main.go",
+    "lines": 79
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/cx.config",
+    "lines": 17
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/go.mod",
+    "lines": 73
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/go.sum",
+    "lines": 319
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/gqlgen.yml",
+    "lines": 56
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/graphql/generated/generated.go",
+    "lines": 5881
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/graphql/schemas/directives.graphqls",
+    "lines": 1
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/graphql/schemas/inputs.graphqls",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/graphql/schemas/schema.graphqls",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/graphql/schemas/types.graphqls",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/web/handler/graphql.go",
+    "lines": 95
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/web/handler/graphql_test.go",
+    "lines": 134
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/web/handler/health.go",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/web/handler/health_test.go",
+    "lines": 22
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/web/handler/mock/echo_context.go",
+    "lines": 810
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/web/handler/resolver.go",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/adapter/web/handler/resolver_test.go",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/entity/audit.go",
+    "lines": 53
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/entity/audit_test.go",
+    "lines": 25
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/entity/entity.go",
+    "lines": 76
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/audit.go",
+    "lines": 86
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/audit_test.go",
+    "lines": 70
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/disputes.go",
+    "lines": 91
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/disputes_test.go",
+    "lines": 117
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/graphql.go",
+    "lines": 43
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/graphql_test.go",
+    "lines": 77
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/health.go",
+    "lines": 17
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/health_test.go",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/interfaces.go",
+    "lines": 25
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/mock/interfaces.go",
+    "lines": 205
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/resolver.go",
+    "lines": 45
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/resolver_test.go",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/schema.resolvers.go",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/service/schema.resolvers_test.go",
+    "lines": 109
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/utils/utils.go",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/domain/utils/utils_test.go",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/apierror/apierror.go",
+    "lines": 158
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/apierror/apierror_test.go",
+    "lines": 140
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/apierror/message/message.go",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/aws/sns/sns.go",
+    "lines": 130
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/env/env.go",
+    "lines": 78
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/logger/config.go",
+    "lines": 43
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/logger/logger.go",
+    "lines": 87
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/logger/logger_test.go",
+    "lines": 86
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/message/message.go",
+    "lines": 66
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/audit.go",
+    "lines": 40
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/constants.go",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/formatters.go",
+    "lines": 118
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/header.go",
+    "lines": 7
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/http.go",
+    "lines": 319
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/interfaces.go",
+    "lines": 18
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/mock/http_client.go",
+    "lines": 39
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/mock/interfaces.go",
+    "lines": 128
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/path_parameter.go",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/query_parameter.go",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/request.go",
+    "lines": 64
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/network/span.go",
+    "lines": 20
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/opentelemetry/opentelemetry.go",
+    "lines": 71
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/request/request.go",
+    "lines": 75
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/request/request_test.go",
+    "lines": 84
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/server/middleware/opentelemetryConfig.go",
+    "lines": 17
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/server/middleware/opentracing.go",
+    "lines": 150
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/server/middleware/request.go",
+    "lines": 64
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/server/middleware/timeout.go",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/server/middleware/validator.go",
+    "lines": 36
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/server/router.go",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/server/server.go",
+    "lines": 57
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/tracer/metrics.go",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/utils/header.go",
+    "lines": 45
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/internal/app/infrastructure/utils/header_test.go",
+    "lines": 88
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/kubernetes/sa-east-1/itau/crm-core-bff-config.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/kubernetes/sa-east-1/itau/crm-core-bff-custom-config.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/kubernetes/sa-east-1/prod/crm-core-bff-config.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/kubernetes/sa-east-1/prod/crm-core-bff-custom-config.yaml",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/cd-production.yaml",
+    "lines": 123
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/cd.yaml",
+    "lines": 132
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/ci-release.yaml",
+    "lines": 231
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/ci.yaml",
+    "lines": 153
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/flyway/migrate.yaml",
+    "lines": 60
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/flyway/repair.yaml",
+    "lines": 60
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/help.yaml",
+    "lines": 58
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/codefresh/release.yaml",
+    "lines": 160
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/docker/api/Dockerfile",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/aus-prod/ap-southeast-2/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/aus-prod/ap-southeast-2/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/aus-prod/ap-southeast-2/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/aus-prod/ap-southeast-2/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/aus-prod/ap-southeast-2/values.yaml",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/getnet-prod/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/getnet-prod/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/getnet-prod/sa-east-1/templates/configmap.yaml",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/getnet-prod/sa-east-1/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/getnet-prod/sa-east-1/values.yaml",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-1/templates/configmap.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-1/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-1/values.yaml",
+    "lines": 49
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-2/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-2/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-2/templates/configmap.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-2/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/ind-prod/ap-south-2/values.yaml",
+    "lines": 49
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/sa-east-1/templates/configmap.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/sa-east-1/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/sa-east-1/values.yaml",
+    "lines": 46
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/us-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/us-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/us-east-1/templates/configmap.yaml",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/us-east-1/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/integration/us-east-1/values.yaml",
+    "lines": 46
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/irl-prod/eu-west-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/irl-prod/eu-west-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/irl-prod/eu-west-1/templates/configmap.yaml",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/irl-prod/eu-west-1/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/irl-prod/eu-west-1/values.yaml",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/itau/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/itau/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/itau/sa-east-1/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/itau/sa-east-1/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/itau/sa-east-1/values.yaml",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/prod/sa-east-1/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/prod/sa-east-1/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/prod/sa-east-1/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/prod/sa-east-1/values.yaml",
+    "lines": 45
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/usa-prod/us-east-2/Chart.yaml",
+    "lines": 3
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/usa-prod/us-east-2/requirements.yaml",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/usa-prod/us-east-2/templates/configmap.yaml",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/usa-prod/us-east-2/templates/keda-scaledobject.yaml",
+    "lines": 29
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/helm/usa-prod/us-east-2/values.yaml",
+    "lines": 41
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/opentelemetry/collector-config.yaml",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/prometheus/prometheus.yaml",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/prometheus/prometheus.yml",
+    "lines": 22
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/shell/start.sh",
+    "lines": 11
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/stresstest/Makefile",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/stresstest/get-health.js",
+    "lines": 12
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/_variables.tf",
+    "lines": 21
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/aus-prod/ap-southeast-2/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/_state.tf",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/_variables.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/global.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/us-east-1/_state.tf",
+    "lines": 9
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/us-east-1/_variables.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/us-east-1/ecr.tf",
+    "lines": 23
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/us-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/dev-ext/us-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ecr.tf",
+    "lines": 39
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/_variables.tf",
+    "lines": 21
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/getnet-prod/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/_variables.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/_variables.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/ind-prod/ap-south-2/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/_variables.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/_variables.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/integration/us-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/_variables.tf",
+    "lines": 21
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/irl-prod/eu-west-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/_state.tf",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/_variables.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/itau/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/_state.tf",
+    "lines": 8
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/_variables.tf",
+    "lines": 15
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/prod/sa-east-1/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/_state.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/_variables.tf",
+    "lines": 19
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/data.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/global.tf",
+    "lines": 14
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/locals.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/modules.tf",
+    "lines": 6
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/outputs.tf",
+    "lines": 24
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/providers.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/secrets.tf",
+    "lines": 10
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/sns.tf",
+    "lines": 35
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/usa-prod/us-east-2/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/variables.tf",
+    "lines": 4
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/scripts/terraform/versions.tf",
+    "lines": 13
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/sonar-project.properties",
+    "lines": 64
+  },
+  {
+    "file_path": "projects/backoffice-core-bff/github/values.yaml",
+    "lines": 66
+  }
+]

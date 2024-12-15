@@ -1,0 +1,53 @@
+openapi: 3.0.1
+info:
+  title: console-audit-bff
+  description: The console-audit-bff project is responsible for serves specifics endpoints for console user domain.
+  x-cortex-tag: console-audit-bff
+  x-cortex-git:
+    github:
+      repository: pismo/console-audit-bff
+  x-cortex-service-groups:
+  - console
+  - golang
+  - api
+  - non-core
+  - sns-producer
+  - integration
+  - itau
+  - prod
+  x-cortex-link:
+  - name: Openapi
+    type: OPENAPI
+    url: https://github.com/pismo/console-audit-bff/tree/main/docs/openapi
+  - name: Console Audit BFF Documentation
+    type: DOCUMENTATION
+    url: https://github.com/pismo/console-audit-bff#readme
+    description: Documentation of console-audit-bff and related processes
+  - name: Runbook
+    type: RUNBOOK
+    url: https://github.com/pismo/console-audit-bff#readme
+  - name: General Dashboard
+    type: Dashboard
+    url: https://pismo.grafana.net/d/xBr3AK97z/main-dashboard?orgId=1&refresh=5s&var-dataset=sandbox&var-environment=integration&var-container=console-audit-bff&var-cid=.*&from=now-3h&to=now
+  x-cortex-oncall:
+    opsgenie:
+      id: 142622e0-ee58-4951-a145-7be8c59e502e
+      type: SCHEDULE
+  x-cortex-k8s:
+  x-cortex-owners:
+  - type: EMAIL
+    email: filipe.lyra@pismo.io
+  - type: slack
+    channel: squad-console-core
+  - name: psm-console
+    type: group
+  x-cortex-custom-metadata:
+    k8s_label:
+      value: console-audit-bff
+    datadog_log_service:
+      value: console-audit-bff
+  x-cortex-apm:
+  x-cortex-slos:
+  x-cortex-dependency:
+  - tag: audit-bff
+

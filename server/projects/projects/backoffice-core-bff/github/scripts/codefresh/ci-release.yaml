@@ -1,0 +1,231 @@
+version: '1.0'
+
+stages:
+  - clone
+  - security
+  - test
+  - sonar
+  - build
+  - metadata
+  - update helm
+
+services:
+  name: integration_services
+  composition:
+    cockroach_node_1:
+      container_name: cockroach_node_1
+      image: 'cockroachdb/cockroach:latest'
+      command: start --insecure
+      ports:
+        - 26257
+        -   8081
+  cockroach_node_2:
+    container_name: cockroach_node_2
+    image: 'cockroachdb/cockroach:latest'
+    command: start --insecure --join=node_1
+  cockroach_node_3:
+    container_name: cockroach_node_3
+    image: 'cockroachdb/cockroach:latest'
+    command: 'start --insecure --join=node_1,node_2'
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - 6379
+  jaeger:
+    image: 'jaegertracing/all-in-one:1.9.0'
+    ports:
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 9411:9411
+      - 16686:16686
+      - 14268:14268
+  localstack:
+    image: localstack/localstack-full
+    ports:
+      - 4566
+      - 4571
+      - 8080
+    environment:
+      - >-
+        SERVICES=s3,sns,sqs,apigateway,lambda,dynamodb,dynamodbstreams,cloudformation
+
+steps:
+  clone_parallel:
+    type: parallel
+    stage: clone
+    steps:
+      clone:
+        title: Cloning repository
+        type: git-clone
+        repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+        revision: '${{CF_BRANCH}}'
+        git: github
+        stage: "clone"
+
+  sec_parallel:
+    type: parallel
+    stage: security
+    steps:
+      gosec:
+        title: gosec
+        image: 'securego/gosec:latest'
+        type: freestyle
+        stage: build
+        working_directory: '${{clone}}'
+        commands:
+          - gosec -no-fail -fmt=sonarqube -out report.json ./...
+
+  test_parallel:
+    type: parallel
+    stage: "test"
+    steps:
+      go_test:
+        title: "Test"
+        image: 'golang:latest'
+        type: freestyle
+        stage: test
+        working_directory: '${{clone}}'
+        commands:
+          - go test -cover -p=1 -coverprofile=./cov.out ./...
+      go_Integration_test:
+        title: "Test Integração"
+        image: 'golang:latest'
+        type: freestyle
+        stage: "test"
+        working_directory: '${{clone}}'
+        commands:
+          - go test ./... -tags=integration
+        services:
+        - integration_services
+
+  sonar:
+    type: sonar-scanner-cli
+    stage: sonar
+    working_directory: '${{clone}}'
+    arguments:
+      SONAR_HOST_URL: 'http://sonarqube-sonarqube.sonarqube.svc.cluster.local:9000/'
+      SONAR_SCANNER_CLI_VERSION: latest
+      SONAR_PROJECT_VERSION: ${{PISMO_PR_RELEASE}}
+      sonar.projectVersion: "fernando"
+    when:
+      condition:
+        all:
+          noSkipCiInCommitMessage: 'includes(lower("${{CF_COMMIT_MESSAGE}}"), "skip sonar") == false'
+          #mainBranch: '"${{CF_BRANCH}}" == "main"'
+
+  build:
+    title: Building Docker image
+    type: build
+    image_name: pismopocs/${{CF_REPO_NAME}}
+    working_directory: '${{clone}}'
+    tags:
+      - "latest"
+      - "${{PISMO_PR_RELEASE}}"
+    dockerfile: scripts/docker/api/Dockerfile
+    stage: build
+    registry: pismopocs
+    disable_push: true
+    when:
+      steps:
+        - name: test_parallel
+          'on':
+            - success
+
+  push:
+    type: push
+    arguments:
+      candidate: '${{build}}'
+      tags:
+        - "latest"
+        - "${{PISMO_PR_RELEASE}}"
+      image_name: pismopocs/${{CF_REPO_NAME}}
+      registry: pismopocs
+
+  enrich_parallel:
+    type: parallel
+    stage: build
+    steps:
+      enrich_image_pr:
+        title: Add PR info
+        type: image-enricher
+        stage: "metadata"
+        arguments:
+          IMAGE: pismopocs/${{CF_REPO_NAME}}:${{PISMO_PR_RELEASE}}
+          BRANCH: '${{CF_BRANCH}}'
+          REPO: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+          GIT_PROVIDER_NAME: github
+      enrich_image_latest:
+        title: Add PR info
+        type: image-enricher
+        stage: "metadata"
+        arguments:
+          IMAGE: pismopocs/${{CF_REPO_NAME}}:latest
+          BRANCH: '${{CF_BRANCH}}'
+          REPO: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+          GIT_PROVIDER_NAME: github
+
+
+  # FIXME CORRIGIR PARA COMMITAR EM PROD / ITAU
+  update_helm_tag_parallel:
+    type: parallel
+    stage: "update helm"
+    steps:
+      update_helm_tag_production_sa_east_1:
+        title: "Update helm tag on file: /scripts/helm/production/sa-east-1/values.yaml"
+        image: "mikefarah/yq:3"
+        working_directory: ${{clone}}/scripts/helm/production/sa-east-1/
+        stage: "update helm"
+        commands:
+          - "ls -la"
+          - "yq w -i values.yaml 'rollout-template.image.tag' ${{PISMO_PR_RELEASE}}"
+          - "yq w -i values.yaml 'rollout-template.image.revision' ${{CF_REVISION}}"
+          - "cat values.yaml"
+      update_helm_tag_production_us_east_1:
+        title: "Update helm tag on file: /scripts/helm/production/us-east-1/values.yaml"
+        image: "mikefarah/yq:3"
+        working_directory: ${{clone}}/scripts/helm/production/us-east-1/
+        stage: "update helm"
+        commands:
+          - "yq w -i values.yaml 'rollout-template.image.tag' ${{PISMO_PR_RELEASE}}"
+          - "yq w -i values.yaml 'rollout-template.image.revision' ${{CF_REVISION}}"
+          - "cat values.yaml"
+      update_helm_tag_itau_sa_east_1:
+        title: "Update helm tag on file: /scripts/helm/itau/sa-east-1/values.yaml"
+        image: "mikefarah/yq:3"
+        working_directory: ${{clone}}/scripts/helm/itau/sa-east-1/
+        stage: "update helm"
+        commands:
+          - "ls -la"
+          - "yq w -i values.yaml 'rollout-template.image.tag' ${{PISMO_PR_RELEASE}}"
+          - "yq w -i values.yaml 'rollout-template.image.revision' ${{CF_REVISION}}"
+          - "cat values.yaml"
+      update_helm_tag_itau_us_east_1:
+        title: "Update helm tag on file: /scripts/helm/itau/us-east-1/values.yaml"
+        image: "mikefarah/yq:3"
+        working_directory: ${{clone}}/scripts/helm/itau/us-east-1/
+        stage: "update helm"
+        commands:
+          - "yq w -i values.yaml 'rollout-template.image.tag' ${{PISMO_PR_RELEASE}}"
+          - "yq w -i values.yaml 'rollout-template.image.revision' ${{CF_REVISION}}"
+          - "cat values.yaml"
+
+  commit_and_push:
+    title: Commit manifest
+    type: git-commit
+    stage: "update helm"
+    working_directory: '${{clone}}'
+    arguments:
+      repo: '${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}'
+      git: github
+      commit_message: "change image: docker.io/pismopocs/${{CF_REPO_NAME}}:${{PISMO_PR_RELEASE}}"
+      git_user_name: codefresh
+      git_user_email: codefresh@pismo.io
+      allow_empty: true
+      add:
+      - ./scripts/helm/production/sa-east-1/values.yaml
+      - ./scripts/helm/production/us-east-1/values.yaml
+      - ./scripts/helm/itau/sa-east-1/values.yaml
+      - ./scripts/helm/itau/us-east-1/values.yaml
+
