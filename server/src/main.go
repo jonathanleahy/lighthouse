@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -490,6 +491,21 @@ func listReposHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
+// checkAndPullRepo checks if the GitHub folder exists and pulls it if it doesn't.
+func checkAndPullRepo(baseRepoName string) error {
+	repoPath := filepath.Join("projects/projects", baseRepoName)
+	if _, err := os.Stat(repoPath); os.IsNotExist(err) {
+		fmt.Printf("Repository %s does not exist. Cloning...\n", baseRepoName)
+		cloneURL := fmt.Sprintf("https://github.com/pismo/%s.git", baseRepoName)
+		cmd := exec.Command("git", "clone", cloneURL, repoPath)
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("error cloning repository: %v", err)
+		}
+		fmt.Printf("Repository %s cloned successfully.\n", baseRepoName)
+	}
+	return nil
+}
+
 func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 	setCORSHeaders(w, r)
 
@@ -504,6 +520,10 @@ func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err := checkAndPullRepo(baseRepoName); err != nil {
+		log.Fatalf("Error checking and pulling repository: %v", err)
+	}
+	
 	repoBitUrl, namespace, appNameSuffixes := getRepoFileDetails(baseRepoName)
 	if repoBitUrl == "" {
 		http.Error(w, "Unknown baseRepoName", http.StatusBadRequest)
@@ -669,6 +689,10 @@ func main() {
 			fmt.Println("Error starting web server:", err)
 		}
 		return
+	}
+
+	if err := checkAndPullRepo(baseRepoName); err != nil {
+		log.Fatalf("Error checking and pulling repository: %v", err)
 	}
 
 	repoBitUrl, namespace, appNameSuffixes := getRepoFileDetails(baseRepoName)
