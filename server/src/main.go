@@ -545,8 +545,8 @@ func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
-func getEnvironmentVersions(deploymentInfo map[string]interface{}) map[string]DeploymentVersions {
-	envVersions := make(map[string]DeploymentVersions)
+func getEnvironmentVersions(deploymentInfo map[string]interface{}) map[string]string {
+	envVersions := make(map[string]string)
 
 	if apps, ok := deploymentInfo["apps"].([]interface{}); ok {
 		for _, app := range apps {
@@ -558,45 +558,26 @@ func getEnvironmentVersions(deploymentInfo map[string]interface{}) map[string]De
 					continue
 				}
 
+				// Extract environment path from app name
+				parts := strings.Split(appName, "-")
+				if len(parts) <= 1 {
+					continue
+				}
+
+				// Remove the microservice name prefix
+				envPath := strings.TrimPrefix(appName, parts[0]+"-"+parts[1]+"-"+parts[2]+"-")
+				if envPath == "" {
+					continue
+				}
+
 				// Get deployment info if it exists
 				if deployment, ok := appMap["deployment"].(map[string]interface{}); ok {
 					if deployments, ok := deployment["deployments"].([]interface{}); ok && len(deployments) > 0 {
-						versions := DeploymentVersions{}
-
-						// Get both stable and canary versions
-						for _, d := range deployments {
-							if deploy, ok := d.(map[string]interface{}); ok {
-								if deployType, ok := deploy["type"].(string); ok {
-									if deployVersion, ok := deploy["version"].(string); ok {
-										switch deployType {
-										case "stable":
-											versions.Stable = deployVersion
-										case "canary":
-											versions.Canary = deployVersion
-										}
-									}
-								}
-							}
-						}
-
-						// Only add to map if at least one version exists
-						if versions.Stable != "" || versions.Canary != "" {
-							// Map app names to environment keys
-							switch {
-							case strings.Contains(appName, "-usa-"):
-								envVersions["env-usa"] = versions
-							case strings.Contains(appName, "-ind-"):
-								envVersions["env-ind"] = versions
-							case strings.Contains(appName, "-irl-"):
-								envVersions["env-irl"] = versions
-							case strings.Contains(appName, "-aus-"):
-								envVersions["env-aus"] = versions
-							case strings.Contains(appName, "-getnet-"):
-								envVersions["env-getnet"] = versions
-							case strings.Contains(appName, "-itau-"):
-								envVersions["env-itau"] = versions
-							case strings.Contains(appName, "prod-sa-east-1") && !strings.Contains(appName, "-getnet-") && !strings.Contains(appName, "-itau-"):
-								envVersions["env-br"] = versions
+						// Get the first deployment's version
+						if deploy, ok := deployments[0].(map[string]interface{}); ok {
+							if version, ok := deploy["version"].(string); ok {
+								envKey := "env-" + envPath
+								envVersions[envKey] = version
 							}
 						}
 					}
@@ -722,13 +703,8 @@ func listReposFromFileHandler(w http.ResponseWriter, r *http.Request) {
 						// Get environment versions
 						envVersions := getEnvironmentVersions(deploymentInfo)
 						// Add environment versions to newEntry
-						for env, versions := range envVersions {
-							if versions.Stable != "" {
-								newEntry[env+"-stable"] = versions.Stable
-							}
-							if versions.Canary != "" {
-								newEntry[env+"-canary"] = versions.Canary
-							}
+						for env, version := range envVersions {
+							newEntry[env] = version
 						}
 					}
 				}
