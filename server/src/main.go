@@ -51,8 +51,13 @@ type ReposListCache struct {
 var (
 	reposListCache ReposListCache
 	reposListMux   sync.RWMutex
-	cacheDuration  = 5 * time.Minute
+	cacheDuration  = 1 * time.Minute
 )
+
+type DeploymentVersions struct {
+	Stable string
+	Canary string
+}
 
 func handleTerraformConfigs(w http.ResponseWriter, r *http.Request) {
 	setCORSHeaders(w, r)
@@ -418,7 +423,7 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 	// Limit the number of concurrent goroutines to 5 by using a semaphore pattern with a buffered channel.
 	var wg sync.WaitGroup
 	var mu sync.Mutex
-	sem := make(chan struct{}, 6) // Semaphore with a capacity of 1
+	sem := make(chan struct{}, 10) // Semaphore with a capacity of 1
 
 	for appNameSuffix, isPrimary := range appNameSuffixes {
 		wg.Add(1)
@@ -493,7 +498,7 @@ func listReposHandler(w http.ResponseWriter, r *http.Request) {
 
 // checkAndPullRepo checks if the GitHub folder exists and pulls it if it doesn't.
 func checkAndPullRepo(baseRepoName string) error {
-	repoPath := filepath.Join("projects/projects", baseRepoName)
+	repoPath := filepath.Join("projects/projects", baseRepoName, "github")
 	if _, err := os.Stat(repoPath); os.IsNotExist(err) {
 		fmt.Printf("Repository %s does not exist. Cloning...\n", baseRepoName)
 		cloneURL := fmt.Sprintf("https://github.com/pismo/%s.git", baseRepoName)
@@ -523,7 +528,7 @@ func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 	if err := checkAndPullRepo(baseRepoName); err != nil {
 		log.Fatalf("Error checking and pulling repository: %v", err)
 	}
-	
+
 	repoBitUrl, namespace, appNameSuffixes := getRepoFileDetails(baseRepoName)
 	if repoBitUrl == "" {
 		http.Error(w, "Unknown baseRepoName", http.StatusBadRequest)
@@ -538,6 +543,69 @@ func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonData)
+}
+
+func getEnvironmentVersions(deploymentInfo map[string]interface{}) map[string]DeploymentVersions {
+	envVersions := make(map[string]DeploymentVersions)
+
+	if apps, ok := deploymentInfo["apps"].([]interface{}); ok {
+		for _, app := range apps {
+			if appMap, ok := app.(map[string]interface{}); ok {
+				appName := appMap["appName"].(string)
+
+				// Skip if there's an error in the app data
+				if _, hasError := appMap["error"]; hasError {
+					continue
+				}
+
+				// Get deployment info if it exists
+				if deployment, ok := appMap["deployment"].(map[string]interface{}); ok {
+					if deployments, ok := deployment["deployments"].([]interface{}); ok && len(deployments) > 0 {
+						versions := DeploymentVersions{}
+
+						// Get both stable and canary versions
+						for _, d := range deployments {
+							if deploy, ok := d.(map[string]interface{}); ok {
+								if deployType, ok := deploy["type"].(string); ok {
+									if deployVersion, ok := deploy["version"].(string); ok {
+										switch deployType {
+										case "stable":
+											versions.Stable = deployVersion
+										case "canary":
+											versions.Canary = deployVersion
+										}
+									}
+								}
+							}
+						}
+
+						// Only add to map if at least one version exists
+						if versions.Stable != "" || versions.Canary != "" {
+							// Map app names to environment keys
+							switch {
+							case strings.Contains(appName, "-usa-"):
+								envVersions["env-usa"] = versions
+							case strings.Contains(appName, "-ind-"):
+								envVersions["env-ind"] = versions
+							case strings.Contains(appName, "-irl-"):
+								envVersions["env-irl"] = versions
+							case strings.Contains(appName, "-aus-"):
+								envVersions["env-aus"] = versions
+							case strings.Contains(appName, "-getnet-"):
+								envVersions["env-getnet"] = versions
+							case strings.Contains(appName, "-itau-"):
+								envVersions["env-itau"] = versions
+							case strings.Contains(appName, "prod-sa-east-1") && !strings.Contains(appName, "-getnet-") && !strings.Contains(appName, "-itau-"):
+								envVersions["env-br"] = versions
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return envVersions
 }
 
 func listReposFromFileHandler(w http.ResponseWriter, r *http.Request) {
@@ -641,6 +709,30 @@ func listReposFromFileHandler(w http.ResponseWriter, r *http.Request) {
 
 		if processed == "true" {
 			newEntry["processed"] = processed
+		}
+
+		if fileInfo, err := os.Stat(deploymentPath); err == nil && fileInfo.Size() > 0 {
+			processed = "true"
+			deploymentData, err := ioutil.ReadFile(deploymentPath)
+			if err == nil && len(deploymentData) > 0 {
+				var deploymentInfo map[string]interface{}
+				if err := json.Unmarshal(deploymentData, &deploymentInfo); err == nil {
+					if apps, ok := deploymentInfo["apps"].([]interface{}); ok && len(apps) > 0 {
+						on_env = "true"
+						// Get environment versions
+						envVersions := getEnvironmentVersions(deploymentInfo)
+						// Add environment versions to newEntry
+						for env, versions := range envVersions {
+							if versions.Stable != "" {
+								newEntry[env+"-stable"] = versions.Stable
+							}
+							if versions.Canary != "" {
+								newEntry[env+"-canary"] = versions.Canary
+							}
+						}
+					}
+				}
+			}
 		}
 
 		result[i] = newEntry
