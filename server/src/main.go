@@ -392,7 +392,6 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 
 	// Check if the file exists and is less than cacheTime seconds old
 	fileInfo, err := os.Stat(filename)
-
 	if err == nil && time.Since(fileInfo.ModTime()) < time.Duration(cacheTime)*time.Second {
 		// Read the data from the file
 		jsonData, err := ioutil.ReadFile(filename)
@@ -403,13 +402,13 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 		return jsonData, nil
 	}
 
+	// Process the data if the file does not exist or is older than cacheTime seconds
 	repo, err := getRepositoryBlock(repoName)
 	if err != nil {
 		fmt.Println(err)
 		//return
 	}
 
-	// Process the data if the file does not exist or is older than 30 seconds
 	repoData := map[string]interface{}{
 		"repoName":      baseRepoName,
 		"repoBitUrl":    repoBitUrl,
@@ -435,7 +434,7 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 			defer func() { <-sem }() // Release the slot
 
 			app := fetchImages(baseRepoName, appNameSuffix, namespace, isPrimary)
-			// a randon 1 to 3 second pause
+			// a random 1 to 3 second pause
 			time.Sleep(time.Duration(rand.Intn(3)) * time.Second)
 			mu.Lock()
 			repoData["apps"] = append(repoData["apps"].([]map[string]interface{}), app)
