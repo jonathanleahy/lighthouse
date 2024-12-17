@@ -143,6 +143,7 @@ const DeploymentProgress: React.FC<DeploymentProgressProps> = ({ deployments, ar
   const stable = deployments.find(d => d.type === "stable");
   const canary = deployments.find(d => d.type === "canary");
 
+  argocdWeight = 30;
   if (!stable || !canary) return null;
 
   const totalPercentage = stable.percentage + canary.percentage;
@@ -152,11 +153,11 @@ const DeploymentProgress: React.FC<DeploymentProgressProps> = ({ deployments, ar
       <div className="space-y-1 w-full">
         <div className="h-3 w-full bg-muted overflow-hidden rounded-full relative">
           <div
-              className="h-full bg-secondary absolute left-0 top-0 transition-all duration-500"
+              className="h-full bg-blue-500 absolute left-0 top-0 transition-all duration-500"
               style={{ width: `${100 - argocdWeight}%` }}
           />
           <div
-              className="h-full bg-accent absolute left-0 top-0 transition-all duration-500"
+              className="h-full bg-green-500 absolute left-0 top-0 transition-all duration-500"
               style={{ width: `${argocdWeight}%`, marginLeft: `${100 - argocdWeight}%` }}
           />
         </div>
@@ -277,7 +278,7 @@ export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData })
                 </TableHead>
                 <TableHead className="">Version</TableHead>
                 <TableHead className="">Progress</TableHead>
-                <TableHead className="">Status</TableHead>
+                <TableHead className="">Argo Status</TableHead>
                 <TableHead className="w-8"></TableHead>
               </TableRow>
             </TableHeader>

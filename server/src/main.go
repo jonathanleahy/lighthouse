@@ -194,14 +194,11 @@ func fetchImages(baseRepoName, appNameSuffix, spr string, isPrimary bool) map[st
 	url1 := fmt.Sprintf("https://argocd.pismo.services/api/v1/applications/%s/resource-tree?appNamespace=argocd", escapedAppName)
 	url2 := fmt.Sprintf("https://argocd.pismo.services/api/v1/applications/%s/resource?name=%s&appNamespace=argocd&namespace=%s&resourceName=%s&version=v1alpha1&kind=Rollout&group=argoproj.io", escapedAppName, baseRepoName, spr, baseRepoName)
 
-	//token := "eyJhbGciOiJSUzI1NiIsImtpZCI6ImE0NWIyZjZiOGM0NWRmZjY0YmUwZjNhNTlmYjkzNWYyNTg1MTFkNjkifQ.eyJpc3MiOiJodHRwczovL2FyZ29jZC5waXNtby5zZXJ2aWNlcy9hcGkvZGV4Iiwic3ViIjoiQ2hkcWIyNWhkR2hoYmk1c1pXRm9lVUJ3YVhOdGJ5NXBieElFYjJ0MFlRIiwiYXVkIjoiYXJnby1jZCIsImV4cCI6MTczMjE4ODY0NywiaWF0IjoxNzMyMTAyMjQ3LCJhdF9oYXNoIjoiXzJzWUQyQ0pWcm9GREhVR25PYkhtQSIsImNfaGFzaCI6IjNsSWZDYXg4ZkZNOU90RFNlQU1MY0EiLCJlbWFpbCI6ImpvbmF0aGFuLmxlYWh5QHBpc21vLmlvIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImdyb3VwcyI6WyJwc20taW50ZXJuYXRpb25hbHVpLXNvZmVuZyIsInBzbS1iYWNrb2ZmdG9vbHMiLCJwc20taW50ZXJuYXRpb25hbHVpIiwicHNtLWVuZ2luZWVycyIsInBzbS1iYWNrb2ZmdG9vbHMtc29mZW5nIl0sIm5hbWUiOiJqb25hdGhhbi5sZWFoeUBwaXNtby5pbyJ9.Kf7DiI088q5u_vYGpELzKx9-Cb1azVarYtMyisQ9Z-gDdGbfyj-aZZmGLReAbOkiPDDC961RKEmN1jtsaSjNJTQkRXlJ9-VltpUjHvtB7oMSmAjR5Oawth3h0DtUL7fh6NE24buPIiBbBJWaoSa4T95llF9EmXU-C0eMuN5_ptY_r8fPMzdVfOLCHoO9PUP9LMJJID4V2i-zpHIgCN_9t7QwEwWxsPUtEoJr1e8q52m4REh9LbZq4IeaY8OWgBj5QbdNa2cDYKYU6nkMNEi8Fxqygv_xahrITj-vhiEvoyb48csCssglrizw4FxeCJiLh9O-mrLawD3Lgpfg042HhQ"
-
 	tokenBytes, err := ioutil.ReadFile("token.txt")
 	if err != nil {
 		log.Fatalf("Error reading token file: %v", err)
 	}
 	token := strings.TrimSpace(string(tokenBytes))
-	//fmt.Printf("Token read from file: %s\n", token)
 
 	fmt.Printf("baseRepoName: %s, appNameSuffix: %s, spr: %s, isPrimary: %t\n", baseRepoName, appNameSuffix, spr, isPrimary)
 
@@ -388,9 +385,20 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 	// Construct the file path in the projects/summary directory
 	filename := filepath.Join(summaryDir, fmt.Sprintf("%s.json", repoName))
 
+    const cacheTime = 20000000
+
+	// Check for force refresh parameter
+	forceRefresh := r.URL.Query().Get("force") == "true"
+
+	// Check cache if not forcing refresh
+	if !forceRefresh {
+	    cacheTime = 1
+	}
+
 	// Check if the file exists and is less than 10 seconds old
 	fileInfo, err := os.Stat(filename)
-	if err == nil && time.Since(fileInfo.ModTime()) < 20000000*time.Second {
+
+	if err == nil && time.Since(fileInfo.ModTime()) < cacheTime * time.Second {
 		// Read the data from the file
 		jsonData, err := ioutil.ReadFile(filename)
 		if err != nil {
@@ -400,7 +408,6 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 		return jsonData, nil
 	}
 
-	//repoName := "accounts-api"
 	repo, err := getRepositoryBlock(repoName)
 	if err != nil {
 		fmt.Println(err)
