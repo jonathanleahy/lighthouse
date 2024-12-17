@@ -386,7 +386,7 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 	filename := filepath.Join(summaryDir, fmt.Sprintf("%s.json", repoName))
 
 	const cacheTime = 20000000
-	
+
 	// Check if the file exists and is less than 10 seconds old
 	fileInfo, err := os.Stat(filename)
 
@@ -517,6 +517,11 @@ func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodOptions {
 		return
 	}
+
+	// Check for force refresh parameter
+	forceRefresh := r.URL.Query().Get("force") == "true"
+
+	fmt.Println(forceRefresh)
 
 	baseRepoName := r.URL.Query().Get("repo")
 	if baseRepoName == "" {
