@@ -25,7 +25,7 @@ export function useDashboardData(url: string | null, initialFetch: boolean): Das
         setLoading(true);
         setError(null);
         try {
-            const fetchUrl = force ? `${url}&force` : url;
+            const fetchUrl = force ? `${url}&force=true` : url;
             const response = await fetch(fetchUrl);
             const result = await response.json();
             setData(result);
