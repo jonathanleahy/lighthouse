@@ -142,8 +142,7 @@ interface DeploymentProgressProps {
 const DeploymentProgress: React.FC<DeploymentProgressProps> = ({ deployments, argocdWeight }) => {
   const stable = deployments.find(d => d.type === "stable");
   const canary = deployments.find(d => d.type === "canary");
-
-  argocdWeight = 30;
+  
   if (!stable || !canary) return null;
 
   const totalPercentage = stable.percentage + canary.percentage;
