@@ -521,7 +521,7 @@ func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check for force refresh parameter
-	forceRefresh := r.URL.Query().Get("force") == "true"
+	forceRefresh := r.URL.Query().Get("force")
 
 	fmt.Println(forceRefresh)
 
@@ -604,7 +604,7 @@ func listReposFromFileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check for force refresh parameter
-	forceRefresh := r.URL.Query().Get("force") == "true"
+	forceRefresh := r.URL.Query().Get("force")
 
 	// Check cache if not forcing refresh
 	if !forceRefresh {
