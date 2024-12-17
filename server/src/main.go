@@ -370,7 +370,7 @@ func getRepoDetails(baseRepoName string) (string, string, map[string]bool) {
 	return "", "", nil
 }
 
-func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes map[string]bool) ([]byte, error) {
+func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes map[string]bool, forceRefresh bool) ([]byte, error) {
 	repoName := baseRepoName
 
 	// Ensure the projects/summary directory exists
@@ -385,12 +385,15 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 	// Construct the file path in the projects/summary directory
 	filename := filepath.Join(summaryDir, fmt.Sprintf("%s.json", repoName))
 
-	const cacheTime = 20000000
+	cacheTime := 20000000
+	if forceRefresh {
+		cacheTime = 1
+	}
 
 	// Check if the file exists and is less than 10 seconds old
 	fileInfo, err := os.Stat(filename)
 
-	if err == nil && time.Since(fileInfo.ModTime()) < cacheTime*time.Second {
+	if time.Since(fileInfo.ModTime()) < time.Duration(cacheTime)*time.Second {
 		// Read the data from the file
 		jsonData, err := ioutil.ReadFile(filename)
 		if err != nil {
@@ -539,7 +542,7 @@ func handleRepoRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonData, err := processRepoData(baseRepoName, repoBitUrl, namespace, appNameSuffixes)
+	jsonData, err := processRepoData(baseRepoName, repoBitUrl, namespace, appNameSuffixes, forceRefresh)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -777,7 +780,7 @@ func main() {
 		return
 	}
 
-	_, err := processRepoData(baseRepoName, repoBitUrl, namespace, appNameSuffixes)
+	_, err := processRepoData(baseRepoName, repoBitUrl, namespace, appNameSuffixes, true)
 	if err != nil {
 		fmt.Println(err)
 	}
