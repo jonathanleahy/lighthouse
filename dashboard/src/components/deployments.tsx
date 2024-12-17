@@ -97,9 +97,9 @@ const StatusIcon: React.FC<StatusIconProps> = ({ status, argocdStep }) => {
       return (
           <div className="flex items-center gap-2">
             {parsedStep.pause?.duration ? (
-                <RotateCw className="text-blue-500 animate-spin h-4 w-4" />
-            ) : (
                 <PlayCircle className="text-blue-500 h-4 w-4" />
+            ) : (
+              <RotateCw className="text-blue-500 animate-spin h-4 w-4" />
             )}
             <div>
               <div className="font-medium">In Progress</div>
@@ -142,7 +142,7 @@ interface DeploymentProgressProps {
 const DeploymentProgress: React.FC<DeploymentProgressProps> = ({ deployments, argocdWeight }) => {
   const stable = deployments.find(d => d.type === "stable");
   const canary = deployments.find(d => d.type === "canary");
-  
+
   if (!stable || !canary) return null;
 
   const totalPercentage = stable.percentage + canary.percentage;
