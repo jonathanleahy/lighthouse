@@ -385,7 +385,7 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 	// Construct the file path in the projects/summary directory
 	filename := filepath.Join(summaryDir, fmt.Sprintf("%s.json", repoName))
 
-	cacheTime := 20
+	cacheTime := 30
 	if forceRefresh {
 		cacheTime = 1
 	}
@@ -395,7 +395,7 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 
 	log.Printf("File age: %v, Cache duration: %v", time.Since(fileInfo.ModTime()), time.Duration(cacheTime)*time.Second)
 
-	if time.Since(fileInfo.ModTime()) < time.Duration(cacheTime)*time.Second {
+	if time.Since(fileInfo.ModTime()) > time.Duration(cacheTime)*time.Second {
 		// Read the data from the file
 		jsonData, err := ioutil.ReadFile(filename)
 		if err != nil {
