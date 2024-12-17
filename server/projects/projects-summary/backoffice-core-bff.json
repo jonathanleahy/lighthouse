@@ -1,86 +1,86 @@
 {
   "apps": [
     {
-      "appName": "backoffice-core-bff-dev-ext-us-east-1",
+      "appName": "backoffice-core-bff-production-sa-east-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-dev-ext-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "backoffice-core-bff-integration-sa-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-integration-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "backoffice-core-bff-usa-prod-us-east-2",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-usa-prod-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "backoffice-core-bff-ind-prod-ap-south-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-ind-prod-ap-south-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "backoffice-core-bff-ind-prod-ap-south-2",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-ind-prod-ap-south-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "backoffice-core-bff-integration-us-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-integration-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-production-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "backoffice-core-bff-irl-prod-eu-west-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-irl-prod-eu-west-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-irl-prod-eu-west-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
-      "appName": "backoffice-core-bff-aus-prod-ap-southeast-2",
+      "appName": "backoffice-core-bff-ind-prod-ap-south-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-aus-prod-ap-southeast-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "backoffice-core-bff-getnet-prod-sa-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-getnet-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "backoffice-core-bff-dev-ext-sa-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-dev-ext-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:36944-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-ind-prod-ap-south-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "backoffice-core-bff-itau-prod-sa-east-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-itau-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:51387-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-itau-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
-      "appName": "backoffice-core-bff-production-sa-east-1",
+      "appName": "backoffice-core-bff-integration-us-east-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-production-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:51387-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-integration-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "backoffice-core-bff-getnet-prod-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-getnet-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "backoffice-core-bff-aus-prod-ap-southeast-2",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-aus-prod-ap-southeast-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "backoffice-core-bff-integration-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-integration-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "backoffice-core-bff-ind-prod-ap-south-2",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-ind-prod-ap-south-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "backoffice-core-bff-usa-prod-us-east-2",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-usa-prod-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:60124-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "backoffice-core-bff-dev-ext-us-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-dev-ext-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:37635-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "backoffice-core-bff-dev-ext-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/backoffice-core-bff-dev-ext-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:37635-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     }
