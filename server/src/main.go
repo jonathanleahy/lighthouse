@@ -390,12 +390,10 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 		cacheTime = 1
 	}
 
-	// Check if the file exists and is less than 10 seconds old
+	// Check if the file exists and is less than cacheTime seconds old
 	fileInfo, err := os.Stat(filename)
 
-	log.Printf("File age: %v, Cache duration: %v", time.Since(fileInfo.ModTime()), time.Duration(cacheTime)*time.Second)
-
-	if time.Since(fileInfo.ModTime()) > time.Duration(cacheTime)*time.Second {
+	if err == nil && time.Since(fileInfo.ModTime()) < time.Duration(cacheTime)*time.Second {
 		// Read the data from the file
 		jsonData, err := ioutil.ReadFile(filename)
 		if err != nil {
