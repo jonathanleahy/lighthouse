@@ -11,7 +11,16 @@ import (
 	"time"
 )
 
-// Use the AnalysisResult struct from the gitProcessor package
+const (
+	defaultHistoryMonths = 24 // 2 years default for both commit and release history
+)
+
+// Command line flags for history
+type HistoryFlags struct {
+	commitMonths  int
+	releaseMonths int
+}
+
 func main() {
 	// Setup logging
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
@@ -21,7 +30,17 @@ func main() {
 	outputPath := flag.String("output", "", "Path to write JSON output (optional)")
 	prettyPrint := flag.Bool("pretty", true, "Pretty print the output")
 	verbose := flag.Bool("verbose", false, "Enable verbose logging")
+
+	// Add history flags with 2-year defaults
+	commitHistory := flag.Int("commit-history", defaultHistoryMonths, "Number of months of commit history to include (default 24 months)")
+	releaseHistory := flag.Int("release-history", defaultHistoryMonths, "Number of months of release history to include (default 24 months)")
+
 	flag.Parse()
+
+	historyFlags := HistoryFlags{
+		commitMonths:  *commitHistory,
+		releaseMonths: *releaseHistory,
+	}
 
 	// Create logger based on verbose flag
 	logger := log.New(os.Stdout, "", log.LstdFlags)
@@ -43,9 +62,12 @@ func main() {
 		logger.Fatalf("Not a git repository: %s", absPath)
 	}
 
-	// Initialize repository module
+	// Initialize repository module with history options
 	logger.Printf("Initializing repository analyzer for: %s", absPath)
-	repoModule, err := gitProcessor.NewRepositoryModule()
+	repoModule, err := gitProcessor.NewRepositoryModule(gitProcessor.Options{
+		CommitHistoryMonths:  historyFlags.commitMonths,
+		ReleaseHistoryMonths: historyFlags.releaseMonths,
+	})
 	if err != nil {
 		logger.Fatalf("Failed to initialize repository module: %v", err)
 	}
@@ -119,6 +141,8 @@ func main() {
 }
 
 func printSummary(result *gitProcessor.AnalysisResult) {
+	timeFormat := "2006-01-02 15:04:05"
+
 	fmt.Println("\nRepository Analysis Summary")
 	fmt.Println("==========================")
 
@@ -133,7 +157,36 @@ func printSummary(result *gitProcessor.AnalysisResult) {
 	fmt.Printf("Commit Message: %s\n", result.Repository.LastCommit.Message)
 
 	if len(result.Repository.Tags) > 0 {
-		fmt.Printf("Tags: %v\n", result.Repository.Tags)
+		fmt.Println("\nTags:")
+		for _, tag := range result.Repository.Tags {
+			fmt.Printf("- %s | %s | by %s\n",
+				tag.Date.Format(timeFormat),
+				tag.Name,
+				tag.Author)
+		}
+	}
+
+	// Commit History
+	if len(result.Repository.CommitHistory) > 0 {
+		fmt.Println("\nRecent Commits:")
+		for _, commit := range result.Repository.CommitHistory {
+			fmt.Printf("- %s | %s | %s | %s\n",
+				commit.Date.Format(timeFormat),
+				commit.Hash[:8],
+				commit.Author,
+				commit.Message)
+		}
+	}
+
+	// Release History
+	if len(result.Repository.ReleaseHistory) > 0 {
+		fmt.Println("\nRecent Releases:")
+		for _, release := range result.Repository.ReleaseHistory {
+			fmt.Printf("- %s | %s | %s\n",
+				release.Date.Format(timeFormat),
+				release.Tag,
+				release.Name)
+		}
 	}
 
 	// Build Info
