@@ -33,12 +33,13 @@ export default function Dashboard() {
   )
 
   return (
+
       <div
           className="min-h-screen pb-16 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white flex flex-col">
         <header className="bg-white dark:bg-gray-800 shadow-lg">
           <div className="container mx-auto px-4 py-6">
             <div className="flex justify-between items-center mb-4">
-              <h1 className="text-3xl font-bold">Microservices Dashboard</h1>
+              <h1 className="text-3xl font-bold">Micrwoservices Dashboard</h1>
               <ThemeToggle/>
             </div>
             <div className="flex items-center space-x-2">

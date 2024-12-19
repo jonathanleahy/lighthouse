@@ -71,4 +71,9 @@ type AnalysisResult struct {
 	Build         BuildInfo         `json:"build"`
 	Dependencies  DependencyInfo    `json:"dependencies"`
 	Documentation DocumentationInfo `json:"documentation"`
+	Commit        string            `json:"commit"`
+	Branch        string            `json:"branch"`
+	Author        string            `json:"author"`
+	Timestamp     string            `json:"timestamp"`
+	Tag           string            `json:"tag"`
 }

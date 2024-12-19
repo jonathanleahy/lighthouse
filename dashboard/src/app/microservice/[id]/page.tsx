@@ -1,7 +1,7 @@
 "use client"
 
 import Link from 'next/link'
-import { ArrowLeft, BarChart, AlertCircle, RefreshCw } from 'lucide-react'
+import {ArrowLeft, BarChart, AlertCircle, RefreshCw} from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Deployments } from '@/components/deployments'
 import { Button } from "@/components/ui/button"
@@ -10,8 +10,13 @@ import { useDashboardData } from "@/hooks/useDashboardData";
 import React, { use } from "react";
 import { useState, useEffect } from 'react';
 import { Globe, RotateCw, Search } from 'lucide-react';
+import Image from "next/image";
+import GithubIcon from 'public/icons/github.svg';
+import CodeFreshIcon from 'public/icons/codefresh.svg';
+import ArgoIcon from 'public/icons/argo.svg';
+import Grafana from 'public/icons/grafana.svg';
 
-function ServiceOverview({ service, refreshData }: { service: { id: string, name: string, description: string, squad: string }, refreshData: () => void }) {
+function ServiceOverview({ service, refreshData }: { service: { id: string, name: string, description: string, squad: string, stableTag: string }, refreshData: () => void }) {
   return (
       <Card className="relative">
         <CardContent className="pt-6">
@@ -27,17 +32,23 @@ function ServiceOverview({ service, refreshData }: { service: { id: string, name
               <span className="font-semibold">Squad:</span>
               <span>{service.squad}</span>
             </div>
+            {service.stableTag && (
+                <div className="flex items-center space-x-2">
+                  <span className="font-semibold">Stable Tag:</span>
+                  <span>{service.stableTag}</span>
+                </div>
+            )}
           </div>
         </CardContent>
       </Card>
-  )
+  );
 }
 
-// Updated DashboardData interface to include all possible fields
 interface DashboardData {
   repoDesc?: string;
   repoSquad?: string;
   repoBitUrl?: string;
+  repoNamespace?: string;
   repoCodefresh?: string;
   argocd?: { url?: string };
   apps?: {
@@ -63,10 +74,10 @@ interface DashboardData {
   }[];
 }
 
-// Update the DeploymentData interface to match the one in the Deployments component
 interface DeploymentData {
   repoName: string;
   repoBitUrl: string;
+  repoNamespace: string;
   apps: Array<{
     appName: string;
     type: string;
@@ -88,6 +99,7 @@ interface DeploymentData {
       url: string;
     };
   }>;
+  stableTag: string;
 }
 
 export default function MicroserviceDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -125,19 +137,25 @@ export default function MicroserviceDetail({ params }: { params: Promise<{ id: s
   const transformToDeploymentData = (data: DashboardData | null): DeploymentData | null => {
     if (!data) return null;
 
+    const stableTag = data.tags?.find(tag => tag.status === 'stable')?.tag || '';
+
     return {
       repoName: selectedOption || '',
       repoBitUrl: data.repoBitUrl || '',
-      apps: data.apps || []
+      repoNamespace: data.repoNamespace || '',
+      apps: data.apps || [],
+      stableTag: stableTag
     };
   };
 
-  const transformedData = transformToDeploymentData(mockData as DashboardData);
+  // const transformedData = transformToDeploymentData(mockData as DashboardData);
 
   const dashboardData = mockData as DashboardData;
 
+  const transformedData = transformToDeploymentData(mockData as DashboardData);
+
   const service = {
-    id: 12,
+    id: '12',
     name: selectedOption,
     description: dashboardData?.repoDesc || '',
     status: 'Warning',
@@ -149,23 +167,24 @@ export default function MicroserviceDetail({ params }: { params: Promise<{ id: s
     squad: dashboardData?.repoSquad || '',
     lastMainUpdate: '2023-11-18',
     lastBranchUpdate: '2023-11-21',
-    lastDeploy: '2023-11-22'
-  }
+    lastDeploy: '2023-11-22',
+    stableTag: transformedData?.stableTag || ''
+  };
 
   return (
       <div className="min-h-screen bg-background">
         <header className="sticky top-0 z-20 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+          <div className="container mx-auto px-4 sm:px-4 lg:px-4 flex h-12 items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link href="/" className="flex items-center space-x-2">
-                <ArrowLeft className="h-5 w-5" />
+                <ArrowLeft className="h-5 w-5"/>
                 <span className="font-medium">Dashboard</span>
               </Link>
               <span className="text-muted-foreground">/</span>
               <h1 className="text-xl font-bold">{service.name}</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <ThemeToggle />
+              <ThemeToggle/>
             </div>
           </div>
         </header>
@@ -199,30 +218,41 @@ export default function MicroserviceDetail({ params }: { params: Promise<{ id: s
                 <Card key="quick-links">
                   <CardContent className="grid grid-cols-2 gap-4 p-4">
                     <Button variant="outline" className="w-full m-1" asChild>
-                      <Link href={dashboardData?.repoBitUrl || "#"} target="_blank" rel="noopener noreferrer">
-                        {dashboardData?.repoBitUrl ? "View Github" : "No Github URL"}
-                      </Link>
+                      <div>
+                        <Image src={GithubIcon} alt="Github" width={16} height={16} className="text-black"/>
+                        <Link href={dashboardData?.repoBitUrl || "#"} target="_blank" rel="noopener noreferrer">
+                          {dashboardData?.repoBitUrl ? "View Github" : "No Github URL"}
+                        </Link>
+                      </div>
                     </Button>
                     <Button variant="outline" className="w-full m-1" asChild>
-                      <Link href={dashboardData?.repoCodefresh || "#"} target="_blank" rel="noopener noreferrer">
-                        {dashboardData?.repoCodefresh ? "View Codefresh" : "No Codefresh URL"}
-                      </Link>
+                      <div>
+                        <Image src={CodeFreshIcon} alt="Codefresh" width={16} height={16} className="text-black"/>
+                        <Link href={dashboardData?.repoCodefresh || "#"} target="_blank" rel="noopener noreferrer">
+                          {dashboardData?.repoCodefresh ? "View Codefresh" : "No Codefresh URL"}
+                        </Link>
+                      </div>
                     </Button>
                     <Button variant="outline" className="w-full m-1" asChild>
-                      <Link href={dashboardData?.argocd?.url || "#"} target="_blank" rel="noopener noreferrer">
-                        {dashboardData?.argocd?.url ? "View ArgoCD" : "No ArgoCD URL"}
-                      </Link>
+                      <div>
+                        <Image src={ArgoIcon} alt="Github" width={16} height={16} className="text-black"/>
+                        <Link href={dashboardData?.argocd?.url || "#"} target="_blank" rel="noopener noreferrer">
+                          {dashboardData?.argocd?.url ? "View ArgoCD" : "No ArgoCD URL"}
+                        </Link>
+                      </div>
                     </Button>
                     <Button variant="outline" className="w-full m-1" asChild>
-                      <a href="#" target="_blank" rel="noopener noreferrer">
-                        <BarChart className="mr-2 h-4 w-4" />
-                        Grafana :-(
-                      </a>
+                      <div>
+                        <Image src={Grafana} alt="Grafana" width={16} height={16} className="text-black"/>
+                        <a href="#" target="_blank" rel="noopener noreferrer">
+                          Grafana :-(
+                        </a>
+                      </div>
                     </Button>
                   </CardContent>
                 </Card>
               </div>
-              <Deployments isLoading={false} mockData={transformedData} />
+              <Deployments isLoading={false} mockData={transformedData} service={service} />
             </main>
         )}
       </div>

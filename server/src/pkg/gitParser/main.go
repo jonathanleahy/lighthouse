@@ -1,10 +1,10 @@
 package main
 
 import (
+	gitProcessor2 "argocd/pkg/gitProcessor"
 	"encoding/json"
 	"flag"
 	"fmt"
-	"git-parser/pkg/gitProcessor"
 	"log"
 	"os"
 	"path/filepath"
@@ -64,7 +64,7 @@ func main() {
 
 	// Initialize repository module with history options
 	logger.Printf("Initializing repository analyzer for: %s", absPath)
-	repoModule, err := gitProcessor.NewRepositoryModule(gitProcessor.Options{
+	repoModule, err := gitProcessor2.NewRepositoryModule(gitProcessor2.Options{
 		CommitHistoryMonths:  historyFlags.commitMonths,
 		ReleaseHistoryMonths: historyFlags.releaseMonths,
 	})
@@ -93,7 +93,7 @@ func main() {
 	}
 
 	// Create final result
-	var result gitProcessor.AnalysisResult
+	var result gitProcessor2.AnalysisResult
 	if err := json.Unmarshal(transformedData, &result); err != nil {
 		logger.Fatalf("Failed to parse transformed data: %v", err)
 	}
@@ -140,7 +140,7 @@ func main() {
 	logger.Print("Analysis completed successfully")
 }
 
-func printSummary(result *gitProcessor.AnalysisResult) {
+func printSummary(result *gitProcessor2.AnalysisResult) {
 	timeFormat := "2006-01-02 15:04:05"
 
 	fmt.Println("\nRepository Analysis Summary")

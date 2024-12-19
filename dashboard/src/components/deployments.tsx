@@ -8,6 +8,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHeader, TableHead, TableRow } from "@/components/ui/table";
+import Image from 'next/image';
+import ArgoIcon from 'public/icons/argo.svg';
 
 // Type definitions
 interface Deployment {
@@ -39,12 +41,14 @@ interface App {
 interface DeploymentData {
   repoName: string;
   repoBitUrl: string;
+  repoNamespace: string;
   apps: App[];
 }
 
 const mockDataExample: DeploymentData = {
   repoName: 'example-repo',
   repoBitUrl: 'https://example.com/repo',
+  repoNamespace: 'psm-namespace',
   apps: [
     {
       appName: 'example-repo-auth-service',
@@ -80,30 +84,68 @@ const mockDataExample: DeploymentData = {
 
 interface StatusIconProps {
   status: string;
+  stableTab: string;
   argocdStep: string;
+}
+
+async function argocdResume(namespace: string, resourceName: string, region: string) {
+  const url = `http://localhost:8083/argocd-resume?namespace=${namespace}&resourceName=${resourceName}&region=${region}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ action: "resume" })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(`Error calling ${url}`, error);
+  }
 }
 
 const StatusIcon: React.FC<StatusIconProps> = ({ status, argocdStep }) => {
   let parsedStep: { pause?: { duration?: string } } = {};
+  let pausedFor: string | number = 0;
+
   try {
     parsedStep = JSON.parse(argocdStep);
+    if (parsedStep.pause?.duration) {
+      pausedFor = parsedStep.pause.duration;
+    } else if (parsedStep.pause) {
+      pausedFor = -1;
+    }
   } catch {
-    // Empty catch block as we're already handling the default case
+    pausedFor = 0;
   }
 
   switch (status) {
     case 'In Progress': {
-      const duration = parsedStep.pause?.duration ? `for ${parsedStep.pause.duration}` : '';
+      let message = '';
+      if (typeof pausedFor === 'string') {
+        message = `Paused for ${pausedFor}`;
+      } else if (pausedFor === -1) {
+        message = 'Paused: Manual start required';
+      } else if (pausedFor === 0) {
+        message = 'ArgoCD is syncing';
+      }
       return (
           <div className="flex items-center gap-2">
-            {parsedStep.pause?.duration ? (
+            {typeof pausedFor === 'string' ? (
                 <PlayCircle className="text-blue-500 h-4 w-4" />
             ) : (
-              <RotateCw className="text-blue-500 animate-spin h-4 w-4" />
+                <PlayCircle className={`text-blue-500 h-4 w-4 ${pausedFor === -1 ? 'animate-spin-back-and-forth' : 'animate-spin'}`} />
             )}
             <div>
               <div className="font-medium">In Progress</div>
-              {duration && <div className="text-xs text-muted-foreground">Paused {duration}</div>}
+              {message && <div className="text-xs text-muted-foreground">{message}</div>}
             </div>
           </div>
       );
@@ -115,19 +157,31 @@ const StatusIcon: React.FC<StatusIconProps> = ({ status, argocdStep }) => {
             <span className="font-medium">{status}</span>
           </div>
       );
+    case 'Version Mismatch':
+      return (
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="text-yellow-500 h-4 w-4" />
+            <span className="font-medium">{status}</span>
+          </div>
+      );
     case 'No Deployment':
       return (
           <div className="flex items-center gap-2">
-            <XCircle className="text-yellow-500 h-4 w-4" />
+            <XCircle className="text-orange-500 h-4 w-4" />
             <span className="font-medium">{status}</span>
           </div>
       );
     default: {
-      const duration = parsedStep.pause?.duration ? `Paused for ${parsedStep.pause.duration}` : 'Paused';
+      let message = 'Paused';
+      if (typeof pausedFor === 'string') {
+        message = `Paused for ${pausedFor}`;
+      } else if (pausedFor === -1) {
+        message = 'Waiting to kick off';
+      }
       return (
           <div className="flex items-center gap-2">
             <PauseCircle className="text-blue-500 h-4 w-4" />
-            <span className="font-medium">{duration}</span>
+            <span className="font-medium">{message}</span>
           </div>
       );
     }
@@ -148,47 +202,73 @@ const DeploymentProgress: React.FC<DeploymentProgressProps> = ({ deployments, ar
   const totalPercentage = stable.percentage + canary.percentage;
   if (totalPercentage !== 100) return null;
 
+  const stablePercentage = isNaN(argocdWeight) ? 0 : 100 - argocdWeight;
+  const canaryPercentage = isNaN(argocdWeight) ? 0 : argocdWeight;
+
   return (
       <div className="space-y-1 w-full">
         <div className="h-3 w-full bg-muted overflow-hidden rounded-full relative">
           <div
-              className="h-full bg-blue-500 absolute left-0 top-0 transition-all duration-500"
-              style={{ width: `${100 - argocdWeight}%` }}
+              className="h-full bg-gray-500 absolute left-0 top-0 transition-all duration-500"
+              style={{ width: `${stablePercentage}%` }}
           />
           <div
               className="h-full bg-green-500 absolute left-0 top-0 transition-all duration-500"
-              style={{ width: `${argocdWeight}%`, marginLeft: `${100 - argocdWeight}%` }}
+              style={{ width: `${canaryPercentage}%`, marginLeft: `${stablePercentage}%` }}
           />
         </div>
         <div className="flex justify-between text-xs text-muted-foreground">
           <div>
-            <span>stable {100 - argocdWeight}%</span>
+            <span>stable {stablePercentage}%</span>
           </div>
           <div>
-            <span>canary {argocdWeight}%</span>
+            <span>canary {canaryPercentage}%</span>
           </div>
         </div>
       </div>
   );
 };
 
-const getDeploymentStatus = (deployments: Deployment[]) => {
+const getDeploymentStatus = (deployments: Deployment[], stableTag: string) => {
   if (deployments.length === 0) return { status: "No Deployment", color: "text-yellow-500" };
+
   if (deployments.length === 1 && deployments[0].percentage === 100) {
-    return { status: "Up to date", color: "text-green-500" };
+    if (deployments[0].version === stableTag) {
+      return {status: "Up to date", color: "text-green-500"};
+    } else {
+      return {status: "Version Mismatch", color: "text-orange-500"};
+    }
   }
+
   if (deployments.length > 1 || deployments[0].percentage < 100) {
     return { status: "In Progress", color: "text-blue-500" };
   }
   return { status: "Unknown", color: "text-gray-500" };
 };
 
+// After
 interface DeploymentsProps {
   isLoading: boolean;
   mockData: DeploymentData | null;
+  service: {
+    id: string;
+    name: string;
+    description: string;
+    status: string;
+    version: string;
+    requests: string;
+    uptime: string;
+    errors: number;
+    infos: number;
+    squad: string;
+    lastMainUpdate: string;
+    lastBranchUpdate: string;
+    lastDeploy: string;
+    stableTag: string;
+  };
 }
 
-export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData }) => {
+export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData, service }) => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [sortColumn, setSortColumn] = useState("appName");
   const [searchTerm, setSearchTerm] = useState("");
@@ -250,7 +330,7 @@ export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData })
   return (
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Deployments</h2>
+          <h2 className="text-lg font-semibold">Github Terraform Deployments</h2>
           <div className="flex items-center gap-2">
             <Input
                 placeholder="Filter deployments..."
@@ -265,14 +345,14 @@ export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData })
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[250px]">
+                <TableHead className="pl-4 w-[250px]">
                   <Button
                       variant="ghost"
                       onClick={() => handleSort("appName")}
                       className="h-8 -ml-4 font-medium"
                   >
-                    App Name
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                    Region
+                    <ArrowUpDown className="ml-2 h-4 w-4"/>
                   </Button>
                 </TableHead>
                 <TableHead className="">Version</TableHead>
@@ -284,8 +364,8 @@ export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData })
             <TableBody>
               {sortedApps.map((app) => {
                 const deploymentStatus = app.deployment?.deployments ?
-                    getDeploymentStatus(app.deployment.deployments) :
-                    { status: "No Deployment", color: "text-yellow-500" };
+                    getDeploymentStatus(app.deployment.deployments, service.stableTag) :
+                    {status: "No Deployment", color: "text-yellow-500"};
                 const argocdWeight = app.argocd?.status ?
                     parseFloat(app.argocd.status.weight) : 0;
 
@@ -330,16 +410,35 @@ export const Deployments: React.FC<DeploymentsProps> = ({ isLoading, mockData })
                         />
                       </TableCell>
                       <TableCell className="pr-8">
-                        <StatusIcon
-                            status={deploymentStatus.status}
-                            argocdStep={app.argocd?.status?.step?.[0] || '{}'}
-                        />
+                        <div className="flex items-center gap-2">
+                          {deploymentStatus.status === 'In Progress' ? (
+                              <>
+                                <Button
+                                    variant="default"
+                                    className="m-1 bg-white hover:bg-gray-100"
+                                    onClick={() => argocdResume(mockData.repoNamespace, service.name, app.appName.replace(data?.repoName ? `${data.repoName}-` : '', ''))}
+                                >
+                                  <Image src={ArgoIcon} alt="ArgoCD" width={16} height={16} className="text-black"/>
+                                  <StatusIcon
+                                      status={deploymentStatus.status}
+                                      argocdStep={app.argocd?.status?.step?.[0] || '{}'}
+                                  />
+                                </Button>
+                              </>
+                          ) : (
+                              <StatusIcon
+                                  status={deploymentStatus.status}
+                                  argocdStep={app.argocd?.status?.step?.[0] || '{}'}
+                              />
+
+                          )                         }
+                        </div>
                       </TableCell>
                       <TableCell>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8 p-0">
-                              <MoreVertical className="h-4 w-4" />
+                              <MoreVertical className="h-4 w-4"/>
                               <span className="sr-only">Open menu</span>
                             </Button>
                           </DropdownMenuTrigger>

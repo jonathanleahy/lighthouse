@@ -210,7 +210,6 @@ const DashboardControls: React.FC<DashboardControlsProps> = ({
                 <RefreshCw className="mr-2 h-4 w-4" />
                 Refresh
             </Button>
-            <ThemeSwitcher />
         </div>
     </div>
 );

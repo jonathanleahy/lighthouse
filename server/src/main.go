@@ -3,6 +3,9 @@ package main
 import (
 	"argocd/pkg/analyzer"
 	"argocd/pkg/analyzerArgoCd"
+	"argocd/pkg/gitProcessor"
+
+	//"argocd/pkg/gitParser/pkg/gitProcessor"
 	"argocd/pkg/regions"
 	"argocd/pkg/terraformConfig"
 	"encoding/json"
@@ -385,7 +388,7 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 	// Construct the file path in the projects/summary directory
 	filename := filepath.Join(summaryDir, fmt.Sprintf("%s.json", repoName))
 
-	cacheTime := 30
+	cacheTime := 30000000
 	if forceRefresh {
 		cacheTime = 1
 	}
@@ -402,11 +405,32 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 		return jsonData, nil
 	}
 
-	// Process the data if the file does not exist or is older than cacheTime seconds
+	//// Process the data if the file does not exist or is older than cacheTime seconds
 	repo, err := getRepositoryBlock(repoName)
 	if err != nil {
 		fmt.Println(err)
 		//return
+	}
+
+	//// Call the gitProcessor code and then add those details into a new GitHub section
+	options := gitProcessor.Options{
+		CommitHistoryMonths:  24, // Example: 24 months of commit history
+		ReleaseHistoryMonths: 24, // Example: 24 months of release history
+	}
+	repoModule, err := gitProcessor.NewRepositoryModule(options)
+	if err != nil {
+		return nil, fmt.Errorf("failed to initialize repository module: %v", err)
+	}
+
+	repoPath := filepath.Join("projects/projects", baseRepoName, "github")
+	repoDetails, err := repoModule.Extract(repoPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to extract repository details: %v", err)
+	}
+
+	var gitDetails gitProcessor.AnalysisResult
+	if err := json.Unmarshal(repoDetails, &gitDetails); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal repository details: %v", err)
 	}
 
 	repoData := map[string]interface{}{
@@ -419,6 +443,13 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 		},
 		"repoDesc":  repo.Description,
 		"repoSquad": repo.Team,
+		"github": map[string]interface{}{
+			"commit":    gitDetails.Commit,
+			"branch":    gitDetails.Branch,
+			"author":    gitDetails.Author,
+			"timestamp": gitDetails.Timestamp,
+			"tag":       gitDetails.Tag,
+		},
 	}
 
 	// Limit the number of concurrent goroutines to 5 by using a semaphore pattern with a buffered channel.
@@ -723,6 +754,8 @@ func listReposFromFileHandler(w http.ResponseWriter, r *http.Request) {
 	response := map[string]interface{}{
 		"repositories": result,
 	}
+
+	// call the github and add a new section call github with the same structure as the others
 
 	// Convert to JSON
 	updatedJSON, err := json.Marshal(response)

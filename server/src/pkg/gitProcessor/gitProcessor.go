@@ -21,6 +21,17 @@ func NewRepositoryModule(opts Options) (*RepositoryModule, error) {
 }
 
 func (m *RepositoryModule) Extract(repoPath string) ([]byte, error) {
+	// Save the current working directory
+	originalDir, err := os.Getwd()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get current working directory: %v", err)
+	}
+	defer func() {
+		if err := os.Chdir(originalDir); err != nil {
+			fmt.Printf("Warning: failed to change back to original directory: %v\n", err)
+		}
+	}()
+
 	// Change to repository directory
 	if err := os.Chdir(repoPath); err != nil {
 		return nil, fmt.Errorf("failed to change to repository directory: %v", err)

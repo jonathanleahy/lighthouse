@@ -1,382 +1,93 @@
 {
   "apps": [
     {
+      "appName": "console-audit-bff-irl-prod-eu-west-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-irl-prod-eu-west-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-ind-prod-ap-south-2",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-ind-prod-ap-south-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-integration-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-integration-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-ind-prod-ap-south-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-ind-prod-ap-south-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
       "appName": "console-audit-bff-citi-stag-usa-us-east-2",
       "error": [
-        "error: received status code 403"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-citi-stag-usa-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-dev-ext-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-dev-ext-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-integration-us-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-integration-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "console-audit-bff-dev-ext-us-east-1",
       "error": [
-        "error: received status code 403"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-dev-ext-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-getnet-prod-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-getnet-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "console-audit-bff-itau-prod-sa-east-1",
       "error": [
-        "error: received status code 403"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-itau-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
-      "appName": "console-audit-bff-ind-prod-ap-south-2",
-      "argocd": {
-        "health": "",
-        "status": {
-          "step": [
-            "{\"pause\":{}}"
-          ],
-          "weight": "0.000000"
-        },
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-ind-prod-ap-south-2?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 1,
-            "nodeNames": [
-              "ip-10-205-39-157.ap-south-2.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 1,
-            "type": "canary",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 1
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-integration-us-east-1",
-      "argocd": {
-        "health": "",
-        "status": {},
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-integration-us-east-1?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [],
-        "totalPods": 0
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
+      "appName": "console-audit-bff-production-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-production-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:58200-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "console-audit-bff-usa-prod-us-east-2",
-      "argocd": {
-        "health": "",
-        "status": {},
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-usa-prod-us-east-2?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 3,
-            "nodeNames": [
-              "ip-10-17-16-32.us-east-2.compute.internal",
-              "ip-10-17-15-5.us-east-2.compute.internal",
-              "ip-10-17-5-53.us-east-2.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 3
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-irl-prod-eu-west-1",
-      "argocd": {
-        "health": "",
-        "status": {},
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-irl-prod-eu-west-1?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 3,
-            "nodeNames": [
-              "ip-10-84-67-210.eu-west-1.compute.internal",
-              "ip-10-84-84-239.eu-west-1.compute.internal",
-              "ip-10-84-75-124.eu-west-1.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 3
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-getnet-prod-sa-east-1",
-      "argocd": {
-        "health": "",
-        "status": {},
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-getnet-prod-sa-east-1?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 3,
-            "nodeNames": [
-              "ip-10-97-71-97.sa-east-1.compute.internal",
-              "ip-10-97-75-205.sa-east-1.compute.internal",
-              "ip-10-97-86-26.sa-east-1.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 3
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-dev-ext-sa-east-1",
-      "argocd": {
-        "health": "",
-        "status": {
-          "step": [
-            "{\"setWeight\":0}"
-          ],
-          "weight": ""
-        },
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-dev-ext-sa-east-1?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 3,
-            "nodeNames": [
-              "ip-192-168-33-75.sa-east-1.compute.internal",
-              "ip-192-168-67-56.sa-east-1.compute.internal",
-              "ip-192-168-56-110.sa-east-1.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 3
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:2.7.1"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-prod-sa-east-1",
-      "argocd": {
-        "health": "",
-        "status": {},
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-prod-sa-east-1?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 3,
-            "nodeNames": [
-              "ip-10-10-64-138.sa-east-1.compute.internal",
-              "ip-10-10-37-154.sa-east-1.compute.internal",
-              "ip-10-10-61-24.sa-east-1.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 3
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-integration-sa-east-1",
-      "argocd": {
-        "health": "",
-        "status": {},
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-integration-sa-east-1?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 3,
-            "nodeNames": [
-              "ip-10-236-20-134.sa-east-1.compute.internal",
-              "ip-10-236-13-51.sa-east-1.compute.internal",
-              "ip-10-236-30-77.sa-east-1.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 3
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-ind-prod-ap-south-1",
-      "argocd": {
-        "health": "",
-        "status": {
-          "step": [
-            "{\"pause\":{}}"
-          ],
-          "weight": "0.000000"
-        },
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-ind-prod-ap-south-1?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 1,
-            "nodeNames": [
-              "ip-10-200-66-239.ap-south-1.compute.internal"
-            ],
-            "percentage": 25,
-            "podCount": 1,
-            "type": "canary",
-            "version": "1.13.0"
-          },
-          {
-            "nodeCount": 2,
-            "nodeNames": [
-              "ip-10-200-37-151.ap-south-1.compute.internal",
-              "ip-10-200-12-213.ap-south-1.compute.internal"
-            ],
-            "percentage": 75,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.12.2"
-          }
-        ],
-        "totalPods": 4
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-usa-prod-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:58200-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "console-audit-bff-aus-prod-ap-southeast-2",
-      "argocd": {
-        "health": "",
-        "status": {},
-        "url": "https://argocd.pismo.services/applications/argocd/console-audit-bff-aus-prod-ap-southeast-2?view=tree\u0026orphaned=false\u0026resource="
-      },
-      "codefresh": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "deployment": {
-        "deployments": [
-          {
-            "nodeCount": 3,
-            "nodeNames": [
-              "ip-10-83-78-169.ap-southeast-2.compute.internal",
-              "ip-10-83-78-124.ap-southeast-2.compute.internal",
-              "ip-10-83-69-144.ap-southeast-2.compute.internal"
-            ],
-            "percentage": 100,
-            "podCount": 3,
-            "type": "stable",
-            "version": "1.13.0"
-          }
-        ],
-        "totalPods": 3
-      },
-      "grafana": {
-        "url": "https://pismo.grafana.net/explore?schemaVersion=1\u0026panes=%7B%22jqe%22%3A%7B%22datasource%22%3A%22grafanacloud-logs%22%2C%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bcontainer%3D%5C%22console-audit-bff%5C%22%2C+env%3D%5C%22prod%5C%22%2C+version%3D%5C%221.24.0%5C%22%7D%22%2C%22queryType%22%3A%22range%22%2C%22datasource%22%3A%7B%22type%22%3A%22loki%22%2C%22uid%22%3A%22grafanacloud-logs%22%7D%2C%22editorMode%22%3A%22code%22%7D%5D%2C%22range%22%3A%7B%22from%22%3A%22now-7d%22%2C%22to%22%3A%22now%22%7D%7D%7D\u0026orgId=1"
-      },
-      "images": [
-        "270036487593.dkr.ecr.us-east-1.amazonaws.com/console-audit-bff:1.13.0"
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-aus-prod-ap-southeast-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:58200-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     }
@@ -384,9 +95,16 @@
   "argocd": {
     "url": "https://argocd.pismo.services/applications?search=console-audit-bff\u0026showFavorites=false\u0026proj=\u0026sync=\u0026autoSync=\u0026health=\u0026namespace=\u0026cluster=\u0026labels="
   },
+  "github": {
+    "author": "",
+    "branch": "",
+    "commit": "",
+    "tag": "",
+    "timestamp": ""
+  },
   "repoBitUrl": "https://github.com/pismo/console-audit-bff",
   "repoCodefresh": "https://g.codefresh.io/pipelines/all/?filter=pageSize:10;field:name~Name;order:asc~Asc;search:console-audit-bff",
-  "repoName": "console-audit-bff",
   "repoDesc": "BFF to Console Audit",
+  "repoName": "console-audit-bff",
   "repoSquad": "psm-console"
 }
