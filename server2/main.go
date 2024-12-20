@@ -16,7 +16,6 @@ import (
 )
 
 var (
-	urlChannel    = make(chan struct{ url, hashtag string }, 100000)
 	queue         []string
 	mu            sync.Mutex
 	channels             = make(map[string]chan string)
@@ -33,12 +32,10 @@ type Job struct {
 }
 
 func init() {
-	// Configure allowed origin from environment variable
 	if origin := os.Getenv("ALLOWED_ORIGIN"); origin != "" {
 		allowedOrigin = origin
 	}
 
-	// Open log files
 	var err error
 	submissionLog, err = os.OpenFile("submissions.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
@@ -51,14 +48,7 @@ func init() {
 	}
 }
 
-func enableCors(w http.ResponseWriter) {
-	w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
-	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-	w.Header().Set("Access-Control-Allow-Headers", "*")
-}
-
 func main() {
-	// Defer closing log files
 	defer submissionLog.Close()
 	defer processingLog.Close()
 
@@ -70,17 +60,16 @@ func main() {
 	http.HandleFunc("/", serveHomePage)
 	http.HandleFunc("/submit", handleURL)
 	http.HandleFunc("/queue-length", getQueueLength)
-	go func() {
-		if err := http.ListenAndServe(":8080", nil); err != nil {
-			log.Fatalf("Failed to start server: %v", err)
-		}
-	}()
 
-	log.Println("Starting the URL processing worker")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
+}
 
-	go processURLs()
-
-	select {}
+func enableCors(w http.ResponseWriter) {
+	w.Header().Set("Access-Control-Allow-Origin", allowedOrigin)
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "*")
 }
 
 func serveHomePage(w http.ResponseWriter, r *http.Request) {
@@ -164,34 +153,43 @@ func handleURL(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Check for mock case first
+	if url == "mock" && hashtag == "mock" {
+		log.Println("Generating random URLs distributed across channels")
+		go generateRandomHashtagsAndSubmit()
+		fmt.Fprintf(w, "Generating mock data")
+		return
+	}
+
 	mu.Lock()
-	queue = append(queue, url)
+	// Ensure channel exists
 	if _, exists := channels[hashtag]; !exists {
+		log.Printf("Creating new channel for hashtag: %s", hashtag)
 		channels[hashtag] = make(chan string, 10000)
 		go processHashtagChannel(hashtag, channels[hashtag])
 	}
+
+	// Initialize or update urlMap
+	if _, exists := urlMap[hashtag]; !exists {
+		urlMap[hashtag] = make([]string, 0)
+	}
 	urlMap[hashtag] = append(urlMap[hashtag], url)
+	queue = append(queue, url)
+
+	// Get channel reference before unlocking
+	ch := channels[hashtag]
 	mu.Unlock()
 
-	// Try to send to hashtag channel with timeout
-	select {
-	case channels[hashtag] <- url:
-	case <-time.After(100 * time.Millisecond):
-		log.Printf("Channel for hashtag %s is full, retrying in background", hashtag)
-		go func() {
-			channels[hashtag] <- url
-		}()
-	}
-
-	// Try to send to main URL channel with timeout
-	select {
-	case urlChannel <- struct{ url, hashtag string }{url, hashtag}:
-	case <-time.After(100 * time.Millisecond):
-		log.Printf("Main URL channel is full, retrying in background")
-		go func() {
-			urlChannel <- struct{ url, hashtag string }{url, hashtag}
-		}()
-	}
+	// Send to hashtag channel
+	go func() {
+		select {
+		case ch <- url:
+			log.Printf("Successfully sent URL to hashtag channel: %s", hashtag)
+		case <-time.After(100 * time.Millisecond):
+			log.Printf("Channel %s is full, retrying in background", hashtag)
+			ch <- url // This will block until space is available
+		}
+	}()
 
 	fmt.Fprintf(w, "URL received: %s with hashtag: %s", url, hashtag)
 }
@@ -221,27 +219,6 @@ func getQueueLength(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-func processURLs() {
-	for item := range urlChannel {
-		log.Printf("Processing URL: %s with hashtag: %s", item.url, item.hashtag)
-
-		if item.url == "mock" && item.hashtag == "mock" {
-			log.Println("Generating random URLs distributed across channels")
-			go generateRandomHashtagsAndSubmit()
-			continue
-		}
-
-		time.Sleep(5 * time.Second)
-		fmt.Printf("Processed URL: %s with hashtag: %s\n", item.url, item.hashtag)
-
-		mu.Lock()
-		if len(queue) > 0 {
-			queue = queue[1:]
-		}
-		mu.Unlock()
-	}
-}
-
 func processHashtagChannel(hashtag string, ch chan string) {
 	var delaySeconds time.Duration = 5
 	var numWorkers int = 1
@@ -255,67 +232,71 @@ func processHashtagChannel(hashtag string, ch chan string) {
 		}
 	}
 
+	// Create a buffered channel for jobs
 	jobs := make(chan Job, 10000)
 
+	// Start the workers
 	var wg sync.WaitGroup
 	for i := 0; i < numWorkers; i++ {
 		wg.Add(1)
-		go worker(i, jobs, &wg, delaySeconds)
+		go func(workerId int) {
+			defer wg.Done()
+			for job := range jobs {
+				processJob(workerId, job, delaySeconds)
+			}
+		}(i)
 	}
 
-	go func() {
-		for url := range ch {
-			jobs <- Job{url: url, hashtag: hashtag}
-		}
-		close(jobs)
-	}()
+	// Process incoming URLs
+	for url := range ch {
+		log.Printf("Received new URL in channel %s: %s", hashtag, url)
+		jobs <- Job{url: url, hashtag: hashtag}
+	}
 
+	// Cleanup
+	close(jobs)
 	wg.Wait()
 }
 
-func worker(id int, jobs chan Job, wg *sync.WaitGroup, delaySeconds time.Duration) {
-	defer wg.Done()
+func processJob(workerId int, job Job, delaySeconds time.Duration) {
+	timestamp := time.Now().Format("2006-01-02 15:04:05.000")
 
-	for job := range jobs {
-		timestamp := time.Now().Format("2006-01-02 15:04:05.000")
+	log.Printf("Worker %d starting to process URL: %s for hashtag: %s",
+		workerId, job.url, job.hashtag)
 
-		log.Printf("Worker %d processing URL: %s for hashtag: %s",
-			id, job.url, job.hashtag)
+	// Log start of processing
+	fmt.Fprintf(processingLog, "%s - PROCESSING - Worker: %d, URL: %s, Hashtag: %s\n",
+		timestamp, workerId, job.url, job.hashtag)
 
-		// Log start of processing
-		fmt.Fprintf(processingLog, "%s - PROCESSING - Worker: %d, URL: %s, Hashtag: %s\n",
-			timestamp, id, job.url, job.hashtag)
+	minDelay := 1 * time.Second
+	if delaySeconds < minDelay {
+		time.Sleep(minDelay)
+	} else {
+		time.Sleep(delaySeconds * time.Second)
+	}
 
-		minDelay := 1 * time.Second
-		if delaySeconds < minDelay {
-			time.Sleep(minDelay)
-		} else {
-			time.Sleep(delaySeconds * time.Second)
-		}
+	timestamp = time.Now().Format("2006-01-02 15:04:05.000")
+	fmt.Fprintf(processingLog, "%s - COMPLETED - Worker: %d, URL: %s, Hashtag: %s\n",
+		timestamp, workerId, job.url, job.hashtag)
 
-		timestamp = time.Now().Format("2006-01-02 15:04:05.000")
-		fmt.Fprintf(processingLog, "%s - COMPLETED - Worker: %d, URL: %s, Hashtag: %s\n",
-			timestamp, id, job.url, job.hashtag)
+	log.Printf("Worker %d completed URL: %s for hashtag: %s\n",
+		workerId, job.url, job.hashtag)
 
-		fmt.Printf("Worker %d completed URL: %s for hashtag: %s\n",
-			id, job.url, job.hashtag)
-
-		mu.Lock()
-		urls := urlMap[job.hashtag]
+	mu.Lock()
+	if urls, exists := urlMap[job.hashtag]; exists {
 		for i, u := range urls {
 			if u == job.url {
 				urlMap[job.hashtag] = append(urls[:i], urls[i+1:]...)
 				break
 			}
 		}
-
+		// Only remove from urlMap if empty, but keep the channel
 		if len(urlMap[job.hashtag]) == 0 {
 			delete(urlMap, job.hashtag)
-			delete(channels, job.hashtag)
-			log.Printf("Removed empty channel and map entry for hashtag: %s", job.hashtag)
+			log.Printf("Removed empty urlMap entry for hashtag: %s", job.hashtag)
 		}
-		mu.Unlock()
 	}
+	mu.Unlock()
 }
 
 func submitURL(urlStr, hashtag string) {
@@ -323,7 +304,6 @@ func submitURL(urlStr, hashtag string) {
 	baseDelay := 50 * time.Millisecond
 	timestamp := time.Now().Format("2006-01-02 15:04:05.000")
 
-	// Log submission
 	fmt.Fprintf(submissionLog, "%s - SUBMITTED - URL: %s, Hashtag: %s\n",
 		timestamp, urlStr, hashtag)
 
@@ -392,7 +372,7 @@ func generateRandomHashtagsAndSubmit() {
 
 	// Submit URLs to channel_0
 	log.Printf("Submitting URLs to channel_0")
-	for i := 0; i < 500; i++ {
+	for i := 0; i < 50; i++ {
 		<-rateLimiter.C
 		url := generateSequentialURL()
 		submitURL(url, "channel_0")
@@ -400,7 +380,7 @@ func generateRandomHashtagsAndSubmit() {
 
 	// Generate and submit URLs to other channels
 	log.Printf("Submitting URLs distributed across other channels")
-	for i := 0; i < 100; i++ {
+	for i := 0; i < 50; i++ {
 		<-rateLimiter.C
 		randomChannel := channelNames[rand.Intn(numChannels)+1]
 		url := generateSequentialURL()
