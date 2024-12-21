@@ -11,7 +11,7 @@ import (
 // ProcessManager handles all service processing
 type ProcessManager struct {
 	config      TreeConfig
-	queue       *WorkQueue
+	queueMgr    *QueueManager
 	cache       map[string]*ServiceCache
 	progress    map[string]*ServiceProgress
 	state       *SystemState
@@ -21,37 +21,10 @@ type ProcessManager struct {
 	stateMu     sync.RWMutex
 }
 
-// WorkQueue manages the processing queue
-type WorkQueue struct {
-	items      []*QueuedCheck
-	processing map[string]bool
-	maxSize    int
-	mu         sync.RWMutex
-}
-
-// JobHistory tracks completed jobs
-type JobHistory struct {
-	CompletedJobs []*JobResult
-	MaxJobs       int
-	mu            sync.RWMutex
-}
-
-// JobResult stores the complete result of a job
-type JobResult struct {
-	ServiceName string
-	Type        string
-	StartTime   time.Time
-	EndTime     time.Time
-	Duration    string
-	Status      string
-	Steps       map[string]*StepProgress
-	TreeOutput  string
-}
-
 func NewProcessManager(config TreeConfig) *ProcessManager {
 	return &ProcessManager{
 		config:   config,
-		queue:    NewWorkQueue(100),
+		queueMgr: NewQueueManager(config.System.Queues),
 		cache:    make(map[string]*ServiceCache),
 		progress: make(map[string]*ServiceProgress),
 		state: &SystemState{
@@ -67,23 +40,13 @@ func NewProcessManager(config TreeConfig) *ProcessManager {
 	}
 }
 
-func NewWorkQueue(maxSize int) *WorkQueue {
-	return &WorkQueue{
-		items:      make([]*QueuedCheck, 0),
-		processing: make(map[string]bool),
-		maxSize:    maxSize,
-	}
-}
-
 // HandleRequest processes new service check requests
 func (pm *ProcessManager) HandleRequest(req ServiceRequest) (ServiceResponse, error) {
 	cacheKey := pm.getCacheKey(req.Name, req.Type)
 
 	// Check if already processing
-	pm.queue.mu.RLock()
-	if pm.queue.processing[cacheKey] {
+	if isProcessing := pm.queueMgr.IsProcessing(cacheKey); isProcessing {
 		pos := pm.getQueuePosition(cacheKey)
-		pm.queue.mu.RUnlock()
 		return &QueueStatus{
 			Status:    "processing",
 			Position:  pos,
@@ -91,7 +54,6 @@ func (pm *ProcessManager) HandleRequest(req ServiceRequest) (ServiceResponse, er
 			StartTime: time.Now(),
 		}, nil
 	}
-	pm.queue.mu.RUnlock()
 
 	// Initialize or get cache entry
 	pm.mu.Lock()
@@ -120,73 +82,23 @@ func (pm *ProcessManager) HandleRequest(req ServiceRequest) (ServiceResponse, er
 }
 
 // processNextInQueue processes the next item in the queue
-// processNextInQueue processes the next item in the queue
 func (pm *ProcessManager) processNextInQueue() {
-	pm.queue.mu.Lock()
-
-	// Log total queue items before processing
-	fmt.Printf("\n[%s] Queue Processing - Total Items: %d\n",
-		time.Now().Format("15:04:05"),
-		len(pm.queue.items))
-
-	// Check if queue is empty or processing limit is reached
-	if len(pm.queue.items) == 0 {
-		pm.queue.mu.Unlock()
+	check := pm.queueMgr.ProcessNextJob()
+	if check == nil {
 		return
 	}
-
-	// Determine max concurrent jobs from configuration
-	var maxConcurrent int
-	for _, queueConfig := range pm.config.System.Queues {
-		if queueConfig.Name == "service_checks" {
-			maxConcurrent = queueConfig.MaxConcurrent
-			break
-		}
-	}
-
-	// Log current processing state
-	fmt.Printf("Current Processing Status:\n")
-	fmt.Printf("Max Concurrent Jobs: %d\n", maxConcurrent)
-	fmt.Printf("Active Checks: %d\n", len(pm.queue.processing))
-
-	// If processing limit is reached, do not process more jobs
-	if len(pm.queue.processing) >= maxConcurrent {
-		fmt.Printf("Processing limit reached. Skipping job processing.\n")
-		pm.queue.mu.Unlock()
-		return
-	}
-
-	// Get next check from queue
-	check := pm.queue.items[0]
-	pm.queue.items = pm.queue.items[1:]
-
-	// Mark as processing
-	cacheKey := pm.getCacheKey(check.ServiceName, check.Type)
-	pm.queue.processing[cacheKey] = true
-
-	// Update positions for remaining items
-	for i, item := range pm.queue.items {
-		item.Position = i + 1
-	}
-	pm.queue.mu.Unlock()
-
-	// Log job being processed
-	fmt.Printf("[%s] Processing Job: %s (%s)\n",
-		time.Now().Format("15:04:05"),
-		check.ServiceName,
-		check.Type)
 
 	// Process the check
 	go func() {
 		defer func() {
-			pm.queue.mu.Lock()
-			delete(pm.queue.processing, cacheKey)
-			pm.queue.mu.Unlock()
+			queueName := pm.queueMgr.DetermineQueueName(check)
+			pm.queueMgr.MarkJobCompleted(queueName, check.ServiceName)
 		}()
 
 		pm.processCheck(check)
 	}()
 }
+
 func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 	if check == nil {
 		fmt.Printf("\n[%s] Error: nil check received\n", time.Now().Format("15:04:05"))
@@ -221,7 +133,6 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 		}
 	}()
 
-	// Identify steps to run with dependencies
 	serviceType, exists := pm.config.System.ServiceTypes[progress.Type]
 	if !exists {
 		fmt.Printf("\n[%s] Error: service type %s not found\n",
@@ -229,7 +140,7 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 		return
 	}
 
-	// Determine which steps can be run based on dependencies
+	// Process each step that needs to be run
 	for _, stepID := range check.StepsToRun {
 		pm.stateMu.RLock()
 		currentState := pm.state.Status
@@ -242,40 +153,18 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 			return
 		}
 
-		// Check handler configuration and dependencies
+		// Check handler configuration
 		handlerConfig, exists := serviceType.Handlers[stepID]
 		if !exists {
 			fmt.Printf("\n[%s] No handler found for step: %s\n",
 				time.Now().Format("15:04:05"), stepID)
-			progress.mu.Lock()
-			if progress.Steps[stepID] != nil {
-				progress.Steps[stepID].Status = "failed"
-				progress.Steps[stepID].Result = &Result{
-					Status:  "error",
-					Message: fmt.Sprintf("No handler found for step %s", stepID),
-				}
-			}
-			progress.mu.Unlock()
 			continue
 		}
 
-		// Check if all dependencies are completed successfully
-		dependenciesMet := true
-		for _, depStep := range handlerConfig.Dependencies {
-			progress.mu.RLock()
-			depStepProgress, exists := progress.Steps[depStep]
-			progress.mu.RUnlock()
-
-			if !exists || depStepProgress.Status != "completed" {
-				dependenciesMet = false
-				fmt.Printf("\n[%s] Dependencies not met for step: %s\n",
-					time.Now().Format("15:04:05"), stepID)
-				break
-			}
-		}
-
-		// Skip if dependencies are not met
-		if !dependenciesMet {
+		// Check dependencies
+		if !pm.areDependenciesMet(progress, handlerConfig.Dependencies) {
+			fmt.Printf("\n[%s] Dependencies not met for step: %s\n",
+				time.Now().Format("15:04:05"), stepID)
 			continue
 		}
 
@@ -371,7 +260,23 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 	pm.mu.Unlock()
 }
 
-// generateTreeOutput creates a tree visualization of the job
+// Check if all dependencies for a step have been completed
+func (pm *ProcessManager) areDependenciesMet(progress *ServiceProgress, dependencies []string) bool {
+	if len(dependencies) == 0 {
+		return true
+	}
+
+	progress.mu.RLock()
+	defer progress.mu.RUnlock()
+
+	for _, depStep := range dependencies {
+		if step, exists := progress.Steps[depStep]; !exists || step.Status != "completed" {
+			return false
+		}
+	}
+	return true
+}
+
 func (pm *ProcessManager) generateTreeOutput(progress *ServiceProgress) string {
 	if progress == nil {
 		return ""
@@ -384,7 +289,6 @@ func (pm *ProcessManager) generateTreeOutput(progress *ServiceProgress) string {
 	builder.WriteString(fmt.Sprintf("├── Duration: %s\n", progress.LastUpdated.Sub(progress.StartTime)))
 	builder.WriteString("└── Steps:\n")
 
-	// Sort steps for consistent output
 	stepIDs := make([]string, 0, len(progress.Steps))
 	for stepID := range progress.Steps {
 		stepIDs = append(stepIDs, stepID)
@@ -463,58 +367,91 @@ func (pm *ProcessManager) HandleControlCommand(cmd ControlCommand) (*SystemState
 	return pm.state, nil
 }
 
-// InvalidateCache handles cache invalidation requests
-func (pm *ProcessManager) InvalidateCache(req InvalidationRequest) error {
-	if req.ServiceName == "*" {
-		pm.mu.Lock()
-		for cacheKey, cache := range pm.cache {
-			if req.Type == "*" || strings.HasSuffix(cacheKey, "-"+req.Type) {
-				cache.mu.Lock()
-				if len(req.Handlers) > 0 {
-					for _, handlerID := range req.Handlers {
-						delete(cache.Steps, handlerID)
-					}
-				} else {
-					cache.Steps = make(map[string]StepCache)
-				}
-				if req.ResetTimes {
-					cache.LastUpdated = time.Time{}
-				}
-				cache.mu.Unlock()
-			}
-		}
-		pm.mu.Unlock()
-		return nil
+// GetQueueStats returns current queue statistics
+func (pm *ProcessManager) GetQueueStats() QueueStats {
+	allStats := pm.queueMgr.GetQueueStats()
+
+	// Aggregate stats from all queues
+	totalStats := QueueStats{
+		QueuedJobs:     make([]QueuedJobInfo, 0),
+		QueuedServices: make([]string, 0),
 	}
 
-	cacheKey := pm.getCacheKey(req.ServiceName, req.Type)
-	pm.mu.Lock()
-	cache, exists := pm.cache[cacheKey]
-	pm.mu.Unlock()
-
-	if !exists {
-		return fmt.Errorf("no cache found for service %s (%s)", req.ServiceName, req.Type)
+	for _, stats := range allStats {
+		totalStats.QueueLength += stats.QueueLength
+		totalStats.ActiveChecks += stats.ActiveChecks
+		totalStats.QueuedServices = append(totalStats.QueuedServices, stats.QueuedServices...)
+		totalStats.QueuedJobs = append(totalStats.QueuedJobs, stats.QueuedJobs...)
 	}
 
-	cache.mu.Lock()
-	defer cache.mu.Unlock()
-
-	if len(req.Handlers) > 0 {
-		for _, handlerID := range req.Handlers {
-			delete(cache.Steps, handlerID)
-		}
-	} else {
-		cache.Steps = make(map[string]StepCache)
-	}
-
-	if req.ResetTimes {
-		cache.LastUpdated = time.Time{}
-	}
-
-	return nil
+	return totalStats
 }
 
-// GetSystemDebugInfo returns comprehensive system debug information
+// GetSystemMetrics retrieves comprehensive system metrics
+func (pm *ProcessManager) GetSystemMetrics() SystemMetrics {
+	queueStats := pm.GetQueueStats()
+
+	pm.stateMu.RLock()
+	systemState := *pm.state
+	pm.stateMu.RUnlock()
+
+	pm.mu.RLock()
+	totalCacheEntries := len(pm.cache)
+	activeProcesses := len(pm.progress)
+	pm.mu.RUnlock()
+
+	return SystemMetrics{
+		TotalCacheEntries: totalCacheEntries,
+		ActiveProcesses:   activeProcesses,
+		QueueStats:        queueStats,
+		SystemState:       systemState,
+	}
+}
+
+// Utility methods
+// Continued from previous...
+
+// Utility methods
+func (pm *ProcessManager) getCacheKey(serviceName, processType string) string {
+	return fmt.Sprintf("%s-%s", serviceName, processType)
+}
+
+func (pm *ProcessManager) getQueuePosition(cacheKey string) int {
+	return pm.queueMgr.GetPosition(cacheKey)
+}
+
+func (pm *ProcessManager) getOrCreateProgress(req ServiceRequest) *ServiceProgress {
+	pm.mu.Lock()
+	defer pm.mu.Unlock()
+
+	cacheKey := pm.getCacheKey(req.Name, req.Type)
+	if progress, exists := pm.progress[cacheKey]; exists {
+		return progress
+	}
+
+	progress := &ServiceProgress{
+		ServiceName: req.Name,
+		Type:        req.Type,
+		Status:      "initializing",
+		Steps:       make(map[string]*StepProgress),
+		StartTime:   time.Now(),
+		LastUpdated: time.Now(),
+	}
+
+	// Initialize steps based on service type
+	if serviceType, exists := pm.config.System.ServiceTypes[req.Type]; exists {
+		progress.TotalSteps = len(serviceType.Handlers)
+		for stepID := range serviceType.Handlers {
+			progress.Steps[stepID] = &StepProgress{
+				Status: "pending",
+			}
+		}
+	}
+
+	pm.progress[cacheKey] = progress
+	return progress
+}
+
 func (pm *ProcessManager) GetSystemDebugInfo() SystemDebugInfo {
 	debug := SystemDebugInfo{
 		Timestamp: time.Now(),
@@ -530,21 +467,35 @@ func (pm *ProcessManager) GetSystemDebugInfo() SystemDebugInfo {
 	}
 
 	// Queue Status
-	pm.queue.mu.RLock()
-	debug.QueueStatus.QueueLength = len(pm.queue.items)
-	debug.QueueStatus.MaxQueueSize = pm.queue.maxSize
+	queueStats := pm.queueMgr.GetQueueStats()
+	var totalLength, maxSize int
 
-	for _, item := range pm.queue.items {
-		debug.QueueStatus.QueuedItems = append(debug.QueueStatus.QueuedItems, QueuedItem{
-			ServiceName: item.ServiceName,
-			Type:        item.Type,
-			Position:    item.Position,
-			QueueTime:   item.QueueTime,
-			WaitTime:    time.Since(item.QueueTime).String(),
-			StepsToRun:  item.StepsToRun,
-		})
+	for _, stats := range queueStats {
+		totalLength += stats.QueueLength
+		if stats.MaxQueueSize > maxSize {
+			maxSize = stats.MaxQueueSize
+		}
+
+		for _, service := range stats.QueuedServices {
+			parts := strings.Split(service, " (")
+			if len(parts) == 2 {
+				serviceName := parts[0]
+				serviceType := strings.TrimRight(parts[1], ")")
+
+				debug.QueueStatus.QueuedItems = append(debug.QueueStatus.QueuedItems, QueuedItem{
+					ServiceName: serviceName,
+					Type:        serviceType,
+					Position:    len(debug.QueueStatus.QueuedItems) + 1,
+					QueueTime:   time.Now(),
+					WaitTime:    "N/A",
+					StepsToRun:  []string{},
+				})
+			}
+		}
 	}
-	pm.queue.mu.RUnlock()
+
+	debug.QueueStatus.QueueLength = totalLength
+	debug.QueueStatus.MaxQueueSize = maxSize
 
 	// Cache Status
 	pm.mu.RLock()
@@ -613,120 +564,18 @@ func (pm *ProcessManager) GetSystemDebugInfo() SystemDebugInfo {
 	return debug
 }
 
-// GetQueueStatus returns current queue statistics
-func (pm *ProcessManager) GetQueueStats() QueueStats {
-	pm.queue.mu.RLock()
-	defer pm.queue.mu.RUnlock()
-
-	// Log detailed queue information
-	fmt.Printf("\n[%s] Queue Statistics:\n", time.Now().Format("15:04:05"))
-	fmt.Printf("Total Queue Items: %d\n", len(pm.queue.items))
-	fmt.Printf("Active Processing: %d\n", len(pm.queue.processing))
-
-	stats := QueueStats{
-		QueueLength:    len(pm.queue.items),
-		MaxQueueSize:   pm.queue.maxSize,
-		ActiveChecks:   len(pm.queue.processing),
-		QueuedServices: make([]string, 0),
-		QueuedJobs:     make([]QueuedJobInfo, 0),
-	}
-
-	// Log each queued item
-	for i, item := range pm.queue.items {
-		queuedService := fmt.Sprintf("%s (%s)", item.ServiceName, item.Type)
-		stats.QueuedServices = append(stats.QueuedServices, queuedService)
-
-		queuedJob := QueuedJobInfo{
-			ServiceName:   item.ServiceName,
-			Type:          item.Type,
-			QueuePosition: i + 1,
-			QueueTime:     item.QueueTime,
-			WaitTime:      time.Since(item.QueueTime).String(),
-			StepsToRun:    item.StepsToRun,
-		}
-		stats.QueuedJobs = append(stats.QueuedJobs, queuedJob)
-
-		fmt.Printf("Queued Job %d: %s (%s), Position: %d, Queued At: %s\n",
-			i+1,
-			item.ServiceName,
-			item.Type,
-			i+1,
-			item.QueueTime.Format(time.RFC3339))
-	}
-
-	return stats
-}
-
-// Utility methods
-func (pm *ProcessManager) getCacheKey(serviceName, processType string) string {
-	return fmt.Sprintf("%s-%s", serviceName, processType)
-}
-
-func (pm *ProcessManager) getQueuePosition(cacheKey string) int {
-	pm.queue.mu.RLock()
-	defer pm.queue.mu.RUnlock()
-
-	for i, check := range pm.queue.items {
-		if pm.getCacheKey(check.ServiceName, check.Type) == cacheKey {
-			return i + 1
-		}
-	}
-	return 0
-}
-
-func (pm *ProcessManager) getHandlerConfig(serviceType, handlerID string) *HandlerConfig {
-	if svcType, exists := pm.config.System.ServiceTypes[serviceType]; exists {
-		if handler, exists := svcType.Handlers[handlerID]; exists {
-			return &handler
-		}
-	}
-	return nil
-}
-
-func (pm *ProcessManager) getOrCreateProgress(req ServiceRequest) *ServiceProgress {
-	pm.mu.Lock()
-	defer pm.mu.Unlock()
-
-	cacheKey := pm.getCacheKey(req.Name, req.Type)
-	if progress, exists := pm.progress[cacheKey]; exists {
-		return progress
-	}
-
-	progress := &ServiceProgress{
-		ServiceName: req.Name,
-		Type:        req.Type,
-		Status:      "initializing",
-		Steps:       make(map[string]*StepProgress),
-		StartTime:   time.Now(),
-		LastUpdated: time.Now(),
-	}
-
-	// Initialize steps based on service type
-	if serviceType, exists := pm.config.System.ServiceTypes[req.Type]; exists {
-		progress.TotalSteps = len(serviceType.Handlers)
-		for stepID := range serviceType.Handlers {
-			progress.Steps[stepID] = &StepProgress{
-				Status: "pending",
-			}
-		}
-	}
-
-	pm.progress[cacheKey] = progress
-	return progress
-}
-
 // StartCleanupTask starts a periodic cleanup of old progress entries
 func (pm *ProcessManager) StartCleanupTask(interval, maxAge time.Duration) {
 	go func() {
 		ticker := time.NewTicker(interval)
 		for range ticker.C {
-			pm.CleanupOldProgress(maxAge)
+			pm.cleanupOldProgress(maxAge)
 		}
 	}()
 }
 
-// CleanupOldProgress removes completed progress entries older than the specified duration
-func (pm *ProcessManager) CleanupOldProgress(maxAge time.Duration) {
+// cleanupOldProgress removes completed progress entries older than maxAge
+func (pm *ProcessManager) cleanupOldProgress(maxAge time.Duration) {
 	pm.mu.Lock()
 	defer pm.mu.Unlock()
 

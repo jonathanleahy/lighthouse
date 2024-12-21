@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -10,13 +9,6 @@ type ServiceType struct {
 	Description string                   `json:"description"`
 	Queues      []string                 `json:"queues"`
 	Handlers    map[string]HandlerConfig `json:"handlers"`
-}
-
-type QueueConfig struct {
-	Name          string `json:"name"`
-	Type          string `json:"type"`
-	MaxConcurrent int    `json:"maxConcurrent"`
-	QueueSize     int    `json:"queueSize"`
 }
 
 type SystemConfig struct {
@@ -189,14 +181,6 @@ type SystemMetrics struct {
 	SystemState       SystemState `json:"system_state"`
 }
 
-type QueueStats struct {
-	QueueLength    int             `json:"queue_length"`
-	MaxQueueSize   int             `json:"max_queue_size"`
-	ActiveChecks   int             `json:"active_checks"`
-	QueuedServices []string        `json:"queued_services"`
-	QueuedJobs     []QueuedJobInfo `json:"queued_jobs"`
-}
-
 type QueuedJobInfo struct {
 	ServiceName   string    `json:"service_name"`
 	Type          string    `json:"type"`
@@ -213,13 +197,13 @@ type HandlerConfig struct {
 	Dependencies []string `json:"dependencies,omitempty"`
 }
 
-type QueueStatus struct {
-	Status     string    `json:"status"`
-	Position   int       `json:"position"`
-	CacheKey   string    `json:"cache_key"`
-	QueueTime  time.Time `json:"queue_time"`
-	StartTime  time.Time `json:"start_time"` // Add this line
-	StepsToRun []string  `json:"steps_to_run,omitempty"`
+type QueueStats struct {
+	QueueLength    int             `json:"queue_length"`
+	MaxQueueSize   int             `json:"max_queue_size"`
+	ActiveChecks   int             `json:"active_checks"`
+	QueuedServices []string        `json:"queued_services"`
+	QueuedJobs     []QueuedJobInfo `json:"queued_jobs"`
+	QueueName      string          `json:"queue_name,omitempty"`
 }
 
 type CachedResponse struct {
@@ -239,9 +223,12 @@ type ServiceResponse interface {
 	ResponseType() string
 }
 
-// Ensure QueueStatus implements ServiceResponse
-func (qs *QueueStatus) ResponseType() string {
-	return qs.Status
+// Add QueueConfig if not already present
+type QueueConfig struct {
+	Name          string `json:"name"`
+	Type          string `json:"type"`
+	MaxConcurrent int    `json:"maxConcurrent"`
+	QueueSize     int    `json:"queueSize"`
 }
 
 // Ensure CachedResponse implements ServiceResponse
@@ -275,40 +262,22 @@ func (pm *ProcessManager) identifyExpiredSteps(serviceType string, cache *Servic
 
 // queueRequest adds a request to the processing queue
 func (pm *ProcessManager) queueRequest(req ServiceRequest, expiredSteps []string, cacheKey string) (ServiceResponse, error) {
-	pm.queue.mu.Lock()
-	defer pm.queue.mu.Unlock()
-
-	// Check if already in queue
-	for _, check := range pm.queue.items {
-		if check.ServiceName == req.Name && check.Type == req.Type {
-			return &QueueStatus{
-				Status:    "queued",
-				Position:  check.Position,
-				CacheKey:  cacheKey,
-				QueueTime: check.QueueTime,
-			}, nil
-		}
-	}
-
-	// Add to queue if not full
-	if len(pm.queue.items) >= pm.queue.maxSize {
-		return nil, fmt.Errorf("queue is full")
-	}
-
-	queuedCheck := &QueuedCheck{
+	check := &QueuedCheck{
 		ServiceName: req.Name,
 		Type:        req.Type,
 		StepsToRun:  expiredSteps,
 		QueueTime:   time.Now(),
-		Position:    len(pm.queue.items) + 1,
 	}
-	pm.queue.items = append(pm.queue.items, queuedCheck)
+
+	if err := pm.queueMgr.EnqueueJob(check); err != nil {
+		return nil, err
+	}
 
 	return &QueueStatus{
 		Status:     "queued",
-		Position:   queuedCheck.Position,
+		Position:   check.Position,
 		CacheKey:   cacheKey,
-		QueueTime:  queuedCheck.QueueTime,
+		QueueTime:  check.QueueTime,
 		StepsToRun: expiredSteps,
 	}, nil
 }
@@ -335,27 +304,19 @@ func (pm *ProcessManager) getCachedResults(cache *ServiceCache) *CachedResponse 
 	return response
 }
 
-// GetSystemMetrics retrieves comprehensive system metrics
-// GetSystemMetrics retrieves comprehensive system metrics
-func (pm *ProcessManager) GetSystemMetrics() SystemMetrics {
-	// Get queue stats
-	queueStats := pm.GetQueueStats()
+type JobHistory struct {
+	CompletedJobs []*JobResult
+	MaxJobs       int
+	mu            sync.RWMutex
+}
 
-	// Get current system state
-	pm.stateMu.RLock()
-	systemState := *pm.state
-	pm.stateMu.RUnlock()
-
-	// Count total cache entries and active processes
-	pm.mu.RLock()
-	totalCacheEntries := len(pm.cache)
-	activeProcesses := len(pm.progress)
-	pm.mu.RUnlock()
-
-	return SystemMetrics{
-		TotalCacheEntries: totalCacheEntries,
-		ActiveProcesses:   activeProcesses,
-		QueueStats:        queueStats,
-		SystemState:       systemState,
-	}
+type JobResult struct {
+	ServiceName string                   `json:"service_name"`
+	Type        string                   `json:"type"`
+	StartTime   time.Time                `json:"start_time"`
+	EndTime     time.Time                `json:"end_time"`
+	Duration    string                   `json:"duration"`
+	Status      string                   `json:"status"`
+	Steps       map[string]*StepProgress `json:"steps"`
+	TreeOutput  string                   `json:"tree_output"`
 }

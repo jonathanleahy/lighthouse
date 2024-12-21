@@ -1,6 +1,6 @@
-# Project Files Summary - Part 1
+[# Project Files Summary - Part 1
 
-Generated on: 2024-12-21T15:56:00Z
+Generated on: 2024-12-21T21:12:46Z
 
 Root Directory: ./server4
 
@@ -78,9 +78,9 @@ Last Modified: 2024-12-21T10:13:07Z
 
 ## File: .idea/workspace.xml
 
-Size: 4527 bytes
+Size: 4845 bytes
 
-Last Modified: 2024-12-21T15:53:53Z
+Last Modified: 2024-12-21T21:08:29Z
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -91,6 +91,8 @@ Last Modified: 2024-12-21T15:53:53Z
   <component name="ChangeListManager">
     <list default="true" id="8c4ba807-6f4d-4f41-8ea1-15fd00764a18" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/types.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../server4_collated_part1.md" beforeDir="false" afterPath="$PROJECT_DIR$/../server4_collated_part1.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +103,7 @@ Last Modified: 2024-12-21T15:53:53Z
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="main" />
+        <entry key="$PROJECT_DIR$/.." value="ed65c8113b4ef228d5bb4a0df257c2c0c36c6e97" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -138,7 +140,7 @@ Last Modified: 2024-12-21T15:53:53Z
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ed65c811&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/jon&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -1628,9 +1630,9 @@ func (pm *ProcessManager) CleanupOldProgress(maxAge time.Duration) {
 
 ## File: types.go
 
-Size: 9948 bytes
+Size: 10594 bytes
 
-Last Modified: 2024-12-21T15:55:37Z
+Last Modified: 2024-12-21T21:09:03Z
 
 ```go
 package main
@@ -1848,6 +1850,27 @@ type HandlerConfig struct {
 	Dependencies []string `json:"dependencies,omitempty"`
 }
 
+type QueueStatus struct {
+	Status     string    `json:"status"`
+	Position   int       `json:"position"`
+	CacheKey   string    `json:"cache_key"`
+	QueueTime  time.Time `json:"queue_time"`
+	StartTime  time.Time `json:"start_time"` // Add this line
+	StepsToRun []string  `json:"steps_to_run,omitempty"`
+}
+
+type CachedResponse struct {
+	Status     string                `json:"status"`
+	LastUpdate time.Time             `json:"last_update"`
+	Steps      map[string]StepResult `json:"steps"`
+}
+
+type StepResult struct {
+	Status     string    `json:"status"`
+	LastUpdate time.Time `json:"last_update"`
+	Result     *Result   `json:"result,omitempty"`
+}
+
 // ServiceResponse is an interface that can be implemented by different response types
 type ServiceResponse interface {
 	ResponseType() string
@@ -1976,3 +1999,4 @@ func (pm *ProcessManager) GetSystemMetrics() SystemMetrics {
 
 ```
 
+]()
