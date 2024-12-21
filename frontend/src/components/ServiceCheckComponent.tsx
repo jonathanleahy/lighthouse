@@ -4,7 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {
     Pause, Play, StepForward, RefreshCw,
     AlertCircle, Server, List, Clock,
-    RotateCw, History, XCircle
+    RotateCw, History, XCircle, Activity, Layers, Briefcase, Database
 } from 'lucide-react';
 import {Alert, AlertDescription} from '@/components/ui/alert';
 import {formatWaitTime} from "@/components/job/JobUtils";
@@ -83,6 +83,25 @@ interface QueueStats {
     queued_jobs: QueuedJobInfo[];
 }
 
+interface SystemMetrics {
+    total_cache_entries: number;
+    active_processes: number;
+    queue_stats: {
+        queue_length: number;
+        max_queue_size: number;
+        active_checks: number;
+        queued_services: string[];
+        queued_jobs: QueuedJobInfo[];
+    };
+    system_state: {
+        status: string;
+        last_updated: string;
+        step_mode: boolean;
+        current_step?: string;
+        message?: string;
+    };
+}
+
 
 const API_BASE_URL = 'http://localhost:8080';
 
@@ -104,7 +123,33 @@ const ServiceManagementComponent: React.FC = () => {
     const [isPollingActive, setIsPollingActive] = useState(false);
     const [errorDetails, setErrorDetails] = useState<string>('');
     const [queuedJobs, setQueuedJobs] = useState<QueuedJobInfo[]>([]);
+    const [systemMetrics, setSystemMetrics] = useState<SystemMetrics | null>(null);
 
+    const fetchSystemMetrics = async () => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/health`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setSystemMetrics(data);
+            console.log('System Metrics:', data);
+        } catch (error) {
+            console.error('Error fetching system metrics:', error);
+        }
+    };
+
+    // Modify existing useEffect for periodic metrics fetch
+    useEffect(() => {
+        // Fetch metrics initially
+        fetchSystemMetrics();
+
+        // Set up periodic fetching
+        const metricsInterval = setInterval(fetchSystemMetrics, 5000);
+
+        // Cleanup interval on component unmount
+        return () => clearInterval(metricsInterval);
+    }, []);
 
     // Check server connectivity
     const checkServerConnection = async () => {
@@ -835,6 +880,128 @@ const ServiceManagementComponent: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {systemMetrics && (
+                <div className="bg-white shadow-md rounded-lg p-6">
+                    <h2 className="text-xl font-bold mb-4 flex items-center">
+                        <Activity className="mr-2 text-green-600"/> System Metrics
+                    </h2>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* System State Card */}
+                        <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="font-semibold flex items-center">
+                                    <Layers className="mr-2 text-blue-600"/> System State
+                                </h3>
+                                <span className={`text-sm font-medium ${
+                                    systemMetrics.system_state?.status === 'running'
+                                        ? 'text-green-600'
+                                        : 'text-yellow-600'
+                                }`}>
+                                    {systemMetrics.system_state?.status}
+                                </span>
+                            </div>
+                            <div className="space-y-2 text-sm text-gray-600">
+                                <div>
+                                    <span className="font-medium">Last Updated:</span>{' '}
+                                    {new Date(systemMetrics.system_state?.last_updated).toLocaleString()}
+                                </div>
+                                {systemMetrics.system_state?.step_mode && (
+                                    <div className="text-blue-600 flex items-center">
+                                        <StepForward className="mr-2 w-4 h-4"/> Step Mode Active
+                                    </div>
+                                )}
+                                {systemMetrics.system_state?.current_step && (
+                                    <div>
+                                        <span className="font-medium">Current Step:</span>{' '}
+                                        {systemMetrics.system_state.current_step}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Queue Statistics Card */}
+                        <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="font-semibold flex items-center">
+                                    <Briefcase className="mr-2 text-purple-600"/> Queue Statistics
+                                </h3>
+                                <span className="text-sm font-medium text-gray-600">
+                                    {systemMetrics.queue_stats?.queue_length} / {systemMetrics.queue_stats?.max_queue_size}
+                                </span>
+                            </div>
+                            <div className="space-y-2 text-sm text-gray-600">
+                                <div>
+                                    <span className="font-medium">Queued Jobs:</span>{' '}
+                                    {systemMetrics.queue_stats?.queue_length}
+                                </div>
+                                <div>
+                                    <span className="font-medium">Active Checks:</span>{' '}
+                                    {systemMetrics.queue_stats?.active_checks}
+                                </div>
+                                {systemMetrics.queue_stats?.queued_services?.length > 0 && (
+                                    <div>
+                                        <span className="font-medium">Queued Services:</span>{' '}
+                                        {systemMetrics.queue_stats?.queued_services?.join(', ')}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* System Resources Card */}
+                        <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="font-semibold flex items-center">
+                                    <Database className="mr-2 text-indigo-600"/> System Resources
+                                </h3>
+                            </div>
+                            <div className="space-y-2 text-sm text-gray-600">
+                                <div>
+                                    <span className="font-medium">Total Cache Entries:</span>{' '}
+                                    {systemMetrics.total_cache_entries}
+                                </div>
+                                <div>
+                                    <span className="font-medium">Active Processes:</span>{' '}
+                                    {systemMetrics.active_processes}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Job Queue Details Card */}
+                        <div className="bg-gray-50 rounded-lg p-4">
+                            <div className="flex items-center justify-between mb-3">
+                                <h3 className="font-semibold flex items-center">
+                                    <Clock className="mr-2 text-orange-600"/> Queued Job Details
+                                </h3>
+                            </div>
+                            <div className="space-y-2 text-sm">
+                                {systemMetrics.queue_stats?.queued_jobs.length > 0 ? (
+                                    systemMetrics.queue_stats?.queued_jobs.map((job, index) => (
+                                        <div key={index} className="border-b pb-2 last:border-b-0">
+                                            <div className="flex justify-between">
+                                                <span className="font-medium">{job.service_name}</span>
+                                                <span className="text-gray-500">
+                                                    Position: {job.queue_position}
+                                                </span>
+                                            </div>
+                                            <div className="text-gray-600">
+                                                <span>Type: {job.type}</span>
+                                                <span className="ml-2">
+                                                    Wait Time: {formatWaitTime(job.wait_time)}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-gray-500 text-center">No jobs in queue</div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };
