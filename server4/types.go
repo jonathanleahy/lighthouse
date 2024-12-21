@@ -6,13 +6,6 @@ import (
 	"time"
 )
 
-// Configuration Types
-type HandlerConfig struct {
-	Name         string `json:"name"`
-	CacheSeconds int    `json:"cacheSeconds"`
-	Description  string `json:"description"`
-}
-
 type ServiceType struct {
 	Description string                   `json:"description"`
 	Queues      []string                 `json:"queues"`
@@ -211,6 +204,13 @@ type QueuedJobInfo struct {
 	QueueTime     time.Time `json:"queue_time"`
 	WaitTime      string    `json:"wait_time"`
 	StepsToRun    []string  `json:"steps_to_run"`
+}
+
+type HandlerConfig struct {
+	Name         string   `json:"name"`
+	CacheSeconds int      `json:"cacheSeconds"`
+	Description  string   `json:"description"`
+	Dependencies []string `json:"dependencies,omitempty"`
 }
 
 // ServiceResponse is an interface that can be implemented by different response types

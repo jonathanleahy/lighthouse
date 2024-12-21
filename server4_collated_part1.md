@@ -1,6 +1,6 @@
 # Project Files Summary - Part 1
 
-Generated on: 2024-12-21T14:27:40Z
+Generated on: 2024-12-21T15:24:20Z
 
 Root Directory: ./server4
 
@@ -492,9 +492,9 @@ func simulateWork(handlerName string, ctx *Context, minSec, maxSec int) *Result 
 
 ## File: http_handlers.go
 
-Size: 5926 bytes
+Size: 7343 bytes
 
-Last Modified: 2024-12-21T13:15:32Z
+Last Modified: 2024-12-21T15:21:01Z
 
 ```go
 package main
@@ -627,6 +627,76 @@ func handleInvalidateRequest(w http.ResponseWriter, r *http.Request, pm *Process
 	})
 }
 
+func handleJobHistory(w http.ResponseWriter, r *http.Request, pm *ProcessManager) {
+	w.Header().Set("Content-Type", "application/json")
+
+	// Get optional limit from query params
+	limit := 1000
+	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
+		if l, err := strconv.Atoi(limitStr); err == nil && l > 0 {
+			limit = l
+		}
+	}
+
+	pm.history.mu.RLock()
+	jobs := pm.history.CompletedJobs
+	if len(jobs) > limit {
+		jobs = jobs[len(jobs)-limit:]
+	}
+	pm.history.mu.RUnlock()
+
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"completed_jobs": jobs,
+	})
+}
+
+func handleHealthRequest(w http.ResponseWriter, r *http.Request, pm *ProcessManager) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	metrics := pm.GetSystemMetrics()
+
+	// Determine health status
+	status := "healthy"
+	if metrics.SystemState.Status != "running" ||
+		metrics.QueueStats.ActiveChecks > 2 ||
+		metrics.QueueStats.QueueLength > int(float64(metrics.QueueStats.MaxQueueSize)*0.9) {
+		status = "degraded"
+	}
+
+	// Prepare health response
+	healthResponse := map[string]interface{}{
+		"status":       status,
+		"uptime":       time.Since(metrics.SystemState.LastUpdated).String(),
+		"metrics":      metrics,
+		"queue_status": metrics.QueueStats, // Include full queue stats
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(healthResponse)
+}
+
+func handleQueuedJobsRequest(w http.ResponseWriter, r *http.Request, pm *ProcessManager) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Get queue stats which include queued jobs
+	queueStats := pm.GetQueueStats()
+
+	response := map[string]interface{}{
+		"queued_jobs":  queueStats.QueuedJobs,
+		"total_queued": len(queueStats.QueuedJobs),
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+// Ensure this method in http_handlers.go is working correctly
 func handleJobProgress(w http.ResponseWriter, r *http.Request, pm *ProcessManager) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -648,29 +718,6 @@ func handleJobProgress(w http.ResponseWriter, r *http.Request, pm *ProcessManage
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"active_jobs": activeJobs,
-	})
-}
-
-func handleJobHistory(w http.ResponseWriter, r *http.Request, pm *ProcessManager) {
-	w.Header().Set("Content-Type", "application/json")
-
-	// Get optional limit from query params
-	limit := 1000
-	if limitStr := r.URL.Query().Get("limit"); limitStr != "" {
-		if l, err := strconv.Atoi(limitStr); err == nil && l > 0 {
-			limit = l
-		}
-	}
-
-	pm.history.mu.RLock()
-	jobs := pm.history.CompletedJobs
-	if len(jobs) > limit {
-		jobs = jobs[len(jobs)-limit:]
-	}
-	pm.history.mu.RUnlock()
-
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"completed_jobs": jobs,
 	})
 }
 
@@ -713,9 +760,9 @@ func writeTextDebugInfo(w http.ResponseWriter, debug SystemDebugInfo) {
 
 ## File: main.go
 
-Size: 6350 bytes
+Size: 6889 bytes
 
-Last Modified: 2024-12-21T13:18:06Z
+Last Modified: 2024-12-21T15:21:28Z
 
 ```go
 package main
@@ -786,6 +833,16 @@ func main() {
 		}(i)
 	}
 
+	// Start worker pool for processing queue
+	for i := 0; i < 5; i++ {
+		go func(id int) {
+			for {
+				processManager.processNextInQueue()
+				time.Sleep(100 * time.Millisecond)
+			}
+		}(i)
+	}
+
 	// Setup HTTP handlers using the default mux
 	http.HandleFunc("/check", func(w http.ResponseWriter, r *http.Request) {
 		handleCheckRequest(w, r, processManager)
@@ -799,11 +856,21 @@ func main() {
 	http.HandleFunc("/invalidate", func(w http.ResponseWriter, r *http.Request) {
 		handleInvalidateRequest(w, r, processManager)
 	})
+	// Add these to your existing HTTP handler setup in main()
+	http.HandleFunc("/jobs/queue", func(w http.ResponseWriter, r *http.Request) {
+		handleQueuedJobsRequest(w, r, processManager)
+	})
+
 	http.HandleFunc("/jobs/progress", func(w http.ResponseWriter, r *http.Request) {
 		handleJobProgress(w, r, processManager)
 	})
 	http.HandleFunc("/jobs/history", func(w http.ResponseWriter, r *http.Request) {
 		handleJobHistory(w, r, processManager)
+	})
+
+	// Add health check endpoint
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		handleHealthRequest(w, r, processManager)
 	})
 
 	// Print startup information and usage instructions
@@ -905,9 +972,9 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 ## File: process_manager.go
 
-Size: 16801 bytes
+Size: 18670 bytes
 
-Last Modified: 2024-12-21T14:04:18Z
+Last Modified: 2024-12-21T15:01:07Z
 
 ```go
 package main
@@ -1032,9 +1099,38 @@ func (pm *ProcessManager) HandleRequest(req ServiceRequest) (ServiceResponse, er
 }
 
 // processNextInQueue processes the next item in the queue
+// processNextInQueue processes the next item in the queue
 func (pm *ProcessManager) processNextInQueue() {
 	pm.queue.mu.Lock()
+
+	// Log total queue items before processing
+	fmt.Printf("\n[%s] Queue Processing - Total Items: %d\n",
+		time.Now().Format("15:04:05"),
+		len(pm.queue.items))
+
+	// Check if queue is empty or processing limit is reached
 	if len(pm.queue.items) == 0 {
+		pm.queue.mu.Unlock()
+		return
+	}
+
+	// Determine max concurrent jobs from configuration
+	var maxConcurrent int
+	for _, queueConfig := range pm.config.System.Queues {
+		if queueConfig.Name == "service_checks" {
+			maxConcurrent = queueConfig.MaxConcurrent
+			break
+		}
+	}
+
+	// Log current processing state
+	fmt.Printf("Current Processing Status:\n")
+	fmt.Printf("Max Concurrent Jobs: %d\n", maxConcurrent)
+	fmt.Printf("Active Checks: %d\n", len(pm.queue.processing))
+
+	// If processing limit is reached, do not process more jobs
+	if len(pm.queue.processing) >= maxConcurrent {
+		fmt.Printf("Processing limit reached. Skipping job processing.\n")
 		pm.queue.mu.Unlock()
 		return
 	}
@@ -1052,6 +1148,12 @@ func (pm *ProcessManager) processNextInQueue() {
 		item.Position = i + 1
 	}
 	pm.queue.mu.Unlock()
+
+	// Log job being processed
+	fmt.Printf("[%s] Processing Job: %s (%s)\n",
+		time.Now().Format("15:04:05"),
+		check.ServiceName,
+		check.Type)
 
 	// Process the check
 	go func() {
@@ -1465,16 +1567,40 @@ func (pm *ProcessManager) GetQueueStats() QueueStats {
 	pm.queue.mu.RLock()
 	defer pm.queue.mu.RUnlock()
 
+	// Log detailed queue information
+	fmt.Printf("\n[%s] Queue Statistics:\n", time.Now().Format("15:04:05"))
+	fmt.Printf("Total Queue Items: %d\n", len(pm.queue.items))
+	fmt.Printf("Active Processing: %d\n", len(pm.queue.processing))
+
 	stats := QueueStats{
 		QueueLength:    len(pm.queue.items),
 		MaxQueueSize:   pm.queue.maxSize,
 		ActiveChecks:   len(pm.queue.processing),
 		QueuedServices: make([]string, 0),
+		QueuedJobs:     make([]QueuedJobInfo, 0),
 	}
 
-	for _, item := range pm.queue.items {
-		stats.QueuedServices = append(stats.QueuedServices,
-			fmt.Sprintf("%s (%s)", item.ServiceName, item.Type))
+	// Log each queued item
+	for i, item := range pm.queue.items {
+		queuedService := fmt.Sprintf("%s (%s)", item.ServiceName, item.Type)
+		stats.QueuedServices = append(stats.QueuedServices, queuedService)
+
+		queuedJob := QueuedJobInfo{
+			ServiceName:   item.ServiceName,
+			Type:          item.Type,
+			QueuePosition: i + 1,
+			QueueTime:     item.QueueTime,
+			WaitTime:      time.Since(item.QueueTime).String(),
+			StepsToRun:    item.StepsToRun,
+		}
+		stats.QueuedJobs = append(stats.QueuedJobs, queuedJob)
+
+		fmt.Printf("Queued Job %d: %s (%s), Position: %d, Queued At: %s\n",
+			i+1,
+			item.ServiceName,
+			item.Type,
+			i+1,
+			item.QueueTime.Format(time.RFC3339))
 	}
 
 	return stats
@@ -1567,9 +1693,9 @@ func (pm *ProcessManager) CleanupOldProgress(maxAge time.Duration) {
 
 ## File: types.go
 
-Size: 8906 bytes
+Size: 9910 bytes
 
-Last Modified: 2024-12-21T14:05:51Z
+Last Modified: 2024-12-21T14:55:59Z
 
 ```go
 package main
@@ -1762,20 +1888,29 @@ type ProcessingItem struct {
 	TotalSteps     int       `json:"total_steps"`
 }
 
-// QueueStats represents queue statistics
-type QueueStats struct {
-	QueueLength    int      `json:"queue_length"`
-	MaxQueueSize   int      `json:"max_queue_size"`
-	ActiveChecks   int      `json:"active_checks"`
-	QueuedServices []string `json:"queued_services"`
-}
-
 // SystemMetrics represents system-wide metrics
 type SystemMetrics struct {
 	TotalCacheEntries int         `json:"total_cache_entries"`
 	ActiveProcesses   int         `json:"active_processes"`
 	QueueStats        QueueStats  `json:"queue_stats"`
 	SystemState       SystemState `json:"system_state"`
+}
+
+type QueueStats struct {
+	QueueLength    int             `json:"queue_length"`
+	MaxQueueSize   int             `json:"max_queue_size"`
+	ActiveChecks   int             `json:"active_checks"`
+	QueuedServices []string        `json:"queued_services"`
+	QueuedJobs     []QueuedJobInfo `json:"queued_jobs"`
+}
+
+type QueuedJobInfo struct {
+	ServiceName   string    `json:"service_name"`
+	Type          string    `json:"type"`
+	QueuePosition int       `json:"queue_position"`
+	QueueTime     time.Time `json:"queue_time"`
+	WaitTime      string    `json:"wait_time"`
+	StepsToRun    []string  `json:"steps_to_run"`
 }
 
 // ServiceResponse is an interface that can be implemented by different response types
@@ -1877,6 +2012,31 @@ func (pm *ProcessManager) getCachedResults(cache *ServiceCache) *CachedResponse 
 	}
 
 	return response
+}
+
+// GetSystemMetrics retrieves comprehensive system metrics
+// GetSystemMetrics retrieves comprehensive system metrics
+func (pm *ProcessManager) GetSystemMetrics() SystemMetrics {
+	// Get queue stats
+	queueStats := pm.GetQueueStats()
+
+	// Get current system state
+	pm.stateMu.RLock()
+	systemState := *pm.state
+	pm.stateMu.RUnlock()
+
+	// Count total cache entries and active processes
+	pm.mu.RLock()
+	totalCacheEntries := len(pm.cache)
+	activeProcesses := len(pm.progress)
+	pm.mu.RUnlock()
+
+	return SystemMetrics{
+		TotalCacheEntries: totalCacheEntries,
+		ActiveProcesses:   activeProcesses,
+		QueueStats:        queueStats,
+		SystemState:       systemState,
+	}
 }
 
 ```

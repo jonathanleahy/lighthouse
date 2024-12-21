@@ -9,22 +9,26 @@
           "dns": {
             "name": "dnsHandler",
             "cacheSeconds": 60,
-            "description": "Quick DNS resolution check, cache for 1 minute"
+            "description": "Quick DNS resolution check, cache for 1 minute",
+            "dependencies": []
           },
           "github": {
             "name": "githubHandler",
             "cacheSeconds": 86400,
-            "description": "GitHub repo check, cache for 24 hours"
+            "description": "GitHub repo check, cache for 24 hours",
+            "dependencies": ["dns"]
           },
           "performance": {
             "name": "performanceHandler",
             "cacheSeconds": 300,
-            "description": "Performance metrics, cache for 5 minutes"
+            "description": "Performance metrics, cache for 5 minutes",
+            "dependencies": ["github"]
           },
           "ai": {
             "name": "aiHandler",
             "cacheSeconds": 3600,
-            "description": "AI analysis, cache for 1 hour"
+            "description": "AI analysis, cache for 1 hour",
+            "dependencies": ["dns", "github", "performance"]
           }
         }
       },

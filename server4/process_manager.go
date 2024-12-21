@@ -187,7 +187,6 @@ func (pm *ProcessManager) processNextInQueue() {
 		pm.processCheck(check)
 	}()
 }
-
 func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 	if check == nil {
 		fmt.Printf("\n[%s] Error: nil check received\n", time.Now().Format("15:04:05"))
@@ -222,6 +221,15 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 		}
 	}()
 
+	// Identify steps to run with dependencies
+	serviceType, exists := pm.config.System.ServiceTypes[progress.Type]
+	if !exists {
+		fmt.Printf("\n[%s] Error: service type %s not found\n",
+			time.Now().Format("15:04:05"), progress.Type)
+		return
+	}
+
+	// Determine which steps can be run based on dependencies
 	for _, stepID := range check.StepsToRun {
 		pm.stateMu.RLock()
 		currentState := pm.state.Status
@@ -234,15 +242,11 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 			return
 		}
 
-		// Update current step in system state
-		pm.stateMu.Lock()
-		pm.state.CurrentStep = stepID
-		pm.state.LastUpdated = time.Now()
-		pm.stateMu.Unlock()
-
-		// Process the step
-		handlerConfig := pm.getHandlerConfig(progress.Type, stepID)
-		if handlerConfig == nil {
+		// Check handler configuration and dependencies
+		handlerConfig, exists := serviceType.Handlers[stepID]
+		if !exists {
+			fmt.Printf("\n[%s] No handler found for step: %s\n",
+				time.Now().Format("15:04:05"), stepID)
 			progress.mu.Lock()
 			if progress.Steps[stepID] != nil {
 				progress.Steps[stepID].Status = "failed"
@@ -254,6 +258,32 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 			progress.mu.Unlock()
 			continue
 		}
+
+		// Check if all dependencies are completed successfully
+		dependenciesMet := true
+		for _, depStep := range handlerConfig.Dependencies {
+			progress.mu.RLock()
+			depStepProgress, exists := progress.Steps[depStep]
+			progress.mu.RUnlock()
+
+			if !exists || depStepProgress.Status != "completed" {
+				dependenciesMet = false
+				fmt.Printf("\n[%s] Dependencies not met for step: %s\n",
+					time.Now().Format("15:04:05"), stepID)
+				break
+			}
+		}
+
+		// Skip if dependencies are not met
+		if !dependenciesMet {
+			continue
+		}
+
+		// Update current step in system state
+		pm.stateMu.Lock()
+		pm.state.CurrentStep = stepID
+		pm.state.LastUpdated = time.Now()
+		pm.stateMu.Unlock()
 
 		// Execute the handler
 		ctx := &Context{
