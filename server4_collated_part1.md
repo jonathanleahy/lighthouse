@@ -1,6 +1,6 @@
 # Project Files Summary - Part 1
 
-Generated on: 2024-12-21T15:24:20Z
+Generated on: 2024-12-21T15:56:00Z
 
 Root Directory: ./server4
 
@@ -78,9 +78,9 @@ Last Modified: 2024-12-21T10:13:07Z
 
 ## File: .idea/workspace.xml
 
-Size: 15179 bytes
+Size: 4527 bytes
 
-Last Modified: 2024-12-21T14:21:51Z
+Last Modified: 2024-12-21T15:53:53Z
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -90,118 +90,7 @@ Last Modified: 2024-12-21T14:21:51Z
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c4ba807-6f4d-4f41-8ea1-15fd00764a18" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../frontend/src/components/job/JobProgressView.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontend/src/components/job/JobUtils.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/jobscheduler/cmd/example/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/jobscheduler/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/jobscheduler/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/jobscheduler/processor.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/jobscheduler/scheduler.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/jobscheduler/scheduler_test.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/jobscheduler/types.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/cmd/server/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/internal/api/types.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/internal/handlers/jobs.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/internal/handlers/stats.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/internal/middleware/auth.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/internal/middleware/cors.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/static/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../server3/webserver/static/js/main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/service-config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/handlers.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/http_handlers.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/process_manager.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/types.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/.eslintrc.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/components.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/next.config.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/postcss.config.mjs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/argocd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/file.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/globe.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/icons/argo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/icons/codefresh.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/icons/github.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/icons/grafana.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/next.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/pismo.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/vercel.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/public/window.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/customize-fields/page-good.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/customize-fields/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/fonts/GeistMonoVF.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/fonts/GeistVF.woff" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/globals.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/globals.css.rej" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/layout.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/microservice/[id]/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/app/page.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/App.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/DashboardGuide.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/IconWithSlash.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/TextFilter.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/[id].tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/activity-card.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/build-info.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/card.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/current-date.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/dashboard-grid-good.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/dashboard-grid.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/dashboard-summary.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/dashboard.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/deployment-info.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/deployments.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/deployments.tsx.rej" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/error-logs.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/github-info.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/grapfana-spark-line.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/header.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/jira-tickets.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/microservice-info.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/microservices-overview.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/performance-card.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/squad-members.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/status-card.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/theme-provider.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/theme-switcher.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/theme-toggle.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/theme-wrapper.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/avatar.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/badge.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/button.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/card.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/checkbox.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/dialog.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/dropdown-menu.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/input.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/label.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/progress.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/scroll-area.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/select.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/separator.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/sheet.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/switch.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/table.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/tabs.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/toggle.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/components/ui/tooltip.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/hooks/useDashboardData.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/hooks/useFetchHook.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/lib/customFieldsContext.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/src/lib/utils.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/tailwind.config.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/tsconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dashboard/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,7 +99,13 @@ Last Modified: 2024-12-21T14:21:51Z
   </component>
   <component name="GOROOT" url="file:///snap/go/current" />
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="RESET_MODE" value="MIXED" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -243,7 +138,7 @@ Last Modified: 2024-12-21T14:21:51Z
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ed65c811&quot;,
     &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/jon&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -280,6 +175,17 @@ Last Modified: 2024-12-21T14:21:51Z
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
   </component>
@@ -290,9 +196,9 @@ Last Modified: 2024-12-21T14:21:51Z
 
 ## File: config/service-config.json
 
-Size: 2244 bytes
+Size: 2415 bytes
 
-Last Modified: 2024-12-21T10:14:49Z
+Last Modified: 2024-12-21T15:55:37Z
 
 ```json
 {
@@ -306,22 +212,26 @@ Last Modified: 2024-12-21T10:14:49Z
           "dns": {
             "name": "dnsHandler",
             "cacheSeconds": 60,
-            "description": "Quick DNS resolution check, cache for 1 minute"
+            "description": "Quick DNS resolution check, cache for 1 minute",
+            "dependencies": []
           },
           "github": {
             "name": "githubHandler",
             "cacheSeconds": 86400,
-            "description": "GitHub repo check, cache for 24 hours"
+            "description": "GitHub repo check, cache for 24 hours",
+            "dependencies": ["dns"]
           },
           "performance": {
             "name": "performanceHandler",
             "cacheSeconds": 300,
-            "description": "Performance metrics, cache for 5 minutes"
+            "description": "Performance metrics, cache for 5 minutes",
+            "dependencies": ["github"]
           },
           "ai": {
             "name": "aiHandler",
             "cacheSeconds": 3600,
-            "description": "AI analysis, cache for 1 hour"
+            "description": "AI analysis, cache for 1 hour",
+            "dependencies": ["dns", "github", "performance"]
           }
         }
       },
@@ -760,9 +670,9 @@ func writeTextDebugInfo(w http.ResponseWriter, debug SystemDebugInfo) {
 
 ## File: main.go
 
-Size: 6889 bytes
+Size: 6686 bytes
 
-Last Modified: 2024-12-21T15:21:28Z
+Last Modified: 2024-12-21T15:51:26Z
 
 ```go
 package main
@@ -778,30 +688,6 @@ import (
 	// Import the CORS middleware library
 	"github.com/rs/cors"
 )
-
-// QueueStatus represents the status of a service in the queue
-type QueueStatus struct {
-	Status     string    `json:"status"` // "queued", "processing", "cached"
-	Position   int       `json:"position,omitempty"`
-	CacheKey   string    `json:"cache_key"`
-	QueueTime  time.Time `json:"queue_time,omitempty"`
-	StartTime  time.Time `json:"start_time,omitempty"`
-	StepsToRun []string  `json:"steps_to_run,omitempty"`
-}
-
-// CachedResponse represents a response with cached data
-type CachedResponse struct {
-	Status     string                `json:"status"`
-	LastUpdate time.Time             `json:"last_update"`
-	Steps      map[string]StepResult `json:"steps"`
-}
-
-// StepResult represents the result of a single step
-type StepResult struct {
-	Status     string    `json:"status"`
-	LastUpdate time.Time `json:"last_update"`
-	Result     *Result   `json:"result"`
-}
 
 func main() {
 	// Seed random number generator for simulated work
@@ -833,16 +719,6 @@ func main() {
 		}(i)
 	}
 
-	// Start worker pool for processing queue
-	for i := 0; i < 5; i++ {
-		go func(id int) {
-			for {
-				processManager.processNextInQueue()
-				time.Sleep(100 * time.Millisecond)
-			}
-		}(i)
-	}
-
 	// Setup HTTP handlers using the default mux
 	http.HandleFunc("/check", func(w http.ResponseWriter, r *http.Request) {
 		handleCheckRequest(w, r, processManager)
@@ -856,11 +732,9 @@ func main() {
 	http.HandleFunc("/invalidate", func(w http.ResponseWriter, r *http.Request) {
 		handleInvalidateRequest(w, r, processManager)
 	})
-	// Add these to your existing HTTP handler setup in main()
 	http.HandleFunc("/jobs/queue", func(w http.ResponseWriter, r *http.Request) {
 		handleQueuedJobsRequest(w, r, processManager)
 	})
-
 	http.HandleFunc("/jobs/progress", func(w http.ResponseWriter, r *http.Request) {
 		handleJobProgress(w, r, processManager)
 	})
@@ -871,6 +745,27 @@ func main() {
 	// Add health check endpoint
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		handleHealthRequest(w, r, processManager)
+	})
+
+	// Add service types endpoint
+	http.HandleFunc("/service-types", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		// Extract service types from the configuration
+		serviceTypes := make(map[string]interface{})
+		for typeName, typeConfig := range config.System.ServiceTypes {
+			serviceTypes[typeName] = map[string]interface{}{
+				"description": typeConfig.Description,
+				"queues":      typeConfig.Queues,
+				"handlers":    typeConfig.Handlers,
+			}
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(serviceTypes)
 	})
 
 	// Print startup information and usage instructions
@@ -902,9 +797,9 @@ func main() {
 
 	fmt.Printf("\n3. Debug Information:\n")
 	fmt.Printf("   # Get human-readable status:\n")
-	fmt.Printf("   curl \"http://localhost:8080/debug?format=text\"\n")
+	fmt.Printf("   curl \"http://localhost:8080/health?format=text\"\n")
 	fmt.Printf("   # Get JSON status:\n")
-	fmt.Printf("   curl http://localhost:8080/debug\n")
+	fmt.Printf("   curl http://localhost:8080/health\n")
 
 	fmt.Printf("\n4. Cache Invalidation:\n")
 	fmt.Printf("   # Invalidate specific service:\n")
@@ -936,10 +831,20 @@ func main() {
 
 	// Create a CORS handler that wraps the default mux
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"}, // or "*" to allow all
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type"},
-		AllowCredentials: false,
+		AllowedOrigins: []string{
+			"http://localhost:3000",
+			"http://127.0.0.1:3000",
+			"http://192.168.3.130:3000",
+		}, // Add all potential frontend origins
+		AllowedMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
+		AllowedHeaders: []string{
+			"Content-Type",
+			"X-Requested-With",
+			"Authorization",
+			"Accept",
+		},
+		AllowCredentials: true,
+		MaxAge:           86400, // Cache preflight request results for 24 hours
 	})
 
 	// Wrap the default mux with the CORS middleware
@@ -972,9 +877,9 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 
 ## File: process_manager.go
 
-Size: 18670 bytes
+Size: 19614 bytes
 
-Last Modified: 2024-12-21T15:01:07Z
+Last Modified: 2024-12-21T15:55:37Z
 
 ```go
 package main
@@ -1166,7 +1071,6 @@ func (pm *ProcessManager) processNextInQueue() {
 		pm.processCheck(check)
 	}()
 }
-
 func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 	if check == nil {
 		fmt.Printf("\n[%s] Error: nil check received\n", time.Now().Format("15:04:05"))
@@ -1201,6 +1105,15 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 		}
 	}()
 
+	// Identify steps to run with dependencies
+	serviceType, exists := pm.config.System.ServiceTypes[progress.Type]
+	if !exists {
+		fmt.Printf("\n[%s] Error: service type %s not found\n",
+			time.Now().Format("15:04:05"), progress.Type)
+		return
+	}
+
+	// Determine which steps can be run based on dependencies
 	for _, stepID := range check.StepsToRun {
 		pm.stateMu.RLock()
 		currentState := pm.state.Status
@@ -1213,15 +1126,11 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 			return
 		}
 
-		// Update current step in system state
-		pm.stateMu.Lock()
-		pm.state.CurrentStep = stepID
-		pm.state.LastUpdated = time.Now()
-		pm.stateMu.Unlock()
-
-		// Process the step
-		handlerConfig := pm.getHandlerConfig(progress.Type, stepID)
-		if handlerConfig == nil {
+		// Check handler configuration and dependencies
+		handlerConfig, exists := serviceType.Handlers[stepID]
+		if !exists {
+			fmt.Printf("\n[%s] No handler found for step: %s\n",
+				time.Now().Format("15:04:05"), stepID)
 			progress.mu.Lock()
 			if progress.Steps[stepID] != nil {
 				progress.Steps[stepID].Status = "failed"
@@ -1233,6 +1142,32 @@ func (pm *ProcessManager) processCheck(check *QueuedCheck) {
 			progress.mu.Unlock()
 			continue
 		}
+
+		// Check if all dependencies are completed successfully
+		dependenciesMet := true
+		for _, depStep := range handlerConfig.Dependencies {
+			progress.mu.RLock()
+			depStepProgress, exists := progress.Steps[depStep]
+			progress.mu.RUnlock()
+
+			if !exists || depStepProgress.Status != "completed" {
+				dependenciesMet = false
+				fmt.Printf("\n[%s] Dependencies not met for step: %s\n",
+					time.Now().Format("15:04:05"), stepID)
+				break
+			}
+		}
+
+		// Skip if dependencies are not met
+		if !dependenciesMet {
+			continue
+		}
+
+		// Update current step in system state
+		pm.stateMu.Lock()
+		pm.state.CurrentStep = stepID
+		pm.state.LastUpdated = time.Now()
+		pm.stateMu.Unlock()
 
 		// Execute the handler
 		ctx := &Context{
@@ -1693,9 +1628,9 @@ func (pm *ProcessManager) CleanupOldProgress(maxAge time.Duration) {
 
 ## File: types.go
 
-Size: 9910 bytes
+Size: 9948 bytes
 
-Last Modified: 2024-12-21T14:55:59Z
+Last Modified: 2024-12-21T15:55:37Z
 
 ```go
 package main
@@ -1705,13 +1640,6 @@ import (
 	"sync"
 	"time"
 )
-
-// Configuration Types
-type HandlerConfig struct {
-	Name         string `json:"name"`
-	CacheSeconds int    `json:"cacheSeconds"`
-	Description  string `json:"description"`
-}
 
 type ServiceType struct {
 	Description string                   `json:"description"`
@@ -1911,6 +1839,13 @@ type QueuedJobInfo struct {
 	QueueTime     time.Time `json:"queue_time"`
 	WaitTime      string    `json:"wait_time"`
 	StepsToRun    []string  `json:"steps_to_run"`
+}
+
+type HandlerConfig struct {
+	Name         string   `json:"name"`
+	CacheSeconds int      `json:"cacheSeconds"`
+	Description  string   `json:"description"`
+	Dependencies []string `json:"dependencies,omitempty"`
 }
 
 // ServiceResponse is an interface that can be implemented by different response types

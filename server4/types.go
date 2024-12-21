@@ -213,6 +213,27 @@ type HandlerConfig struct {
 	Dependencies []string `json:"dependencies,omitempty"`
 }
 
+type QueueStatus struct {
+	Status     string    `json:"status"`
+	Position   int       `json:"position"`
+	CacheKey   string    `json:"cache_key"`
+	QueueTime  time.Time `json:"queue_time"`
+	StartTime  time.Time `json:"start_time"` // Add this line
+	StepsToRun []string  `json:"steps_to_run,omitempty"`
+}
+
+type CachedResponse struct {
+	Status     string                `json:"status"`
+	LastUpdate time.Time             `json:"last_update"`
+	Steps      map[string]StepResult `json:"steps"`
+}
+
+type StepResult struct {
+	Status     string    `json:"status"`
+	LastUpdate time.Time `json:"last_update"`
+	Result     *Result   `json:"result,omitempty"`
+}
+
 // ServiceResponse is an interface that can be implemented by different response types
 type ServiceResponse interface {
 	ResponseType() string

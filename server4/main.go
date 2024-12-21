@@ -12,30 +12,6 @@ import (
 	"github.com/rs/cors"
 )
 
-// QueueStatus represents the status of a service in the queue
-type QueueStatus struct {
-	Status     string    `json:"status"` // "queued", "processing", "cached"
-	Position   int       `json:"position,omitempty"`
-	CacheKey   string    `json:"cache_key"`
-	QueueTime  time.Time `json:"queue_time,omitempty"`
-	StartTime  time.Time `json:"start_time,omitempty"`
-	StepsToRun []string  `json:"steps_to_run,omitempty"`
-}
-
-// CachedResponse represents a response with cached data
-type CachedResponse struct {
-	Status     string                `json:"status"`
-	LastUpdate time.Time             `json:"last_update"`
-	Steps      map[string]StepResult `json:"steps"`
-}
-
-// StepResult represents the result of a single step
-type StepResult struct {
-	Status     string    `json:"status"`
-	LastUpdate time.Time `json:"last_update"`
-	Result     *Result   `json:"result"`
-}
-
 func main() {
 	// Seed random number generator for simulated work
 	rand.Seed(time.Now().UnixNano())
@@ -66,16 +42,6 @@ func main() {
 		}(i)
 	}
 
-	// Start worker pool for processing queue
-	for i := 0; i < 5; i++ {
-		go func(id int) {
-			for {
-				processManager.processNextInQueue()
-				time.Sleep(100 * time.Millisecond)
-			}
-		}(i)
-	}
-
 	// Setup HTTP handlers using the default mux
 	http.HandleFunc("/check", func(w http.ResponseWriter, r *http.Request) {
 		handleCheckRequest(w, r, processManager)
@@ -89,11 +55,9 @@ func main() {
 	http.HandleFunc("/invalidate", func(w http.ResponseWriter, r *http.Request) {
 		handleInvalidateRequest(w, r, processManager)
 	})
-	// Add these to your existing HTTP handler setup in main()
 	http.HandleFunc("/jobs/queue", func(w http.ResponseWriter, r *http.Request) {
 		handleQueuedJobsRequest(w, r, processManager)
 	})
-
 	http.HandleFunc("/jobs/progress", func(w http.ResponseWriter, r *http.Request) {
 		handleJobProgress(w, r, processManager)
 	})
@@ -104,6 +68,27 @@ func main() {
 	// Add health check endpoint
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		handleHealthRequest(w, r, processManager)
+	})
+
+	// Add service types endpoint
+	http.HandleFunc("/service-types", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		// Extract service types from the configuration
+		serviceTypes := make(map[string]interface{})
+		for typeName, typeConfig := range config.System.ServiceTypes {
+			serviceTypes[typeName] = map[string]interface{}{
+				"description": typeConfig.Description,
+				"queues":      typeConfig.Queues,
+				"handlers":    typeConfig.Handlers,
+			}
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(serviceTypes)
 	})
 
 	// Print startup information and usage instructions
@@ -135,9 +120,9 @@ func main() {
 
 	fmt.Printf("\n3. Debug Information:\n")
 	fmt.Printf("   # Get human-readable status:\n")
-	fmt.Printf("   curl \"http://localhost:8080/debug?format=text\"\n")
+	fmt.Printf("   curl \"http://localhost:8080/health?format=text\"\n")
 	fmt.Printf("   # Get JSON status:\n")
-	fmt.Printf("   curl http://localhost:8080/debug\n")
+	fmt.Printf("   curl http://localhost:8080/health\n")
 
 	fmt.Printf("\n4. Cache Invalidation:\n")
 	fmt.Printf("   # Invalidate specific service:\n")
@@ -169,10 +154,20 @@ func main() {
 
 	// Create a CORS handler that wraps the default mux
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"}, // or "*" to allow all
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Content-Type"},
-		AllowCredentials: false,
+		AllowedOrigins: []string{
+			"http://localhost:3000",
+			"http://127.0.0.1:3000",
+			"http://192.168.3.130:3000",
+		}, // Add all potential frontend origins
+		AllowedMethods: []string{"GET", "POST", "OPTIONS", "PUT", "DELETE"},
+		AllowedHeaders: []string{
+			"Content-Type",
+			"X-Requested-With",
+			"Authorization",
+			"Accept",
+		},
+		AllowCredentials: true,
+		MaxAge:           86400, // Cache preflight request results for 24 hours
 	})
 
 	// Wrap the default mux with the CORS middleware
