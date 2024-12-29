@@ -1,93 +1,93 @@
 {
   "apps": [
     {
-      "appName": "console-audit-bff-irl-prod-eu-west-1",
+      "appName": "console-audit-bff-getnet-prod-sa-east-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-irl-prod-eu-west-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-ind-prod-ap-south-2",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-ind-prod-ap-south-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-integration-sa-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-integration-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-getnet-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "console-audit-bff-ind-prod-ap-south-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-ind-prod-ap-south-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-citi-stag-usa-us-east-2",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-citi-stag-usa-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-dev-ext-sa-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-dev-ext-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-integration-us-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-integration-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-dev-ext-us-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-dev-ext-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-getnet-prod-sa-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-getnet-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-ind-prod-ap-south-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "console-audit-bff-itau-prod-sa-east-1",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-itau-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:38303-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-production-sa-east-1",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-production-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:58200-\u003e127.0.0.53:53: i/o timeout"
-      ],
-      "type": "primary"
-    },
-    {
-      "appName": "console-audit-bff-usa-prod-us-east-2",
-      "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-usa-prod-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:58200-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-itau-prod-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     },
     {
       "appName": "console-audit-bff-aus-prod-ap-southeast-2",
       "error": [
-        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-aus-prod-ap-southeast-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:58200-\u003e127.0.0.53:53: i/o timeout"
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-aus-prod-ap-southeast-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-production-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-production-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-ind-prod-ap-south-2",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-ind-prod-ap-south-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-irl-prod-eu-west-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-irl-prod-eu-west-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-usa-prod-us-east-2",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-usa-prod-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-integration-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-integration-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-dev-ext-us-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-dev-ext-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:34682-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-dev-ext-sa-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-dev-ext-sa-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:42300-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-integration-us-east-1",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-integration-us-east-1/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:42300-\u003e127.0.0.53:53: i/o timeout"
+      ],
+      "type": "primary"
+    },
+    {
+      "appName": "console-audit-bff-citi-stag-usa-us-east-2",
+      "error": [
+        "error making request: Get \"https://argocd.pismo.services/api/v1/applications/console-audit-bff-citi-stag-usa-us-east-2/resource-tree?appNamespace=argocd\": dial tcp: lookup argocd.pismo.services on 127.0.0.53:53: read udp 127.0.0.1:42300-\u003e127.0.0.53:53: i/o timeout"
       ],
       "type": "primary"
     }

@@ -1,0 +1,31 @@
+{
+  "status": "success",
+  "summary": "Pipeline 'mylearning/mylearning-frontend' on branch 'main'\nStatus: running\nStarted: 2024-12-29T00:44:07.097Z\nDuration: 00:00:07\nCommit: 71c0e51c87974285dfa5f5e2ecbf9540b5513b37",
+  "pipeline": {
+    "build": {
+      "branch": "main",
+      "commitId": "71c0e51c87974285dfa5f5e2ecbf9540b5513b37",
+      "duration": "00:00:07",
+      "stages": [
+        {
+          "name": "clone",
+          "title": "Cloning repository",
+          "type": "git-clone"
+        },
+        {
+          "name": "build",
+          "title": "Building Docker image",
+          "type": "build"
+        },
+        {
+          "name": "test",
+          "title": "Running test",
+          "type": "freestyle"
+        }
+      ],
+      "started": "2024-12-29T00:44:07.097Z",
+      "status": "running"
+    },
+    "name": "mylearning/mylearning-frontend"
+  }
+}

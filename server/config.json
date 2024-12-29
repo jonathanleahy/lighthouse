@@ -1,0 +1,7 @@
+{
+    "cacheDuration": "1m",
+    "serverPort": ":8083",
+    "tokenPath": "token.txt",
+    "projectsPath": "projects/projects",
+    "summaryPath": "projects/projects-summary"
+} 

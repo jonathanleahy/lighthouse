@@ -42,13 +42,3 @@ func getRepositoryBlock(repoName string) (*Repository, error) {
 
 	return nil, fmt.Errorf("repository %s not found", repoName)
 }
-
-//func main() {
-//	repoName := "accounts-api"
-//	repo, err := getRepositoryBlock(repoName)
-//	if err != nil {
-//		fmt.Println(err)
-//		return
-//	}
-//	fmt.Printf("Repository: %+v\n", repo)
-//}
