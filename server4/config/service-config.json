@@ -1,0 +1,83 @@
+{
+  "version": "1.0",
+  "system": {
+    "serviceTypes": {
+      "check": {
+        "description": "Health and status checking workflow",
+        "queues": ["service_checks", "performance_analysis", "ai_analysis"],
+        "handlers": {
+          "dns": {
+            "name": "dnsHandler",
+            "cacheSeconds": 60,
+            "description": "Quick DNS resolution check, cache for 1 minute",
+            "dependencies": []
+          },
+          "github": {
+            "name": "githubHandler",
+            "cacheSeconds": 86400,
+            "description": "GitHub repo check, cache for 24 hours",
+            "dependencies": ["dns"]
+          },
+          "performance": {
+            "name": "performanceHandler",
+            "cacheSeconds": 300,
+            "description": "Performance metrics, cache for 5 minutes",
+            "dependencies": ["github"]
+          },
+          "ai": {
+            "name": "aiHandler",
+            "cacheSeconds": 3600,
+            "description": "AI analysis, cache for 1 hour",
+            "dependencies": ["dns", "github", "performance"]
+          }
+        }
+      },
+      "report": {
+        "description": "Detailed reporting workflow",
+        "queues": ["data_collection", "metric_analysis", "report_generation"],
+        "handlers": {
+          "metrics": {
+            "name": "metricCollector",
+            "cacheSeconds": 300,
+            "description": "Metric collection, cache for 5 minutes"
+          },
+          "logs": {
+            "name": "logAnalyzer",
+            "cacheSeconds": 600,
+            "description": "Log analysis, cache for 10 minutes"
+          },
+          "trends": {
+            "name": "trendAnalyzer",
+            "cacheSeconds": 1800,
+            "description": "Trend analysis, cache for 30 minutes"
+          },
+          "report": {
+            "name": "reportGenerator",
+            "cacheSeconds": 3600,
+            "description": "Report generation, cache for 1 hour"
+          }
+        }
+      }
+    },
+    "queues": [
+      {
+        "name": "service_checks",
+        "type": "worker",
+        "maxConcurrent": 2,
+        "queueSize": 100
+      },
+      {
+        "name": "performance_analysis",
+        "type": "worker",
+        "maxConcurrent": 3,
+        "queueSize": 50
+      },
+      {
+        "name": "ai_analysis",
+        "type": "worker",
+        "maxConcurrent": 1,
+        "queueSize": 50
+      }
+    ]
+  }
+}
