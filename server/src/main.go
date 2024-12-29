@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -63,6 +64,36 @@ type cache struct {
 type cacheEntry struct {
 	data      []byte
 	timestamp time.Time
+}
+
+type PismoData struct {
+	Repositories []Repository `json:"repositories"`
+	TotalCount   int          `json:"total_count"`
+}
+
+func GetRepositoryBlock(repoName string) (*Repository, error) {
+	// Read the content of pismo.json
+	file, err := os.Open("projects/projects/pismo.json")
+	if err != nil {
+		return nil, fmt.Errorf("error opening pismo.json: %v", err)
+	}
+	defer file.Close()
+
+	// Parse the JSON data
+	var data PismoData
+	byteValue, _ := ioutil.ReadAll(file)
+	if err := json.Unmarshal(byteValue, &data); err != nil {
+		return nil, fmt.Errorf("error parsing pismo.json: %v", err)
+	}
+
+	// Search for the repository by name
+	for _, repo := range data.Repositories {
+		if repo.RepositoryName == repoName {
+			return &repo, nil
+		}
+	}
+
+	return nil, fmt.Errorf("repository %s not found", repoName)
 }
 
 func NewCache(duration string) *cache {
@@ -198,7 +229,7 @@ func processRepoData(baseRepoName, repoBitUrl, namespace string, appNameSuffixes
 		"apps":       []interface{}{},
 	}
 
-	repo, err := getRepositoryBlock(baseRepoName)
+	repo, err := GetRepositoryBlock(baseRepoName)
 	if err == nil {
 		repoData["repoDesc"] = repo.Description
 		repoData["repoSquad"] = repo.Team
