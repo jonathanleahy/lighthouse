@@ -7,12 +7,6 @@ import (
 	"os"
 )
 
-type Repository struct {
-	RepositoryName string `json:"repository_name"`
-	Team           string `json:"team"`
-	Description    string `json:"description"`
-}
-
 type PismoData struct {
 	Repositories []Repository `json:"repositories"`
 	TotalCount   int          `json:"total_count"`
