@@ -1,0 +1,123 @@
+diff a/dashboard/src/components/deployments.tsx b/dashboard/src/components/deployments.tsx	(rejected hunks)
+@@ -83,27 +87,64 @@ interface StatusIconProps {
+   argocdStep: string;
+ }
+
++async function argocdResume(namespace: string, resourceName: string, region: string) {
++  const url = `http://localhost:8083/argocd-resume?namespace=${namespace}&resourceName=${resourceName}&region=${region}`;
++
++  try {
++    const response = await fetch(url, {
++      method: 'POST',
++      headers: {
++        'Content-Type': 'application/json'
++      },
++      body: JSON.stringify({ action: "resume" })
++    });
++
++    if (!response.ok) {
++      throw new Error(`HTTP error! status: ${response.status}`);
++    }
++
++    const data = await response.json();
++    console.log(data);
++  } catch (error) {
++    console.error(`Error calling ${url}`, error);
++  }
++}
++
+ const StatusIcon: React.FC<StatusIconProps> = ({ status, argocdStep }) => {
+   let parsedStep: { pause?: { duration?: string } } = {};
++  let pausedFor: string | number = 0;
++
+   try {
+     parsedStep = JSON.parse(argocdStep);
++    if (parsedStep.pause?.duration) {
++      pausedFor = parsedStep.pause.duration;
++    } else if (parsedStep.pause) {
++      pausedFor = -1;
++    }
+   } catch {
+-    // Empty catch block as we're already handling the default case
++    pausedFor = 0;
+   }
+
+   switch (status) {
+     case 'In Progress': {
+-      const duration = parsedStep.pause?.duration ? `for ${parsedStep.pause.duration}` : '';
++      let message = '';
++      if (typeof pausedFor === 'string') {
++        message = `Paused for ${pausedFor}`;
++      } else if (pausedFor === -1) {
++        message = 'Paused: Manual start required';
++      } else if (pausedFor === 0) {
++        message = 'ArgoCD is syncing';
++      }
+       return (
+           <div className="flex items-center gap-2">
+-            {parsedStep.pause?.duration ? (
++            {typeof pausedFor === 'string' ? (
+                 <PlayCircle className="text-blue-500 h-4 w-4" />
+             ) : (
+-              <RotateCw className="text-blue-500 animate-spin h-4 w-4" />
++                <PlayCircle className={`text-blue-500 h-4 w-4 ${pausedFor === -1 ? 'animate-spin-back-and-forth' : 'animate-spin'}`} />
+             )}
+             <div>
+               <div className="font-medium">In Progress</div>
+-              {duration && <div className="text-xs text-muted-foreground">Paused {duration}</div>}
++              {message && <div className="text-xs text-muted-foreground">{message}</div>}
+             </div>
+           </div>
+       );
+@@ -123,11 +164,16 @@ const StatusIcon: React.FC<StatusIconProps> = ({ status, argocdStep }) => {
+           </div>
+       );
+     default: {
+-      const duration = parsedStep.pause?.duration ? `Paused for ${parsedStep.pause.duration}` : 'Paused';
++      let message = 'Paused';
++      if (typeof pausedFor === 'string') {
++        message = `Paused for ${pausedFor}`;
++      } else if (pausedFor === -1) {
++        message = 'Waiting to kick off';
++      }
+       return (
+           <div className="flex items-center gap-2">
+             <PauseCircle className="text-blue-500 h-4 w-4" />
+-            <span className="font-medium">{duration}</span>
++            <span className="font-medium">{message}</span>
+           </div>
+       );
+     }
+@@ -148,24 +194,27 @@ const DeploymentProgress: React.FC<DeploymentProgressProps> = ({ deployments, ar
+   const totalPercentage = stable.percentage + canary.percentage;
+   if (totalPercentage !== 100) return null;
+
++  const stablePercentage = isNaN(argocdWeight) ? 0 : 100 - argocdWeight;
++  const canaryPercentage = isNaN(argocdWeight) ? 0 : argocdWeight;
++
+   return (
+       <div className="space-y-1 w-full">
+         <div className="h-3 w-full bg-muted overflow-hidden rounded-full relative">
+           <div
+-              className="h-full bg-blue-500 absolute left-0 top-0 transition-all duration-500"
+-              style={{ width: `${100 - argocdWeight}%` }}
++              className="h-full bg-gray-500 absolute left-0 top-0 transition-all duration-500"
++              style={{ width: `${stablePercentage}%` }}
+           />
+           <div
+               className="h-full bg-green-500 absolute left-0 top-0 transition-all duration-500"
+-              style={{ width: `${argocdWeight}%`, marginLeft: `${100 - argocdWeight}%` }}
++              style={{ width: `${canaryPercentage}%`, marginLeft: `${stablePercentage}%` }}
+           />
+         </div>
+         <div className="flex justify-between text-xs text-muted-foreground">
+           <div>
+-            <span>stable {100 - argocdWeight}%</span>
++            <span>stable {stablePercentage}%</span>
+           </div>
+           <div>
+-            <span>canary {argocdWeight}%</span>
++            <span>canary {canaryPercentage}%</span>
+           </div>
+         </div>
+       </div>
